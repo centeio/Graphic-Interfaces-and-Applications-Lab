@@ -47,8 +47,35 @@ MySceneGraph.prototype.onXMLReady=function()
  */
 MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	
-	var elems =  rootElement.getElementsByTagName('globals');
-	if (elems == null) {
+	var primitives =  rootElement.getElementsByTagName('primitives');
+	if (primitives[0].children.length == 0) {
+		return "primitives are missing.";
+	}
+
+	this.primitives = [];
+	var nnodes=primitives[0].children.length;
+	for (var i=0; i< nnodes; i++)
+	{
+		var e=primitives[0].children[i].children[0];
+
+		console.log("Read list item "+ e);
+
+		switch(e.tagName) {
+			case "rectangle":
+				this.primitives[0] = e.attributes.getNamedItem("x1").value;
+				this.primitives[1] = e.attributes.getNamedItem("y1").value;
+				this.primitives[2] = e.attributes.getNamedItem("x2").value;
+				this.primitives[3] = e.attributes.getNamedItem("y2").value;
+				break;
+			default:
+				break;
+		}
+
+		for(var i=0; i<4; i++) {
+			console.log("x" + i + this.primitives[i]);
+		}
+	}
+	/*if (elems == null) {
 		return "globals element is missing.";
 	}
 
@@ -81,7 +108,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 		// process each element and store its information
 		this.list[e.id]=e.attributes.getNamedItem("coords").value;
 		console.log("Read list item id "+ e.id+" with value "+this.list[e.id]);
-	};
+	};*/
 
 };
 	

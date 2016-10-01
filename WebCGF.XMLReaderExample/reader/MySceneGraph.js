@@ -4,7 +4,7 @@ function MySceneGraph(filename, scene) {
 	
 	// Establish bidirectional references between scene and graph
 	this.scene = scene;
-	scene.graph=this;
+	scene.graph = this;
 		
 	// File reading 
 	this.reader = new CGFXMLreader();
@@ -47,32 +47,42 @@ MySceneGraph.prototype.onXMLReady=function()
  */
 MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	
-	var primitives =  rootElement.getElementsByTagName('primitives');
-	if (primitives[0].children.length == 0) {
+	var rootPrimitives =  rootElement.getElementsByTagName('primitives');
+	if (rootPrimitives[0].children.length == 0) {
 		return "primitives are missing.";
 	}
 
 	this.primitives = [];
-	var nnodes=primitives[0].children.length;
-	for (var i=0; i< nnodes; i++)
+	var nnodes = rootPrimitives[0].children.length;
+	console.log(nnodes);
+	for (var i=0; i < nnodes; i++)
 	{
-		var e=primitives[0].children[i].children[0];
+		var e = rootPrimitives[0].children[i].children[0];
 
-		console.log("Read list item "+ e);
+		console.log("Read list item " + e);
 
 		switch(e.tagName) {
 			case "rectangle":
-				this.primitives[0] = e.attributes.getNamedItem("x1").value;
-				this.primitives[1] = e.attributes.getNamedItem("y1").value;
-				this.primitives[2] = e.attributes.getNamedItem("x2").value;
-				this.primitives[3] = e.attributes.getNamedItem("y2").value;
+				this.primitives.push(new MyRectangle(this.scene, 
+					e.attributes.getNamedItem("x1").value,
+					e.attributes.getNamedItem("x2").value,
+					e.attributes.getNamedItem("y1").value, 
+					e.attributes.getNamedItem("y2").value));
+				break;
+			case "triangle":
+				this.primitives.push(new MyTriangle(this.scene,
+					e.attributes.getNamedItem("x1").value,
+					e.attributes.getNamedItem("y1").value,
+					e.attributes.getNamedItem("z1").value, 
+					e.attributes.getNamedItem("x2").value,
+					e.attributes.getNamedItem("y2").value,
+					e.attributes.getNamedItem("z2").value,
+					e.attributes.getNamedItem("x3").value, 
+					e.attributes.getNamedItem("y3").value,
+					e.attributes.getNamedItem("z3").value));
 				break;
 			default:
 				break;
-		}
-
-		for(var i=0; i<4; i++) {
-			console.log("x" + i + this.primitives[i]);
 		}
 	}
 	/*if (elems == null) {

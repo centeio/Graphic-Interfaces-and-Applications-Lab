@@ -81,6 +81,13 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 					e.attributes.getNamedItem("y3").value,
 					e.attributes.getNamedItem("z3").value));
 				break;
+			case "cylinder":
+				this.primitives.push(new MyCylinder(this.scene,
+				e.attributes.getNamedItem("slices").value,
+				e.attributes.getNamedItem("stacks").value));
+				console.log(e.attributes.getNamedItem("slices").value);
+				console.log(e.attributes.getNamedItem("stacks").value);
+				break;
 			default:
 				break;
 		}

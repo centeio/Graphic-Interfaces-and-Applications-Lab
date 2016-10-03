@@ -54,7 +54,6 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 
 	this.primitives = [];
 	var nnodes = rootPrimitives[0].children.length;
-	console.log(nnodes);
 	for (var i=0; i < nnodes; i++)
 	{
 		var e = rootPrimitives[0].children[i].children[0];
@@ -64,29 +63,31 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 		switch(e.tagName) {
 			case "rectangle":
 				this.primitives.push(new MyRectangle(this.scene, 
-					e.attributes.getNamedItem("x1").value,
-					e.attributes.getNamedItem("x2").value,
-					e.attributes.getNamedItem("y1").value, 
-					e.attributes.getNamedItem("y2").value));
+					this.reader.getFloat(e, "minX", bool),
+					this.reader.getFloat(e, "maxX", bool),
+					this.reader.getFloat(e, "minY", bool),
+					this.reader.getFloat(e, "maxY", bool)));
 				break;
 			case "triangle":
 				this.primitives.push(new MyTriangle(this.scene,
-					e.attributes.getNamedItem("x1").value,
-					e.attributes.getNamedItem("y1").value,
-					e.attributes.getNamedItem("z1").value, 
-					e.attributes.getNamedItem("x2").value,
-					e.attributes.getNamedItem("y2").value,
-					e.attributes.getNamedItem("z2").value,
-					e.attributes.getNamedItem("x3").value, 
-					e.attributes.getNamedItem("y3").value,
-					e.attributes.getNamedItem("z3").value));
+					this.reader.getFloat(e, "x1", bool),
+					this.reader.getFloat(e, "y1", bool),
+					this.reader.getFloat(e, "z1", bool),
+					this.reader.getFloat(e, "x2", bool),
+					this.reader.getFloat(e, "y2", bool),
+					this.reader.getFloat(e, "z2", bool),
+					this.reader.getFloat(e, "x3", bool),
+					this.reader.getFloat(e, "y3", bool),
+					this.reader.getFloat(e, "z3", bool)));
 				break;
 			case "cylinder":
+				var bool;
 				this.primitives.push(new MyCylinder(this.scene,
-				e.attributes.getNamedItem("slices").value,
-				e.attributes.getNamedItem("stacks").value));
-				console.log(e.attributes.getNamedItem("slices").value);
-				console.log(e.attributes.getNamedItem("stacks").value);
+					this.reader.getFloat(e, "base", bool),
+					this.reader.getFloat(e, "top", bool),
+					this.reader.getFloat(e, "height", bool), 
+					this.reader.getFloat(e, "slices", bool),
+					this.reader.getFloat(e, "stacks", bool)));
 				break;
 			default:
 				break;
@@ -102,7 +103,6 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 
 	this.transformations = [];
 	nnodes = rootTranformations[0].children.length;
-	console.log(nnodes);
 	for (var i=0; i < nnodes; i++)
 	{	
 		this.transformations.push(rootTranformations[0].children[i].attributes.getNamedItem("id").value);

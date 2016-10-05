@@ -63,10 +63,14 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 		switch(e.tagName) {
 			case "rectangle":
 				this.primitives.push(new MyRectangle(this.scene, 
-					this.reader.getFloat(e, "minX", bool),
-					this.reader.getFloat(e, "maxX", bool),
-					this.reader.getFloat(e, "minY", bool),
-					this.reader.getFloat(e, "maxY", bool)));
+					this.reader.getFloat(e, "x1", bool),
+					this.reader.getFloat(e, "x2", bool),
+					this.reader.getFloat(e, "y1", bool),
+					this.reader.getFloat(e, "y2", bool)));
+					console.log(this.primitives[0].minX);
+					console.log(this.primitives[0].maxX);
+					console.log(this.primitives[0].minY);
+					console.log(this.primitives[0].maxY);
 				break;
 			case "triangle":
 				this.primitives.push(new MyTriangle(this.scene,

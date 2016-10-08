@@ -1,20 +1,21 @@
 /**
- * MySemiSphere
+ * MySphere
  * @constructor
  */
- function MySemiSphere(scene, slices, stacks) {
+ function MySphere(scene, radius, slices, stacks) {
  	CGFobject.call(this,scene);
 	
+	this.radius = radius;
 	this.slices = slices;
 	this.stacks = stacks;
 
  	this.initBuffers();
  };
 
- MySemiSphere.prototype = Object.create(CGFobject.prototype);
- MySemiSphere.prototype.constructor = MySemiSphere;
+MySphere.prototype = Object.create(CGFobject.prototype);
+MySphere.prototype.constructor = MySphere;
 
- MySemiSphere.prototype.initBuffers = function() {
+MySphere.prototype.initBuffers = function() {
  	/*
  	* TODO:
  	* Replace the following lines in order to build a prism with a **single mesh**.
@@ -23,13 +24,13 @@
  	* build a prism with varying number of slices and stacks?
  	*/
  	var theta = 2 * Math.PI / this.slices;
- 	var phi = Math.PI / (2 * this.stacks);
+ 	var phi = 2 * Math.PI / (2 * this.stacks);
 
  	this.vertices = [];
  	this.texCoords = [];
  	for(var j = 0; j <= this.stacks; j++){
 		for (var i = 0; i < this.slices; i++) {			
-			this.vertices.push(Math.sin(j * phi) * Math.cos(i * theta), Math.sin(j * phi) * Math.sin(i * theta), Math.cos(j * phi));
+			this.vertices.push(this.radius * Math.sin(j * phi) * Math.cos(i * theta),this.radius * Math.sin(j * phi) * Math.sin(i * theta), this.radius * Math.cos(j * phi));
 			this.texCoords.push(0.5 * (Math.sin(j * phi) * Math.cos(i * theta)) + .5, 0.5 * (Math.sin(j * phi) * Math.sin(i * theta)) + .5);
 		}
 	}
@@ -52,7 +53,7 @@
  	this.normals = [];
  	for(var j = 0; j <= this.stacks; j++){
 		for (var i = 0; i < this.slices; i++) {
-			this.normals.push(Math.sin(j*phi)*Math.cos(i*theta), Math.sin(j*phi)*Math.sin(i*theta), Math.cos(j*phi));
+			this.normals.push(Math.sin(j * phi) * Math.cos(i * theta), Math.sin(j * phi) * Math.sin(i * theta), Math.cos(j * phi));
 		}
 	}
 

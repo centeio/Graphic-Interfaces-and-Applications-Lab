@@ -67,10 +67,6 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 					this.reader.getFloat(e, "x2", bool),
 					this.reader.getFloat(e, "y1", bool),
 					this.reader.getFloat(e, "y2", bool)));
-					console.log(this.primitives[0].minX);
-					console.log(this.primitives[0].maxX);
-					console.log(this.primitives[0].minY);
-					console.log(this.primitives[0].maxY);
 				break;
 			case "triangle":
 				this.primitives.push(new MyTriangle(this.scene,
@@ -90,6 +86,13 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 					this.reader.getFloat(e, "base", bool),
 					this.reader.getFloat(e, "top", bool),
 					this.reader.getFloat(e, "height", bool), 
+					this.reader.getFloat(e, "slices", bool),
+					this.reader.getFloat(e, "stacks", bool)));
+				break;
+			case "sphere":
+				var bool;
+				this.primitives.push(new MySphere(this.scene,
+					this.reader.getFloat(e, "radius", bool),
 					this.reader.getFloat(e, "slices", bool),
 					this.reader.getFloat(e, "stacks", bool)));
 				break;

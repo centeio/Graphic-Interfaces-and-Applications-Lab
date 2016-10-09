@@ -57,7 +57,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	for (var i=0; i < nnodes; i++)
 	{
 		var e = rootPrimitives[0].children[i].children[0];
-
+		var bool;
 		console.log("Read list item " + e);
 
 		switch(e.tagName) {
@@ -81,7 +81,6 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 					this.reader.getFloat(e, "z3", bool)));
 				break;
 			case "cylinder":
-				var bool;
 				this.primitives.push(new MyCylinder(this.scene,
 					this.reader.getFloat(e, "base", bool),
 					this.reader.getFloat(e, "top", bool),
@@ -90,11 +89,17 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 					this.reader.getFloat(e, "stacks", bool)));
 				break;
 			case "sphere":
-				var bool;
 				this.primitives.push(new MySphere(this.scene,
 					this.reader.getFloat(e, "radius", bool),
 					this.reader.getFloat(e, "slices", bool),
 					this.reader.getFloat(e, "stacks", bool)));
+				break;
+			case "torus":
+				this.primitives.push(new MyTorus(this.scene,
+					this.reader.getFloat(e, "inner", bool),
+					this.reader.getFloat(e, "outer", bool),
+					this.reader.getFloat(e, "slices", bool),
+					this.reader.getFloat(e, "loops", bool)));
 				break;
 			default:
 				break;

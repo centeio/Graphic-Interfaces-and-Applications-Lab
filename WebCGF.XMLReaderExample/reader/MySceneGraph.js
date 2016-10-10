@@ -61,71 +61,114 @@ function multiplyMatrices(m1, m2) {
    return result;
 }
 
-MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
+MySceneGraph.prototype.parseViews = function(rootElement) {
+	var rootViews = rootElement.getElementsByTagName('views');
+	if(rootViews[0].children.length == 0)
+		return "Views are missing."
 
-	var rootPrimitives =  rootElement.getElementsByTagName('primitives');
-	if (rootPrimitives[0].children.length == 0) {
-		return "primitives are missing.";
+	this.views = new Map();
+	var nperspectives = rootViews[0].children.length;
+	for(var i = 0; i < nperspectives; i++) {
+		var element = rootViews[0].children[i];
+		var bool;
+		console.log("Read list item " + element);
+		var npositions = rootViews[0].children[i].children.length;
+
+		for(var j = 0; j < npositions; j++) {
+			var innerElement = element.children[j];
+
+			switch(innerElement.tagName) {
+				case "from":
+					var x1 = this.reader.getFloat(innerElement, "x", bool);
+					var y1 = this.reader.getFloat(innerElement, "y", bool);
+					var z1 = this.reader.getFloat(innerElement, "z", bool);
+					break;
+				case "to":
+					var x2 = this.reader.getFloat(innerElement, "x", bool);
+					var y2 = this.reader.getFloat(innerElement, "y", bool);
+					var z2 = this.reader.getFloat(innerElement, "z", bool);
+					break;
+				default:
+					break;
+			}
+		}
+		
+		this.views.set(this.reader.getString(element, "id", bool),
+			new MyView(this.reader.getString(element, "near", bool),
+				this.reader.getString(element, "far", bool),
+				this.reader.getString(element, "angle", bool), x1, y1, z1, x2, y2, z2));
 	}
+}
+
+MySceneGraph.prototype.parsePrimitives = function(rootElement) {
+	var rootPrimitives =  rootElement.getElementsByTagName('primitives');
+	if (rootPrimitives[0].children.length == 0)
+		return "Primitives are missing."
 
 	this.primitives = new Map();
 	var nnodes = rootPrimitives[0].children.length;
-	for (var i=0; i < nnodes; i++)
-	{
-		var e = rootPrimitives[0].children[i].children[0];
+	for (var i = 0; i < nnodes; i++) {
+		var element = rootPrimitives[0].children[i].children[0];
 		var bool;
-		console.log("Read list item " + e);
+		console.log("Read list item " + element);
 
-		switch(e.tagName) {
+		switch(element.tagName) {
 			case "rectangle":
 				this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
 					new MyRectangle(this.scene, 
-						this.reader.getFloat(e, "x1", bool),
-						this.reader.getFloat(e, "x2", bool),
-						this.reader.getFloat(e, "y1", bool),
-						this.reader.getFloat(e, "y2", bool)));
+						this.reader.getFloat(element, "x1", bool),
+						this.reader.getFloat(element, "x2", bool),
+						this.reader.getFloat(element, "y1", bool),
+						this.reader.getFloat(element, "y2", bool)));
 				break;
 			case "triangle":
 				this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
 					new MyTriangle(this.scene,
-						this.reader.getFloat(e, "x1", bool),
-						this.reader.getFloat(e, "y1", bool),
-						this.reader.getFloat(e, "z1", bool),
-						this.reader.getFloat(e, "x2", bool),
-						this.reader.getFloat(e, "y2", bool),
-						this.reader.getFloat(e, "z2", bool),
-						this.reader.getFloat(e, "x3", bool),
-						this.reader.getFloat(e, "y3", bool),
-						this.reader.getFloat(e, "z3", bool)));
+						this.reader.getFloat(element, "x1", bool),
+						this.reader.getFloat(element, "y1", bool),
+						this.reader.getFloat(element, "z1", bool),
+						this.reader.getFloat(element, "x2", bool),
+						this.reader.getFloat(element, "y2", bool),
+						this.reader.getFloat(element, "z2", bool),
+						this.reader.getFloat(element, "x3", bool),
+						this.reader.getFloat(element, "y3", bool),
+						this.reader.getFloat(element, "z3", bool)));
 				break;
 			case "cylinder":
 				this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
 					new MyCylinder(this.scene,
-						this.reader.getFloat(e, "base", bool),
-						this.reader.getFloat(e, "top", bool),
-						this.reader.getFloat(e, "height", bool), 
-						this.reader.getFloat(e, "slices", bool),
-						this.reader.getFloat(e, "stacks", bool)));
+						this.reader.getFloat(element, "base", bool),
+						this.reader.getFloat(element, "top", bool),
+						this.reader.getFloat(element, "height", bool), 
+						this.reader.getFloat(element, "slices", bool),
+						this.reader.getFloat(element, "stacks", bool)));
 				break;
 			case "sphere":
 				this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
 					new MySphere(this.scene,
-						this.reader.getFloat(e, "radius", bool),
-						this.reader.getFloat(e, "slices", bool),
-						this.reader.getFloat(e, "stacks", bool)));
+						this.reader.getFloat(element, "radius", bool),
+						this.reader.getFloat(element, "slices", bool),
+						this.reader.getFloat(element, "stacks", bool)));
 				break;
 			case "torus":
 				this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
 					new MyTorus(this.scene,
-						this.reader.getFloat(e, "inner", bool),
-						this.reader.getFloat(e, "outer", bool),
-						this.reader.getFloat(e, "slices", bool),
-						this.reader.getFloat(e, "loops", bool)));
+						this.reader.getFloat(element, "inner", bool),
+						this.reader.getFloat(element, "outer", bool),
+						this.reader.getFloat(element, "slices", bool),
+						this.reader.getFloat(element, "loops", bool)));
 				break;
 			default:
 				break;
 		}
-	}
+	}	
+}
+
+MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {	
+
+	this.parseViews(rootElement);
+	
+	this.parsePrimitives(rootElement);
 
 	//reading tranformations
 

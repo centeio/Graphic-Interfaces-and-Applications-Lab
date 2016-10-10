@@ -104,6 +104,56 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 		this.textures.set(this.reader.getString(t[0], "id", bool),texture);		
 	}
 
+	//materials
+	var rootMaterials =  rootElement.getElementsByTagName('materials');
+	this.materials = new Map();
+	nnodes = rootMaterials[0].children.length;
+	for(var i=0; i < nnodes; i++)
+	{
+		var emission = [];
+		var ambient = [];
+		var diffuse = [];
+		var specular = [];
+		var shininess = [];
+		var all = [];
+
+		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		all.push(emission);		
+		all.push(ambient);		
+		all.push(diffuse);		
+		all.push(specular);		
+		all.push(shininess);		
+
+		this.materials.set(this.reader.getString(rootMaterials[0].children[i], "id", bool),all);
+
+	}
+
+
+
 
 	//primitives
 

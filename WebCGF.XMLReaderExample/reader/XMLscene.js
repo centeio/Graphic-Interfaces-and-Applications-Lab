@@ -78,18 +78,8 @@ XMLscene.prototype.display = function () {
 	if (this.graph.loadedOk)
 	{
 		this.lights[0].update();
-		for(var i = 0; i < this.graph.primitives.length; i++)
-			if(i == (this.graph.primitives.length - 1)) {
-				this.pushMatrix();
-				this.translate(0,0,3);
-				this.graph.primitives[i].display();
-				this.popMatrix();
-			} else if(i == (this.graph.primitives.length - 2)) {
-				this.pushMatrix();
-				this.translate(0,0,5);
-				this.graph.primitives[i].display();
-				this.popMatrix();
-			} else 
-				this.graph.primitives[i].display();
+		for(var [key, value] of this.graph.primitives.entries()) {
+			value.display();		
+		}
 	};	
 };

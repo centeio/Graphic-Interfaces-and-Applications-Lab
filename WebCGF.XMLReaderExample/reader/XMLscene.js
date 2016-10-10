@@ -78,6 +78,12 @@ XMLscene.prototype.display = function () {
 	if (this.graph.loadedOk)
 	{
 		this.lights[0].update();
+		for(var [key, value] of this.graph.views.entries()) {
+			console.log(key + " near: " + value.near + " far: " + value.far + " angle: " + value.angle + " from ["
+				+ value.fromX + "," + value.fromY + "," + value.fromZ + "] to [" + value.toX + "," + value.toY + ","
+				+ value.toZ + "]");		
+		}
+
 		for(var [key, value] of this.graph.primitives.entries()) {
 			value.display();		
 		}

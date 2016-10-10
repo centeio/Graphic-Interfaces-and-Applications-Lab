@@ -45,6 +45,22 @@ MySceneGraph.prototype.onXMLReady=function()
 /*
  * Example of method that parses elements of one block and stores information in a specific data structure
  */
+
+function multiplyMatrices(m1, m2) {
+   var result = [];
+   for (var i = 0; i < m1.length; i++) {
+       result[i] = [];
+       for (var j = 0; j < m2[0].length; j++) {
+           var sum = 0;
+           for (var k = 0; k < m1[0].length; k++) {
+               sum += m1[i][k] * m2[k][j];
+           }
+           result[i][j] = sum;
+       }
+   }
+   return result;
+}
+
 MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 
 	var rootPrimitives =  rootElement.getElementsByTagName('primitives');
@@ -105,38 +121,62 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	console.log(nnodes);
 	for (var i=0; i < nnodes; i++)
 	{	
-		this.transformations.push(rootTranformations[0].children[i].attributes.getNamedItem("id").value);
+		var trans = [];
+
+		trans.push(rootTranformations[0].children[i].attributes.getNamedItem("id").value);
+
+		var matrix = mat4.create();
 
 		var snodes = rootTranformations[0].children[i].children.length;
+		mat4.identity(matrix);
 
-		for(var j=0; j < snodes; j++){
-		var t = rootTranformations[0].children[i].children[j];
+		for(var j=snodes-1; j >= 0; j--){
 
-		console.log("Read list item " + e);
+			var t = rootTranformations[0].children[i].children[j];
+			var bool;
 
-		var trans = [];
-		trans.push(t.tagName);
+			console.log("Read list item " + t);
 
-		switch(t.tagName) {
-			case "translate":
-				this.transformations.push(t.attributes.getNamedItem("x").value);
-				this.transformations.push(t.attributes.getNamedItem("y").value);
-				this.transformations.push(t.attributes.getNamedItem("z").value);
-			break;
-			case "rotate":
-				this.transformations.push(t.attributes.getNamedItem("axis").value);
-				this.transformations.push(t.attributes.getNamedItem("angle").value);
-			break;		
-			case "scale":
-				this.transformations.push(t.attributes.getNamedItem("x").value);
-				this.transformations.push(t.attributes.getNamedItem("y").value);
-				this.transformations.push(t.attributes.getNamedItem("z").value);				
-			break;
-			default:
-			break;				
+
+	//this.reader.getFloat(e, "x1", bool),
+			switch(t.tagName) {
+				case "translate":
+				mat4.translate(matrix,matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
+				console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
+
+
+				break;
+				case "rotate":
+					
+					console.log("axis " + this.reader.getString(t,"axis",bool));
+//mat4.translate(matrix,[x,y,z];)
+					switch(this.reader.getString(t,"axis",bool)) {
+						case "x":
+						mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[1,0,0]);
+						console.log("angle " + this.reader.getFloat(t,"angle",bool));
+						break;
+						case "y":
+						mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[0,1,0]);
+						break;
+						case "z":
+						mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[0,0,1]);
+						break;
+						default:
+						break;
+					}
+				break;		
+				case "scale":
+					mat4.scale(matrix,matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
+					console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
+				break;
+				default:
+				break;				
 		}
-		}
 
+		//mat4.multiply(m,m,matrix);
+		}
+		trans.push(matrix);
+		this.transformations.push(trans);
 	}
 
 

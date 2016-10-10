@@ -78,7 +78,10 @@ XMLscene.prototype.display = function () {
 	if (this.graph.loadedOk)
 	{
 		this.lights[0].update();
+		this.multMatrix(this.graph.transformations[0][1]);
 		for(var i = 0; i < this.graph.primitives.length; i++)
 			this.graph.primitives[i].display();
-	};	
+		
+	};
+
 };

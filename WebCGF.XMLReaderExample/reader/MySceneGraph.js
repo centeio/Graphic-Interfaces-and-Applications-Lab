@@ -62,6 +62,37 @@ function multiplyMatrices(m1, m2) {
 }
 
 MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
+	var bool;
+
+	//read root and axis
+	var sceneInfo = rootElement.getElementsByTagName('scene');
+	this.rootName = this.reader.getString(sceneInfo[0], "root", bool);
+	this.axisLength = this.reader.getFloat(sceneInfo[0], "axis_length", bool);
+
+//	console.log("scene " + this.rootName + " axis " + this.axisLength);
+
+	//ilumination
+	var illumination = rootElement.getElementsByTagName('illumination');
+	this.doublesided = this.reader.getBoolean(illumination[0], "doublesided", bool);
+	this.local = this.reader.getBoolean(illumination[0], "local", bool);	
+
+	this.ambient = [];
+	var amb = illumination[0].getElementsByTagName('ambient');
+	this.ambient.push(this.reader.getFloat(amb[0], "r", bool));
+	this.ambient.push(this.reader.getFloat(amb[0], "g", bool));
+	this.ambient.push(this.reader.getFloat(amb[0], "b", bool));
+	this.ambient.push(this.reader.getFloat(amb[0], "a", bool));
+
+	this.background = [];
+	var backg = illumination[0].getElementsByTagName('ambient');
+	this.background.push(this.reader.getFloat(backg[0], "r", bool));
+	this.background.push(this.reader.getFloat(backg[0], "g", bool));
+	this.background.push(this.reader.getFloat(backg[0], "b", bool));
+	this.background.push(this.reader.getFloat(backg[0], "a", bool));
+
+
+
+	//primitives
 
 	var rootPrimitives =  rootElement.getElementsByTagName('primitives');
 	if (rootPrimitives[0].children.length == 0) {
@@ -73,7 +104,6 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	for (var i=0; i < nnodes; i++)
 	{
 		var e = rootPrimitives[0].children[i].children[0];
-		var bool;
 		console.log("Read list item " + e);
 
 		switch(e.tagName) {

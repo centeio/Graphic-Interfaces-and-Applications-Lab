@@ -50,7 +50,7 @@ MyRectangle.prototype.initBuffers = function () {
     	this.minS, this.minT,
    		this.maxS, this.minT  
     ];
-		
+	
 	this.primitiveType=this.scene.gl.TRIANGLES;
 	this.initGLBuffers();
 };

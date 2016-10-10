@@ -106,7 +106,7 @@
         <transformation id="ss">
            <!-- instrucoes a usar sem limite nem ordem -->
            <!-- deve existir pelo menos uma transformacao -->
-           <translate x="ff" y="ff" z="ff" />
+           <translate x="5" y="4" z="3" />
            <rotate axis="cc" angle="ff" />
            <scale x="ff" y="ff" z="ff" />
         </transformation>
@@ -145,15 +145,36 @@
             
         </primitive>
 
-        <primitive id="triangle">
+        <primitive id="cylinder">
            
             <!-- apenas pode existir UMA das seguintes tags: -->
             <!--     rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente como-->
             <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
-            <cylinder base="4" top="2" height="2" slices="8" stacks="20" />
+            <cylinder base="2" top="1" height="4" slices="8" stacks="20" />
             <!---<sphere radius="ff" slices="ii" stacks="ii" />
             <torus inner="ff" outer="ff" slices="ii" loops="ii" />-->
+            
+        </primitive>
+
+        <primitive id="sphere">
+           
+            <!-- apenas pode existir UMA das seguintes tags: -->
+            <!--     rectangle, triangle, cylinder, sphere, torus -->
+            <!-- os parametros devem ser interpretados, genericamente como-->
+            <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
+            <sphere radius="1" slices="20" stacks="20" />
+            <!--<torus inner="ff" outer="ff" slices="ii" loops="ii" />-->
+            
+        </primitive>
+
+        <primitive id="torus">
+           
+            <!-- apenas pode existir UMA das seguintes tags: -->
+            <!--     rectangle, triangle, cylinder, sphere, torus -->
+            <!-- os parametros devem ser interpretados, genericamente como-->
+            <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
+            <torus inner="2" outer="3" slices="8" loops="20" />
             
         </primitive>
         

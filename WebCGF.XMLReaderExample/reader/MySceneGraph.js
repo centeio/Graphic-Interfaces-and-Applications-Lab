@@ -62,7 +62,7 @@ function multiplyMatrices(m1, m2) {
 }
 
 MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
-	var bool;
+	var bool, nnodes;
 
 	//read root and axis
 	var sceneInfo = rootElement.getElementsByTagName('scene');
@@ -90,6 +90,19 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	this.background.push(this.reader.getFloat(backg[0], "b", bool));
 	this.background.push(this.reader.getFloat(backg[0], "a", bool));
 
+	//textures
+	var rootTextures =  rootElement.getElementsByTagName('textures');
+	this.textures = new Map();
+	nnodes = rootTextures[0].children.length;
+	for (var i=0; i < nnodes; i++)
+	{
+		var texture = [];
+		var t = rootTextures[0].children[i];
+		texture.push(this.reader.getString(t[0], "file", bool));
+		texture.push(this.reader.getFloat(t[0], "length_s", bool));
+		texture.push(this.reader.getFloat(t[0], "length_t", bool));
+		this.textures.set(this.reader.getString(t[0], "id", bool),texture);		
+	}
 
 
 	//primitives
@@ -100,7 +113,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	}
 
 	this.primitives = new Map();
-	var nnodes = rootPrimitives[0].children.length;
+	nnodes = rootPrimitives[0].children.length;
 	for (var i=0; i < nnodes; i++)
 	{
 		var e = rootPrimitives[0].children[i].children[0];
@@ -157,21 +170,17 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 		}
 	}
 
-	//reading tranformations
+	//tranformations
 
 	var rootTranformations =  rootElement.getElementsByTagName('transformations');
 	if (rootTranformations[0].children.length == 0) {
 		return "transformations are missing.";
 	}
 
-	this.transformations = [];
+	this.transformations = new Map();
 	nnodes = rootTranformations[0].children.length;
 	for (var i=0; i < nnodes; i++)
 	{	
-		var trans = [];
-
-		trans.push(rootTranformations[0].children[i].attributes.getNamedItem("id").value);
-
 		var matrix = mat4.create();
 
 		var snodes = rootTranformations[0].children[i].children.length;
@@ -222,8 +231,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 
 		//mat4.multiply(m,m,matrix);
 		}
-		trans.push(matrix);
-		this.transformations.push(trans);
+		this.transformations.set(this.reader.getString(rootTranformations[0].children[i],"id", bool),matrix);
 	}
 
 

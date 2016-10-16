@@ -100,6 +100,122 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 	}
 }
 
+MySceneGraph.prototype.parseLights = function(rootElement) {
+	var rootLights = rootElement.getElementsByTagName('lights');
+	var nLights = rootLights[0].children.length;
+
+	if(nLights > 8)
+		return "WebGL only supports 8 lights."
+
+	var bool;
+
+	for(var i = 0; i < nLights; i++) {
+		var child = rootLights[0].children[i];
+
+		switch(child.tagName) {
+			case "omni":
+				var location = child.getElementsByTagName('location')[0];
+				var ambient = child.getElementsByTagName('ambient')[0];
+				var diffuse = child.getElementsByTagName('diffuse')[0];
+				var specular = child.getElementsByTagName('specular')[0];
+
+				this.scene.lights[i].setPosition(
+					this.reader.getFloat(location, "x", bool),
+					this.reader.getFloat(location, "y", bool),
+					this.reader.getFloat(location, "z", bool),
+					this.reader.getFloat(location, "w", bool));
+				this.scene.lights[i].setAmbient(
+					this.reader.getFloat(ambient, "r", bool),
+					this.reader.getFloat(ambient, "g", bool),
+					this.reader.getFloat(ambient, "b", bool),
+					this.reader.getFloat(ambient, "a", bool));
+				this.scene.lights[i].setDiffuse(
+					this.reader.getFloat(diffuse, "r", bool),
+					this.reader.getFloat(diffuse, "g", bool),
+					this.reader.getFloat(diffuse, "b", bool),
+					this.reader.getFloat(diffuse, "a", bool));
+				this.scene.lights[i].setSpecular(
+					this.reader.getFloat(specular, "r", bool),
+					this.reader.getFloat(specular, "g", bool),
+					this.reader.getFloat(specular, "b", bool),
+					this.reader.getFloat(specular, "a", bool));
+
+				this.scene.lights[i].setVisible(true);
+				if(this.reader.getBoolean(child, "enabled", bool)) {
+					console.log("Light " + i + " On.");
+					this.scene.lights[i].enable();
+				}
+				else {
+					console.log("Light " + i + " Off.");
+					this.scene.lights[i].disable();
+				}
+				break;
+			case "spot":
+				var target = child.getElementsByTagName('target')[0];
+				var location = child.getElementsByTagName('location')[0];
+				var ambient = child.getElementsByTagName('ambient')[0];
+				var diffuse = child.getElementsByTagName('diffuse')[0];
+				var specular = child.getElementsByTagName('specular')[0];
+
+				this.scene.lights[i].setPosition(
+					this.reader.getFloat(location, "x", bool),
+					this.reader.getFloat(location, "y", bool),
+					this.reader.getFloat(location, "z", bool));
+
+				console.log("Ambient: r: " + this.reader.getFloat(ambient, "r", bool)
+					+ " g: " + this.reader.getFloat(ambient, "g", bool)
+					+ " b: " + this.reader.getFloat(ambient, "b", bool)
+					+ " a: " + this.reader.getFloat(ambient, "a", bool));
+				this.scene.lights[i].setAmbient(
+					this.reader.getFloat(ambient, "r", bool),
+					this.reader.getFloat(ambient, "g", bool),
+					this.reader.getFloat(ambient, "b", bool),
+					this.reader.getFloat(ambient, "a", bool));
+
+				console.log("Ambient: r: " + this.reader.getFloat(diffuse, "r", bool)
+					+ " g: " + this.reader.getFloat(diffuse, "g", bool)
+					+ " b: " + this.reader.getFloat(diffuse, "b", bool)
+					+ " a: " + this.reader.getFloat(diffuse, "a", bool));
+				this.scene.lights[i].setDiffuse(
+					this.reader.getFloat(diffuse, "r", bool),
+					this.reader.getFloat(diffuse, "g", bool),
+					this.reader.getFloat(diffuse, "b", bool),
+					this.reader.getFloat(diffuse, "a", bool));
+
+				console.log("Ambient: r: " + this.reader.getFloat(specular, "r", bool)
+					+ " g: " + this.reader.getFloat(specular, "g", bool)
+					+ " b: " + this.reader.getFloat(specular, "b", bool)
+					+ " a: " + this.reader.getFloat(specular, "a", bool));
+				this.scene.lights[i].setSpecular(
+					this.reader.getFloat(specular, "r", bool),
+					this.reader.getFloat(specular, "g", bool),
+					this.reader.getFloat(specular, "b", bool),
+					this.reader.getFloat(specular, "a", bool));
+
+				console.log("Direction x: " + (this.reader.getFloat(target, "x", bool) - this.reader.getFloat(location, "x", bool)));
+				console.log("Direction y: " + (this.reader.getFloat(target, "y", bool) - this.reader.getFloat(location, "y", bool)));
+				console.log("Direction z: " + (this.reader.getFloat(target, "z", bool) - this.reader.getFloat(location, "z", bool)));
+				
+				this.scene.lights[i].setSpotDirection(0,0,-1);
+				
+				//this.scene.ligths[i].setSpotCutOff(this.reader.getFloat(child, "angle", bool));
+				this.scene.lights[i].setSpotExponent(this.reader.getFloat(child, "exponent", bool));
+				this.scene.lights[i].setVisible(true);
+				if(this.reader.getBoolean(child, "enabled", bool)) {
+					console.log("Light " + i + " On.");
+					this.scene.lights[i].enable();
+				}
+				else {
+					console.log("Light " + i + " Off.");
+					this.scene.lights[i].disable();
+				}
+				break;
+			default:
+				break;
+		}
+	}
+}
+
 MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 	var rootPrimitives =  rootElement.getElementsByTagName('primitives');
 	if (rootPrimitives[0].children.length == 0)
@@ -167,7 +283,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {	
 
 	this.parseViews(rootElement);
-	
+	this.parseLights(rootElement);
 	this.parsePrimitives(rootElement);
 
 	//reading tranformations

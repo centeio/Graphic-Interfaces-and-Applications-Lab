@@ -48,7 +48,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.gl.clearColor(0,0,0,1);
 	//this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	this.lights[0].setVisible(true);
-    this.lights[0].enable();
+    //this.lights[0].enable();
 };
 
 XMLscene.prototype.display = function () {
@@ -77,12 +77,14 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
 	{
-		this.lights[0].update();
-		for(var [key, value] of this.graph.views.entries()) {
+		for(var i = 0; i < this.lights.length; i++)
+			this.lights[i].update();
+
+		/*for(var [key, value] of this.graph.views.entries()) {
 			console.log(key + " near: " + value.near + " far: " + value.far + " angle: " + value.angle + " from ["
 				+ value.fromX + "," + value.fromY + "," + value.fromZ + "] to [" + value.toX + "," + value.toY + ","
 				+ value.toZ + "]");		
-		}
+		}*/
 
 		for(var [key, value] of this.graph.primitives.entries()) {
 			value.display();		

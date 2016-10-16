@@ -79,7 +79,7 @@ XMLscene.prototype.display = function () {
 	{
 		for(var i = 0; i < this.lights.length; i++)
 			this.lights[i].update();
-
+			
 		/*for(var [key, value] of this.graph.views.entries()) {
 			console.log(key + " near: " + value.near + " far: " + value.far + " angle: " + value.angle + " from ["
 				+ value.fromX + "," + value.fromY + "," + value.fromZ + "] to [" + value.toX + "," + value.toY + ","

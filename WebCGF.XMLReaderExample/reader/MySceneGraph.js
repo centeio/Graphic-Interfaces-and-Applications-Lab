@@ -61,6 +61,103 @@ function multiplyMatrices(m1, m2) {
    return result;
 }
 
+
+MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
+	var bool, nnodes;
+
+	//read root and axis
+	var sceneInfo = rootElement.getElementsByTagName('scene');
+	this.rootName = this.reader.getString(sceneInfo[0], "root", bool);
+	this.axisLength = this.reader.getFloat(sceneInfo[0], "axis_length", bool);
+
+//	console.log("scene " + this.rootName + " axis " + this.axisLength);
+
+	//ilumination
+	var illumination = rootElement.getElementsByTagName('illumination');
+	this.doublesided = this.reader.getBoolean(illumination[0], "doublesided", bool);
+	this.local = this.reader.getBoolean(illumination[0], "local", bool);	
+
+	this.ambient = [];
+	var amb = illumination[0].getElementsByTagName('ambient');
+	this.ambient.push(this.reader.getFloat(amb[0], "r", bool));
+	this.ambient.push(this.reader.getFloat(amb[0], "g", bool));
+	this.ambient.push(this.reader.getFloat(amb[0], "b", bool));
+	this.ambient.push(this.reader.getFloat(amb[0], "a", bool));
+
+	this.background = [];
+	var backg = illumination[0].getElementsByTagName('ambient');
+	this.background.push(this.reader.getFloat(backg[0], "r", bool));
+	this.background.push(this.reader.getFloat(backg[0], "g", bool));
+	this.background.push(this.reader.getFloat(backg[0], "b", bool));
+	this.background.push(this.reader.getFloat(backg[0], "a", bool));
+
+	//textures
+	var rootTextures =  rootElement.getElementsByTagName('textures');
+	this.textures = new Map();
+	nnodes = rootTextures[0].children.length;
+	for (var i=0; i < nnodes; i++)
+	{
+		var texture = [];
+		var t = rootTextures[0].children[i];
+		texture.push(this.reader.getString(t[0], "file", bool));
+		texture.push(this.reader.getFloat(t[0], "length_s", bool));
+		texture.push(this.reader.getFloat(t[0], "length_t", bool));
+		this.textures.set(this.reader.getString(t[0], "id", bool),texture);		
+	}
+
+	//materials
+	var rootMaterials =  rootElement.getElementsByTagName('materials');
+	this.materials = new Map();
+	nnodes = rootMaterials[0].children.length;
+	for(var i=0; i < nnodes; i++)
+	{
+		var emission = [];
+		var ambient = [];
+		var diffuse = [];
+		var specular = [];
+		var shininess = [];
+		var all = [];
+
+		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
+		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
+		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
+		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+
+		all.push(emission);		
+		all.push(ambient);		
+		all.push(diffuse);		
+		all.push(specular);		
+		all.push(shininess);		
+
+		this.materials.set(this.reader.getString(rootMaterials[0].children[i], "id", bool),all);
+
+	}
+
+
+
+
+	//primitives
+
 MySceneGraph.prototype.parseViews = function(rootElement) {
 	var rootViews = rootElement.getElementsByTagName('views');
 	if(rootViews[0].children.length == 0)
@@ -222,11 +319,13 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 		return "Primitives are missing."
 
 	this.primitives = new Map();
-	var nnodes = rootPrimitives[0].children.length;
-	for (var i = 0; i < nnodes; i++) {
-		var element = rootPrimitives[0].children[i].children[0];
-		var bool;
-		console.log("Read list item " + element);
+
+	nnodes = rootPrimitives[0].children.length;
+	for (var i=0; i < nnodes; i++)
+	{
+		var e = rootPrimitives[0].children[i].children[0];
+		console.log("Read list item " + e);
+
 
 		switch(element.tagName) {
 			case "rectangle":
@@ -286,21 +385,17 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	this.parseLights(rootElement);
 	this.parsePrimitives(rootElement);
 
-	//reading tranformations
+	//tranformations
 
 	var rootTranformations =  rootElement.getElementsByTagName('transformations');
 	if (rootTranformations[0].children.length == 0) {
 		return "transformations are missing.";
 	}
 
-	this.transformations = [];
+	this.transformations = new Map();
 	nnodes = rootTranformations[0].children.length;
 	for (var i=0; i < nnodes; i++)
 	{	
-		var trans = [];
-
-		trans.push(rootTranformations[0].children[i].attributes.getNamedItem("id").value);
-
 		var matrix = mat4.create();
 
 		var snodes = rootTranformations[0].children[i].children.length;
@@ -351,8 +446,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 
 		//mat4.multiply(m,m,matrix);
 		}
-		trans.push(matrix);
-		this.transformations.push(trans);
+		this.transformations.set(this.reader.getString(rootTranformations[0].children[i],"id", bool),matrix);
 	}
 
 

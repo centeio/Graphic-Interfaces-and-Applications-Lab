@@ -269,11 +269,128 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 	}	
 }
 
+MySceneGraph.prototype.parseComponents = function(rootElement) {
+	var rootComponents = rootElement.getElementsByTagName('components');
+	if(rootComponents[0].children.length == 0)
+		return "Components are missing."
+	//console.debug(rootComponents[0]);
+
+	this.components = new Map();
+	var ncomponents = rootComponents[0].children.length;
+
+	for(var i = 0; i < ncomponents; i++) {
+		var component = rootComponents[0].children[i];
+		var bool;
+		//console.debug(component);
+
+		var id = this.reader.getString(component, "id", bool);
+		this.components.set(id, new MyComponent());
+		//console.log("Component ID: " + id);
+
+		/* Transformation ---------------------- */
+		var transformation = component.getElementsByTagName('transformation')[0];
+		//console.debug(transformation);
+
+		if(transformation.getElementsByTagName('transformationref')[0] != undefined) {
+			/*console.debug(transformation.getElementsByTagName('transformationref')[0]);
+			console.log("Transformationref: " + 
+				this.reader.getString(transformation.getElementsByTagName('transformationref')[0],
+				"id", bool));*/
+			this.components.get(id).addTransformationRef(
+				this.reader.getString(
+					transformation.getElementsByTagName('transformationref')[0],
+					"id", 
+					bool));
+		}
+		else {
+			var matrix = mat4.create();
+			mat4.identity(matrix);
+
+			var nTransformations = transformation.children.length;
+			for(var i = 0; i < nTransformations; i++) {
+				var t = transformation.children[i];
+
+				switch(t.tagName) {
+					case 'translate':
+						mat4.translate(matrix, matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
+						break;
+					case 'rotate':
+						switch(this.reader.getString(t,"axis",bool)) {
+							case "x":
+								mat4.rotate(matrix, matrix, this.reader.getFloat(t,"angle",bool), [1,0,0]);
+								break;
+							case "y":
+								mat4.rotate(matrix, matrix, this.reader.getFloat(t,"angle",bool), [0,1,0]);
+								break;
+							case "z":
+								mat4.rotate(matrix, matrix, this.reader.getFloat(t,"angle",bool), [0,0,1]);
+								break;
+							default:
+								break;
+						}
+						break;
+					case 'scale':
+						mat4.scale(matrix, matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
+						break;
+					default:
+						break;
+				}
+			}
+			console.log(matrix);
+			this.components.get(id).addTransformation(matrix);
+		} 
+		/* ------------------------------------- */
+
+		/* Materials --------------------------- */
+		var materials = component.getElementsByTagName('materials')[0];
+		var nMaterials = materials.children.length;
+		//console.log("Materials.");
+		for(var i = 0; i < nMaterials; i++) {
+			//console.log("Id " + i + ": " + this.reader.getString(materials.children[i], "id", bool));
+			this.components.get(id).addMaterialRef(
+				this.reader.getString(materials.children[i], "id", bool));
+		}
+		/* ------------------------------------- */
+
+		/* Texture ----------------------------- */
+		var texture = component.getElementsByTagName('texture')[0];
+		//console.log("Texture ID: " + this.reader.getString(texture, "id", bool));
+		this.components.get(id).addTextureRef(
+			this.reader.getString(texture, "id", bool));
+		/* ------------------------------------- */
+
+		/* Children ---------------------------- */ 
+		var componentChildren = component.getElementsByTagName('children')[0];
+		var nChildren = componentChildren.children.length;
+		//console.debug(componentChildren);
+		for(var i = 0; i < nChildren; i++) {
+			var c = componentChildren.children[i];
+			//console.debug(c);
+			switch(c.tagName) {
+				case 'componentref':
+					//console.log("Child Component ID: " + this.reader.getString(c, "id", bool));
+					this.components.get(id).addComponent(
+						this.reader.getString(c, "id", bool));
+					break;
+				case 'primitiveref':
+					//console.log("Child Primitive ID: " + this.reader.getString(c, "id", bool));
+					this.components.get(id).addPrimitive(
+						this.reader.getString(c, "id", bool));
+					break;
+				default:
+					break;
+			}
+		}
+		/* ------------------------------------- */
+	}
+}
+
 MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {	
 
 	this.parseViews(rootElement);
 	this.parseLights(rootElement);
 	this.parsePrimitives(rootElement);
+	this.parseComponents(rootElement);
 
 	//tranformations
 
@@ -295,9 +412,6 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 
 			var t = rootTranformations[0].children[i].children[j];
 			var bool;
-
-			console.log("Read list item " + t);
-
 
 	//this.reader.getFloat(e, "x1", bool),
 			switch(t.tagName) {

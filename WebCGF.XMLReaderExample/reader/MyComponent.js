@@ -2,12 +2,11 @@
  * MyComponent
  * @constructor
  */
-function MyComponent(id) {	
+function MyComponent() {	
 	
-	this.id = id;
 	this.transformationRef = "null";
 	this.transformation = [];
-	this.materialRef = "null";
+	this.materialsRef = [];
 	this.textureRef = "null";
 	this.components = [];
 	this.primitives = [];
@@ -22,7 +21,7 @@ MyComponent.prototype.addTransformation = function(transformation) {
 } 
 
 MyComponent.prototype.addMaterialRef = function(materialRef) {
-	this.materialRef = materialRef;
+	this.materialsRef.push(materialRef);
 } 
 
 MyComponent.prototype.addTextureRef = function(textureRef) {

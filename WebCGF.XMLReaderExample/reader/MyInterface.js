@@ -2,8 +2,6 @@
  * MyInterface
  * @constructor
  */
- 
- 
 function MyInterface() {
 	//call CGFinterface constructor 
 	CGFinterface.call(this);
@@ -30,7 +28,7 @@ MyInterface.prototype.init = function(application) {
 	// the identifier 'doSomething' must be a function declared as part of that object (i.e. a member of the scene class)
 	// e.g. LightingScene.prototype.doSomething = function () { console.log("Doing something..."); }; 
 
-	this.gui.add(this.scene, 'pause');	
+	//this.gui.add(this.scene, 'pause');	
 
 	// add a group of controls (and open/expand by defult)
 	
@@ -40,18 +38,16 @@ MyInterface.prototype.init = function(application) {
 	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
 	// e.g. this.option1=true; this.option2=false;
 	
-	group.add(this.scene, 'Luz1');
-	group.add(this.scene, 'Luz2');
-	group.add(this.scene, 'Luz3');
-	group.add(this.scene, 'Luz4');
+	//group.add(this.scene, 'Luz1');
+	//group.add(this.scene, 'Luz2');
+	//group.add(this.scene, 'Luz3');
+	//group.add(this.scene, 'Luz4');
 	
 	// add a slider
 	// must be a numeric variable of the scene, initialized in scene.init e.g.
 	// this.speed=3;
 	// min and max values can be specified as parameters
-	this.gui.add(this.scene, 'speed', 0.1, 2);
-
-	this.gui.add(this.scene, 'currDroneAppearance', this.scene.droneAppearanceList);
+	//this.gui.add(this.scene, 'currDroneAppearance', this.scene.droneAppearanceList);
 
 	return true;
 };
@@ -73,35 +69,27 @@ MyInterface.prototype.processKeyDown = function(event) {
 	{
 		case('W'):
 		case('w'):
-			this.scene.drone.moveForward();
 			break;
 		case('S'):
 		case('s'):
-			this.scene.drone.moveBackward();
 			break;
 		case ('A'):
 		case ('a'):
-			this.scene.drone.rotateLeft();
 			break;
 		case('D'):
 		case('d'):
-			this.scene.drone.rotateRight();
 			break;
 		case('I'):
 		case('i'):
-			this.scene.drone.moveUp();
 			break;
 		case('J'):
 		case('j'):
-			this.scene.drone.moveDown();
 			break;
 		case('P'):
 		case('p'):
-			this.scene.drone.moveHookUp();
 			break;
 		case('L'):
 		case('l'):
-			this.scene.drone.moveHookDown();
 			break;
 	};
 };
@@ -113,6 +101,4 @@ MyInterface.prototype.processKeyDown = function(event) {
 MyInterface.prototype.processKeyUp = function(event) {
 	// call CGFinterface default code (omit if you want to override)
 	CGFinterface.prototype.processKeyUp.call(this,event);
-	
-	this.scene.drone.static();
 };

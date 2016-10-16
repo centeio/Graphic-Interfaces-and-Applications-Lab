@@ -164,43 +164,25 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 					this.reader.getFloat(location, "x", bool),
 					this.reader.getFloat(location, "y", bool),
 					this.reader.getFloat(location, "z", bool),
-					this.reader.getFloat(location, "w", bool));
+					1);
 
-				console.log("Ambient: r: " + this.reader.getFloat(ambient, "r", bool)
-					+ " g: " + this.reader.getFloat(ambient, "g", bool)
-					+ " b: " + this.reader.getFloat(ambient, "b", bool)
-					+ " a: " + this.reader.getFloat(ambient, "a", bool));
 				this.scene.lights[i].setAmbient(
 					this.reader.getFloat(ambient, "r", bool),
 					this.reader.getFloat(ambient, "g", bool),
 					this.reader.getFloat(ambient, "b", bool),
 					this.reader.getFloat(ambient, "a", bool));
 
-				console.log("Diffuse: r: " + this.reader.getFloat(diffuse, "r", bool)
-					+ " g: " + this.reader.getFloat(diffuse, "g", bool)
-					+ " b: " + this.reader.getFloat(diffuse, "b", bool)
-					+ " a: " + this.reader.getFloat(diffuse, "a", bool));
 				this.scene.lights[i].setDiffuse(
 					this.reader.getFloat(diffuse, "r", bool),
 					this.reader.getFloat(diffuse, "g", bool),
 					this.reader.getFloat(diffuse, "b", bool),
 					this.reader.getFloat(diffuse, "a", bool));
 
-				console.log("Specular: r: " + this.reader.getFloat(specular, "r", bool)
-					+ " g: " + this.reader.getFloat(specular, "g", bool)
-					+ " b: " + this.reader.getFloat(specular, "b", bool)
-					+ " a: " + this.reader.getFloat(specular, "a", bool));
 				this.scene.lights[i].setSpecular(
 					this.reader.getFloat(specular, "r", bool),
 					this.reader.getFloat(specular, "g", bool),
 					this.reader.getFloat(specular, "b", bool),
 					this.reader.getFloat(specular, "a", bool));
-
-				console.log("Direction x: " + (this.reader.getFloat(target, "x", bool) - this.reader.getFloat(location, "x", bool)));
-				console.log("Direction y: " + (this.reader.getFloat(target, "y", bool) - this.reader.getFloat(location, "y", bool)));
-				console.log("Direction z: " + (this.reader.getFloat(target, "z", bool) - this.reader.getFloat(location, "z", bool)));
-				console.log("Angle: " + this.reader.getFloat(child, "angle", bool));
-				console.log("Exponent: " + this.reader.getFloat(child, "exponent", bool));
 
 				this.scene.lights[i].setSpotCutOff(this.reader.getFloat(child, "angle", bool));
 				this.scene.lights[i].setSpotDirection(
@@ -210,14 +192,10 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 				this.scene.lights[i].setSpotExponent(this.reader.getFloat(child, "exponent", bool));
 				
 				this.scene.lights[i].setVisible(true);
-				if(this.reader.getBoolean(child, "enabled", bool)) {
-					console.log("Light " + i + " On.");
+				if(this.reader.getBoolean(child, "enabled", bool))
 					this.scene.lights[i].enable();
-				}
-				else {
-					console.log("Light " + i + " Off.");
+				else 
 					this.scene.lights[i].disable();
-				}
 				break;
 			default:
 				break;

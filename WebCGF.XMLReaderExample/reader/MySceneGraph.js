@@ -336,7 +336,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 						break;
 				}
 			}
-			console.log(matrix);
+			//console.log(matrix);
 			this.components.get(id).addTransformation(matrix);
 		} 
 		/* ------------------------------------- */

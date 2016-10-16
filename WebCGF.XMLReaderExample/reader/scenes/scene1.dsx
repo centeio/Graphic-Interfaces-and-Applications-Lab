@@ -22,10 +22,10 @@
 	
     <textures>
     
-        <texture id="linoleum" file="linoleum.jpg" length_s="1" length_t="1" />  
-        <texture id="cone" file="cone.png" length_s="1" length_t="1" />  
-        <texture id="netnet" file="net.png" length_s="0.5" length_t="0.5" />  
-        <texture id="leather" file="net.png" length_s="1" length_t="1" />  
+        <texture id="linoleum" file="/scenes/linoleum.jpg" length_s="1" length_t="1" />  
+        <texture id="cone" file="/scenes/cone.png" length_s="1" length_t="1" />  
+        <texture id="netnet" file="/scenes/net.png" length_s="0.5" length_t="0.5" />  
+        <texture id="leather" file="/scenes/net.png" length_s="1" length_t="1" />  
         
     </textures>
 	

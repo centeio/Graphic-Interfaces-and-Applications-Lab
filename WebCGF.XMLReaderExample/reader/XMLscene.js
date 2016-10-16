@@ -86,8 +86,6 @@ XMLscene.prototype.display = function () {
 				+ value.toZ + "]");		
 		}*/
 
-		for(var [key, value] of this.graph.primitives.entries()) {
-			value.display();		
-		}
+		this.graph.components.get("root").display();
 	};	
 };

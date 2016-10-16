@@ -198,7 +198,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 				
 				this.scene.lights[i].setSpotDirection(0,0,-1);
 				
-				//this.scene.ligths[i].setSpotCutOff(this.reader.getFloat(child, "angle", bool));
+				//this.scene.ligths[i].setSpotCutOff(2);
 				this.scene.lights[i].setSpotExponent(this.reader.getFloat(child, "exponent", bool));
 				this.scene.lights[i].setVisible(true);
 				if(this.reader.getBoolean(child, "enabled", bool)) {
@@ -224,7 +224,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 	this.primitives = new Map();
 	nnodes = rootPrimitives[0].children.length;
 	var bool;
-	
+
 	for (var i=0; i < nnodes; i++)
 	{
 		var element = rootPrimitives[0].children[i].children[0];

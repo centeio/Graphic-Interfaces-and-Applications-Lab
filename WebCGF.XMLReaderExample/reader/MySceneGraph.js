@@ -41,7 +41,6 @@ MySceneGraph.prototype.onXMLReady=function()
 };
 
 
-
 /*
  * Example of method that parses elements of one block and stores information in a specific data structure
  */
@@ -258,7 +257,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 	var rootComponents = rootElement.getElementsByTagName('components');
 	if(rootComponents[0].children.length == 0)
 		return "Components are missing."
-	//console.debug(rootComponents[0]);
+	console.debug(rootComponents[0]);
 
 	this.components = new Map();
 	var ncomponents = rootComponents[0].children.length;
@@ -266,21 +265,21 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 	for(var i = 0; i < ncomponents; i++) {
 		var component = rootComponents[0].children[i];
 		var bool;
-		//console.debug(component);
+		console.debug(component);
 
 		var id = this.reader.getString(component, "id", bool);
 		this.components.set(id, new MyComponent(this.scene));
-		//console.log("Component ID: " + id);
+		console.log("Component ID: " + id);
 
 		/* Transformation ---------------------- */
 		var transformation = component.getElementsByTagName('transformation')[0];
-		//console.debug(transformation);
+		console.debug(transformation);
 
 		if(transformation.getElementsByTagName('transformationref')[0] != undefined) {
-			/*console.debug(transformation.getElementsByTagName('transformationref')[0]);
+			console.debug(transformation.getElementsByTagName('transformationref')[0]);
 			console.log("Transformationref: " + 
 				this.reader.getString(transformation.getElementsByTagName('transformationref')[0],
-				"id", bool));*/
+				"id", bool));
 			this.components.get(id).addTransformationRef(
 				this.reader.getString(
 					transformation.getElementsByTagName('transformationref')[0],
@@ -292,8 +291,8 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 			mat4.identity(matrix);
 
 			var nTransformations = transformation.children.length;
-			for(var i = 0; i < nTransformations; i++) {
-				var t = transformation.children[i];
+			for(var j = (nTransformations - 1); j >= 0; j--) {
+				var t = transformation.children[j];
 
 				switch(t.tagName) {
 					case 'translate':
@@ -321,7 +320,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 						break;
 				}
 			}
-			//console.log(matrix);
+			console.log(matrix);
 			this.components.get(id).addTransformation(matrix);
 		} 
 		/* ------------------------------------- */
@@ -329,17 +328,17 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 		/* Materials --------------------------- */
 		var materials = component.getElementsByTagName('materials')[0];
 		var nMaterials = materials.children.length;
-		//console.log("Materials.");
-		for(var i = 0; i < nMaterials; i++) {
-			//console.log("Id " + i + ": " + this.reader.getString(materials.children[i], "id", bool));
+		console.log("Materials.");
+		for(var j = 0; j < nMaterials; j++) {
+			console.log("Id " + j + ": " + this.reader.getString(materials.children[j], "id", bool));
 			this.components.get(id).addMaterialRef(
-				this.reader.getString(materials.children[i], "id", bool));
+				this.reader.getString(materials.children[j], "id", bool));
 		}
 		/* ------------------------------------- */
 
 		/* Texture ----------------------------- */
 		var texture = component.getElementsByTagName('texture')[0];
-		//console.log("Texture ID: " + this.reader.getString(texture, "id", bool));
+		console.log("Texture ID: " + this.reader.getString(texture, "id", bool));
 		this.components.get(id).addTextureRef(
 			this.reader.getString(texture, "id", bool));
 		/* ------------------------------------- */
@@ -347,18 +346,18 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 		/* Children ---------------------------- */ 
 		var componentChildren = component.getElementsByTagName('children')[0];
 		var nChildren = componentChildren.children.length;
-		//console.debug(componentChildren);
-		for(var i = 0; i < nChildren; i++) {
-			var c = componentChildren.children[i];
-			//console.debug(c);
+		console.debug(componentChildren);
+		for(var j = 0; j < nChildren; j++) {
+			var c = componentChildren.children[j];
+			console.debug(c);
 			switch(c.tagName) {
 				case 'componentref':
-					//console.log("Child Component ID: " + this.reader.getString(c, "id", bool));
+					console.log("Child Component ID: " + this.reader.getString(c, "id", bool));
 					this.components.get(id).addComponent(
 						this.reader.getString(c, "id", bool));
 					break;
 				case 'primitiveref':
-					//console.log("Child Primitive ID: " + this.reader.getString(c, "id", bool));
+					console.log("Child Primitive ID: " + this.reader.getString(c, "id", bool));
 					this.components.get(id).addPrimitive(
 						this.reader.getString(c, "id", bool));
 					break;
@@ -367,6 +366,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 			}
 		}
 		/* ------------------------------------- */
+		console.log("Finished parsing one component.");
 	}
 }
 

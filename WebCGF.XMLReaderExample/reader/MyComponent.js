@@ -34,11 +34,11 @@ MyComponent.prototype.addComponent = function(component) {
 }
 
 MyComponent.prototype.addPrimitive = function(primitive) {
-	this.components.push(primitive);
+	this.primitives.push(primitive);
 }
 
 MyComponent.prototype.display = function(oldMatrix) {
-
+	console.log("Displaying " + this);
 	var matrix = mat4.create();
 	if(this.transformationRef != "null") {
 		mat4.multiply(matrix, oldMatrix, this.scene.graph.transformations.get(this.transformationRef));
@@ -48,6 +48,10 @@ MyComponent.prototype.display = function(oldMatrix) {
 	}
 
 	for(var i = 0; i < this.components.length; i++) {
+		console.log("Components.");
+		console.log(this.components);
+		console.log(this.components[i]);
+		console.log(this.scene.graph.components.get(this.components[i]));
 		this.scene.graph.components.get(this.components[i]).display(matrix);
 	}
 

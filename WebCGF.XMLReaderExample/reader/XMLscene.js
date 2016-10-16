@@ -85,7 +85,10 @@ XMLscene.prototype.display = function () {
 				+ value.fromX + "," + value.fromY + "," + value.fromZ + "] to [" + value.toX + "," + value.toY + ","
 				+ value.toZ + "]");		
 		}*/
+		
+		var matrix = mat4.create();
+		mat4.identity(matrix);
 
-		this.graph.components.get("root").display();
+		this.graph.components.get("root").display(matrix);
 	};	
 };

@@ -1,7 +1,3 @@
-<!--a>
-
--->
-
 <dsx>
 	
 	<scene root="root" axis_length="3" />
@@ -19,17 +15,15 @@
         </perspective>
         
     </views>
-	
-    <textures>
+
+    <illumination doublesided="tt" local="tt" >
     
-        <texture id="linoleum" file="/scenes/linoleum.jpg" length_s="1" length_t="1" />  
-        <texture id="cone" file="/scenes/cone.png" length_s="1" length_t="1" />  
-        <texture id="netnet" file="/scenes/net.png" length_s="0.5" length_t="0.5" />  
-        <texture id="leather" file="/scenes/net.png" length_s="1" length_t="1" />  
+        <ambient r="ff" g="ff" b="ff" a="ff" />
+        <background r="ff" g="ff" b="ff" a="ff" />
         
-    </textures>
-	
-	<lights>
+    </illumination>
+
+    <lights>
    
        <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
        <!-- Os identificadores "id" nao podem ser repetidos -->
@@ -49,6 +43,15 @@
            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
        </spot>
     </lights>
+	
+    <textures>
+    
+        <texture id="linoleum" file="/scenes/linoleum.jpg" length_s="1" length_t="1" />  
+        <texture id="cone" file="/scenes/cone.png" length_s="1" length_t="1" />  
+        <texture id="netnet" file="/scenes/net.png" length_s="0.5" length_t="0.5" />  
+        <texture id="leather" file="/scenes/net.png" length_s="1" length_t="1" />  
+        
+    </textures>
     
     <materials>
     
@@ -427,8 +430,6 @@
             </children>
         </component>			
 
-		
-        
     </components>
 
 </dsx>	

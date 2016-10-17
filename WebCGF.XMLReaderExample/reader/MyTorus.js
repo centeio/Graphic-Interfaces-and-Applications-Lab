@@ -26,17 +26,15 @@
  	*/
  	var u = 2 * Math.PI / this.loops;
  	var v = 2 * Math.PI / this.slices;
- 	var r = (this.outer - this.inner) / 2;
- 	var distCenter = this.inner + r;
 
  	this.vertices = [];
  	this.texCoords = [];
  	for(var j = 0; j <= this.loops; j++){
 		for (var i = 0; i < this.slices; i++) {
-			this.vertices.push((distCenter + r * Math.cos(i * v)) * Math.cos(j * u),
-				(distCenter + r * Math.cos(i * v)) * Math.sin(j * u), 
-				r * Math.sin(i * v));
-			this.texCoords.push(i/this.slices, j/this.stacks);
+			this.vertices.push((this.outer + this.inner * Math.cos(i * v)) * Math.cos(j * u),
+				(this.outer + this.inner * Math.cos(i * v)) * Math.sin(j * u), 
+				this.inner * Math.sin(i * v));
+			this.texCoords.push(i/this.slices, j/this.loops);
 		}
 	}
 

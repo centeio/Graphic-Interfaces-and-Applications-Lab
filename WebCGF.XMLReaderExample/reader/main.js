@@ -15,7 +15,7 @@ serialInclude([
                 '../lib/CGF.js', 
                 'XMLscene.js', 
                 'MySceneGraph.js', 
-                'MyQuad.js', 
+                'MyRectangle.js', 
                 'MyTriangle.js', 
                 'MyCylinder.js', 
                 'MySphere.js', 
@@ -23,6 +23,7 @@ serialInclude([
 			    'MyTorus.js', 
                 'MyInterface.js',
                 'MyComponent.js',
+                'MyTexture.js',
 
 main=function()
 {

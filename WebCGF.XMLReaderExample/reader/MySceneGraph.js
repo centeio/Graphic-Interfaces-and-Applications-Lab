@@ -128,11 +128,11 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 
 				this.scene.lights[i].setVisible(true);
 				if(this.reader.getBoolean(child, "enabled", bool)) {
-					console.log("Light " + i + " On.");
+					//console.log("Light " + i + " On.");
 					this.scene.lights[i].enable();
 				}
 				else {
-					console.log("Light " + i + " Off.");
+					//console.log("Light " + i + " Off.");
 					this.scene.lights[i].disable();
 				}
 				break;
@@ -196,6 +196,8 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 	nnodes = rootPrimitives[0].children.length;
 	var bool;
 
+	console.log("Parsing Primitives");
+
 	for (var i=0; i < nnodes; i++)
 	{
 		var element = rootPrimitives[0].children[i].children[0];
@@ -209,6 +211,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 						this.reader.getFloat(element, "x2", bool),
 						this.reader.getFloat(element, "y1", bool),
 						this.reader.getFloat(element, "y2", bool)));
+					console.log(this.primitives.get(this.reader.getString(rootPrimitives[0].children[i], "id", bool)));
 				break;
 			case "triangle":
 				this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
@@ -257,7 +260,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 	var rootComponents = rootElement.getElementsByTagName('components');
 	if(rootComponents[0].children.length == 0)
 		return "Components are missing."
-	console.debug(rootComponents[0]);
+	//console.debug(rootComponents[0]);
 
 	this.components = new Map();
 	var ncomponents = rootComponents[0].children.length;
@@ -265,21 +268,21 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 	for(var i = 0; i < ncomponents; i++) {
 		var component = rootComponents[0].children[i];
 		var bool;
-		console.debug(component);
+		//console.debug(component);
 
 		var id = this.reader.getString(component, "id", bool);
 		this.components.set(id, new MyComponent(this.scene));
-		console.log("Component ID: " + id);
+		//console.log("Component ID: " + id);
 
 		/* Transformation ---------------------- */
 		var transformation = component.getElementsByTagName('transformation')[0];
-		console.debug(transformation);
+		//console.debug(transformation);
 
 		if(transformation.getElementsByTagName('transformationref')[0] != undefined) {
-			console.debug(transformation.getElementsByTagName('transformationref')[0]);
-			console.log("Transformationref: " + 
+			//console.debug(transformation.getElementsByTagName('transformationref')[0]);
+			/*console.log("Transformationref: " + 
 				this.reader.getString(transformation.getElementsByTagName('transformationref')[0],
-				"id", bool));
+				"id", bool));*/
 			this.components.get(id).addTransformationRef(
 				this.reader.getString(
 					transformation.getElementsByTagName('transformationref')[0],
@@ -320,7 +323,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 						break;
 				}
 			}
-			console.log(matrix);
+			//console.log(matrix);
 			this.components.get(id).addTransformation(matrix);
 		} 
 		/* ------------------------------------- */
@@ -328,9 +331,9 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 		/* Materials --------------------------- */
 		var materials = component.getElementsByTagName('materials')[0];
 		var nMaterials = materials.children.length;
-		console.log("Materials.");
+		//console.log("Materials.");
 		for(var j = 0; j < nMaterials; j++) {
-			console.log("Id " + j + ": " + this.reader.getString(materials.children[j], "id", bool));
+			//console.log("Id " + j + ": " + this.reader.getString(materials.children[j], "id", bool));
 			this.components.get(id).addMaterialRef(
 				this.reader.getString(materials.children[j], "id", bool));
 		}
@@ -338,7 +341,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 
 		/* Texture ----------------------------- */
 		var texture = component.getElementsByTagName('texture')[0];
-		console.log("Texture ID: " + this.reader.getString(texture, "id", bool));
+		//console.log("Texture ID: " + this.reader.getString(texture, "id", bool));
 		this.components.get(id).addTextureRef(
 			this.reader.getString(texture, "id", bool));
 		/* ------------------------------------- */
@@ -346,18 +349,18 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 		/* Children ---------------------------- */ 
 		var componentChildren = component.getElementsByTagName('children')[0];
 		var nChildren = componentChildren.children.length;
-		console.debug(componentChildren);
+		//console.debug(componentChildren);
 		for(var j = 0; j < nChildren; j++) {
 			var c = componentChildren.children[j];
-			console.debug(c);
+			//console.debug(c);
 			switch(c.tagName) {
 				case 'componentref':
-					console.log("Child Component ID: " + this.reader.getString(c, "id", bool));
+					//console.log("Child Component ID: " + this.reader.getString(c, "id", bool));
 					this.components.get(id).addComponent(
 						this.reader.getString(c, "id", bool));
 					break;
 				case 'primitiveref':
-					console.log("Child Primitive ID: " + this.reader.getString(c, "id", bool));
+					//console.log("Child Primitive ID: " + this.reader.getString(c, "id", bool));
 					this.components.get(id).addPrimitive(
 						this.reader.getString(c, "id", bool));
 					break;
@@ -370,18 +373,11 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 	}
 }
 
-MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {	
-
-	this.parseViews(rootElement);
-	this.parseLights(rootElement);
-	this.parsePrimitives(rootElement);
-	this.parseComponents(rootElement);
-
-	//tranformations
-
+MySceneGraph.prototype.parseTransformations = function(rootElement) {
+	
 	var rootTranformations =  rootElement.getElementsByTagName('transformations');
 	if (rootTranformations[0].children.length == 0) {
-		return "transformations are missing.";
+		return "Transformations are missing.";
 	}
 
 	this.transformations = new Map();
@@ -398,56 +394,51 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 			var t = rootTranformations[0].children[i].children[j];
 			var bool;
 
-	//this.reader.getFloat(e, "x1", bool),
 			switch(t.tagName) {
 				case "translate":
 				mat4.translate(matrix,matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
-				console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
-
-
+				//console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
 				break;
 				case "rotate":
-					
-					console.log("axis " + this.reader.getString(t,"axis",bool));
-//mat4.translate(matrix,[x,y,z];)
+					//console.log("axis " + this.reader.getString(t,"axis",bool));
 					switch(this.reader.getString(t,"axis",bool)) {
 						case "x":
-						mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[1,0,0]);
-						console.log("angle " + this.reader.getFloat(t,"angle",bool));
-						break;
+							mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[1,0,0]);
+							//console.log("angle " + this.reader.getFloat(t,"angle",bool));
+							break;
 						case "y":
-						mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[0,1,0]);
-						break;
+							mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[0,1,0]);
+							break;
 						case "z":
-						mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[0,0,1]);
-						break;
+							mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[0,0,1]);
+							break;
 						default:
-						break;
+							break;
 					}
 				break;		
 				case "scale":
 					mat4.scale(matrix,matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
-					console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
+					//console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
 				break;
 				default:
 				break;				
-		}
-
-		//mat4.multiply(m,m,matrix);
+			}
 		}
 		this.transformations.set(this.reader.getString(rootTranformations[0].children[i],"id", bool),matrix);
 	}
+}
 
-	var bool, nnodes;
-
-	//read root and axis
+MySceneGraph.prototype.parseScene = function(rootElement) {
+	
+	var bool;
 	var sceneInfo = rootElement.getElementsByTagName('scene');
 	this.rootName = this.reader.getString(sceneInfo[0], "root", bool);
 	this.axisLength = this.reader.getFloat(sceneInfo[0], "axis_length", bool);
+}
 
-//	console.log("scene " + this.rootName + " axis " + this.axisLength);
-
-	//ilumination
+MySceneGraph.prototype.parseIllumination = function(rootElement) {
+	
+	var bool;
 	var illumination = rootElement.getElementsByTagName('illumination');
 	this.doublesided = this.reader.getBoolean(illumination[0], "doublesided", bool);
 	this.local = this.reader.getBoolean(illumination[0], "local", bool);	
@@ -465,124 +456,97 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 	this.background.push(this.reader.getFloat(backg[0], "g", bool));
 	this.background.push(this.reader.getFloat(backg[0], "b", bool));
 	this.background.push(this.reader.getFloat(backg[0], "a", bool));
+}
 
-	//textures
+MySceneGraph.prototype.parseTextures = function(rootElement) {
+	
+	var bool, nnodes;
 	var rootTextures =  rootElement.getElementsByTagName('textures');
 	this.textures = new Map();
 	nnodes = rootTextures[0].children.length;
 	for (var i=0; i < nnodes; i++)
 	{
-		var texture = [];
-		var t = rootTextures[0].children[i];
-		texture.push(this.reader.getString(t[0], "file", bool));
-		texture.push(this.reader.getFloat(t[0], "length_s", bool));
-		texture.push(this.reader.getFloat(t[0], "length_t", bool));
-		this.textures.set(this.reader.getString(t[0], "id", bool),texture);		
+		var texture = rootTextures[0].children[i];
+		var id = this.reader.getString(texture, "id", bool);
+		this.textures.set(id, new MyTexture(
+			this.scene,
+			new CGFtexture(
+				this.scene, this.reader.getString(texture, "file", bool))));
+		this.textures.get(id).setLengthS(this.reader.getString(texture, "length_s", bool));
+		this.textures.get(id).setLengthT(this.reader.getString(texture, "length_t", bool));
+		//console.debug("Textures: " + this.textures.get(id));
 	}
+}
 
-	//materials
+MySceneGraph.prototype.parseMaterials = function(rootElement) {
+	
+	var bool, nnodes;
 	var rootMaterials =  rootElement.getElementsByTagName('materials');
 	this.materials = new Map();
+
 	nnodes = rootMaterials[0].children.length;
 	for(var i=0; i < nnodes; i++)
 	{
-		var emission = [];
-		var ambient = [];
-		var diffuse = [];
-		var specular = [];
-		var shininess = [];
-		var all = [];
+		var material = rootMaterials[0].children[i];
+		var id = this.reader.getString(material, "id", bool);
 
-		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
-		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
-		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
-		emission.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+		this.materials.set(id, new CGFappearance(this.scene));
 
-		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
-		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
-		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
-		ambient.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+		var emission = material.getElementsByTagName('emission')[0];
+		this.materials.get(id).setEmission(
+			this.reader.getFloat(emission,"r",bool),
+			this.reader.getFloat(emission,"g",bool),
+			this.reader.getFloat(emission,"b",bool),
+			this.reader.getFloat(emission,"a",bool)
+		);
 
-		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
-		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
-		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
-		diffuse.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+		var ambient = material.getElementsByTagName('ambient')[0];
+		this.materials.get(id).setAmbient(
+			this.reader.getFloat(ambient,"r",bool),
+			this.reader.getFloat(ambient,"g",bool),
+			this.reader.getFloat(ambient,"b",bool),
+			this.reader.getFloat(ambient,"a",bool)
+		);
 
-		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
-		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
-		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
-		specular.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+		var diffuse = material.getElementsByTagName('diffuse')[0];
+		this.materials.get(id).setDiffuse(
+			this.reader.getFloat(diffuse,"r",bool),
+			this.reader.getFloat(diffuse,"g",bool),
+			this.reader.getFloat(diffuse,"b",bool),
+			this.reader.getFloat(diffuse,"a",bool)
+		);
 
-		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"r",bool));
-		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"g",bool));
-		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"b",bool));
-		shininess.push(this.reader.getFloat(rootMaterials[0].children[i].children[0],"a",bool));
+		var specular = material.getElementsByTagName('specular')[0];
+		this.materials.get(id).setSpecular(
+			this.reader.getFloat(specular,"r",bool),
+			this.reader.getFloat(specular,"g",bool),
+			this.reader.getFloat(specular,"b",bool),
+			this.reader.getFloat(specular,"a",bool)
+		);
 
-		all.push(emission);		
-		all.push(ambient);		
-		all.push(diffuse);		
-		all.push(specular);		
-		all.push(shininess);		
-
-		this.materials.set(this.reader.getString(rootMaterials[0].children[i], "id", bool),all);
-
+		var shininess = material.getElementsByTagName('shininess')[0];
+		this.materials.get(id).setShininess(
+			this.reader.getFloat(shininess,"value",bool)
+		);
 	}
+}
 
-	//reading components
-/*
-	var rootComponents =  rootElement.getElementsByTagName('components');
-	if (rootComponents[0].children.length == 0) {
-		return "primitives are missing.";
-	}
+MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {	
 
-	this.primitives = [];
-	nnodes = rootComponents[0].children.length;
-	console.log(nnodes);
-	for (var i=0; i < nnodes; i++){
-
-	}*/
-
-	/*if (elems == null) {
-		return "globals element is missing.";
-	}
-
-	if (elems.length != 1) {
-		return "either zero or more than one 'globals' element found.";
-	}
-
-	// various examples of different types of access
-	var globals = elems[0];
-	this.background = this.reader.getRGBA(globals, 'background');
-	this.drawmode = this.reader.getItem(globals, 'drawmode', ["fill","line","point"]);
-	this.cullface = this.reader.getItem(globals, 'cullface', ["back","front","none", "frontandback"]);
-	this.cullorder = this.reader.getItem(globals, 'cullorder', ["ccw","cw"]);
-
-	console.log("Globals read from file: {background=" + this.background + ", drawmode=" + this.drawmode + ", cullface=" + this.cullface + ", cullorder=" + this.cullorder + "}");
-
-	var tempList=rootElement.getElementsByTagName('list');
-
-	if (tempList == null  || tempList.length==0) {
-		return "list element is missing.";
-	}
-
-	this.list=[];
-	// iterate over every element
-	var nnodes=tempList[0].children.length;
-	for (var i=0; i< nnodes; i++)
-	{
-		var e=tempList[0].children[i];
-
-		// process each element and store its information
-		this.list[e.id]=e.attributes.getNamedItem("coords").value;
-		console.log("Read list item id "+ e.id+" with value "+this.list[e.id]);
-	};*/
-
+	this.parseScene(rootElement);
+	this.parseViews(rootElement);
+	this.parseIllumination(rootElement);
+	this.parseLights(rootElement);
+	this.parseTextures(rootElement);
+	this.parseMaterials(rootElement);
+	this.parseTransformations(rootElement);
+	this.parsePrimitives(rootElement);
+	this.parseComponents(rootElement);
 };
 
 /*
  * Callback to be executed on any read error
  */
-
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+message);	
 	this.loadedOk=false;

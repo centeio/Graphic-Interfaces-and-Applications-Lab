@@ -28,7 +28,7 @@
         <!-- a vista muda para a proxima da lista; da --> 
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="default" near="2" far="3" angle="30">
-            <from x="5" y="5" z="5" />
+            <from x="5" y="5" z="3" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -68,36 +68,57 @@
     </lights>
     
     
-    <textures>
+   <textures>
     
-        <!-- Deve existir um ou mais blocos "texture" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
-        <!-- length_s e length_t sao fatores de escala de textura:-->
-        <!-- Exemplo length_s=3.0: uma ocorrencia da textura, em -->
-        <!-- comprimento, deve cobrir um comprimento igual -->
-        <!-- a 3 unidades;  -->
-        <!-- Exemplo length_t=0.4, uma ocorrencia da textura, em -->
-        <!-- largura, deve cobrir uma largura igual a 0.4 unidades.  -->
-        <!-- Transf. Geometr. do tipo escalamento sobre os -->
-        <!-- objetos respetivos podem a violar esta regra.         -->
-        <!-- Nao necessario aplicar fatores de escala em  -->
-        <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="ss" file="ss" length_s="ff" length_t="ff" />  
+        <texture id="linoleum" file="./scenes/linoleum.jpg" length_s="1" length_t="1" />  
+        <texture id="cone" file="./scenes/cone.png" length_s="1" length_t="1" />  
+        <texture id="netnet" file="./scenes/net.jpg" length_s="0.5" length_t="0.5" />  
+        <texture id="leather" file="./scenes/leather.jpg" length_s="1" length_t="1" />  
         
     </textures>
 
     
     <materials>
     
-        <!-- Deve existir um ou mais blocos "material" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
-        <material id="ss" >
-            <emission r="ff" g="ff" b="ff" a="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
-            <shininess value="ff" />
+        <material id="linoleum" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+            <specular r="0.2" g="0.2" b="0.5" a="1" />
+            <shininess value="70" />
         </material>
+		
+        <material id="metal" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="5" />
+            <specular r="1" g="1" b="1" a="1" />
+            <shininess value="80" />
+        </material>
+		
+        <material id="netnet" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="5" />
+            <specular r="0" g="0" b="0" a="1" />
+            <shininess value="10" />
+        </material>
+
+        <material id="default" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="5" />
+            <specular r="0" g="0" b="0" a="1" />
+            <shininess value="10" />
+        </material>
+
+        <material id="cone" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="5" />
+            <specular r="0" g="0" b="0" a="1" />
+            <shininess value="10" />
+        </material>				
         
     </materials>
     
@@ -119,7 +140,6 @@
     
     <primitives>
     
-        
         <primitive id="rectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
@@ -195,7 +215,7 @@
                 <material id="cone" />
             </materials>
 
-            <texture id="linoleum" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="coneBase" />
                 <primitiveref id="cone" />
@@ -214,7 +234,7 @@
                 <material id="cone" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="linoleum" />
             <children>
                 <componentref id="cone" />
             </children>
@@ -228,10 +248,10 @@
             </transformation>
        
             <materials>
-                <material id="cone" />
+                <material id="linoleum" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="linoleum" />
             <children>
                 <componentref id="cone" />
             </children>
@@ -245,10 +265,10 @@
             </transformation>
        
             <materials>
-                <material id="cone" />
+                <material id="linoleum" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="linoleum" />
             <children>
                 <componentref id="cone" />
             </children>
@@ -265,7 +285,7 @@
                 <material id="cone" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="linoleum" />
             <children>
                 <componentref id="cone" />
             </children>
@@ -327,23 +347,39 @@
             </children>
             
         </component>
-
-        <component id="legFace">
-        
+		
+        <component id="leg1">  
             <transformation>
-                <translate x="0" y="0" z="0.5" />
-            </transformation>
-       
+                <translate x="-2" y="0" z="0" />				
+            </transformation>     
             <materials>
-                <material id="inherit" />
+                <material id="netnet" />
             </materials>
-
-            <texture id="net" />
+            <texture id="inherit" />
             <children>
-                <primitiveref id="rectangle" />
+                <componentref id="frontLegFace" />
+				<componentref id="backLegFace" />
+                <componentref id="rightLegFace" />
+                <componentref id="leftLegFace" />								
             </children>
-            
+        </component>		
+
+        <component id="leg2">  
+            <transformation>
+                <translate x="2" y="0" z="0" />				
+            </transformation>     
+            <materials>
+                <material id="netnet" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="frontLegFace" />
+				<componentref id="backLegFace" />
+                <componentref id="rightLegFace" />
+                <componentref id="leftLegFace" />								
+            </children>
         </component>
+
 
         <component id="frontLegFace">
         
@@ -352,7 +388,7 @@
             </transformation>
        
             <materials>
-                <material id="net" />
+                <material id="netnet" />
             </materials>
 
             <texture id="inherit" />
@@ -369,7 +405,7 @@
             </transformation>
        
             <materials>
-                <material id="net" />
+                <material id="netnet" />
             </materials>
 
             <texture id="inherit" />
@@ -386,7 +422,7 @@
             </transformation>
        
             <materials>
-                <material id="net" />
+                <material id="netnet" />
             </materials>
 
             <texture id="inherit" />
@@ -403,7 +439,7 @@
             </transformation>
        
             <materials>
-                <material id="net" />
+                <material id="netnet" />
             </materials>
 
             <texture id="inherit" />
@@ -412,55 +448,6 @@
             </children>
         </component>
 		
-        <component id="leg">  
-            <transformation>
-                <scale x="0.1" y="4" z="0.1" />
-                <translate x="0" y="2" z="0" />				
-            </transformation>     
-            <materials>
-                <material id="net" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="frontLegFace" />
-				<componentref id="backLegFace" />
-                <componentref id="rightLegFace" />
-                <componentref id="leftLegFace" />								
-            </children>
-        </component>
-		
-        <component id="leg1">  
-            <transformation>
-                <translate x="-2" y="0" z="0" />				
-            </transformation>     
-            <materials>
-                <material id="net" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="frontLegFace" />
-				<componentref id="backLegFace" />
-                <componentref id="rightLegFace" />
-                <componentref id="leftLegFace" />								
-            </children>
-        </component>		
-
-        <component id="leg2">  
-            <transformation>
-                <translate x="2" y="0" z="0" />				
-            </transformation>     
-            <materials>
-                <material id="net" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="frontLegFace" />
-				<componentref id="backLegFace" />
-                <componentref id="rightLegFace" />
-                <componentref id="leftLegFace" />								
-            </children>
-        </component>
-
     </components>
 
 </dsx>

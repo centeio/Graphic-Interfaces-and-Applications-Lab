@@ -12,7 +12,8 @@ XMLscene.prototype.init = function (application) {
     this.initCameras();
 
     this.initLights();
-
+	this.enableTextures(true);
+	
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
     this.gl.clearDepth(100.0);
@@ -31,7 +32,7 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 0.4, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, 0.4, 500, vec3.fromValues(18, 8, 18), vec3.fromValues(0, 0, 0));
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -89,6 +90,6 @@ XMLscene.prototype.display = function () {
 		var matrix = mat4.create();
 		mat4.identity(matrix);
 
-		this.graph.components.get("root").display(matrix);
+		this.graph.components.get("root").display(matrix, "null", "null");
 	};	
 };

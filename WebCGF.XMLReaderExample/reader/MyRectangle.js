@@ -5,8 +5,6 @@
  */
 function MyRectangle(scene, minX, maxX, minY, maxY, minS, maxS, minT, maxT) {
 	CGFobject.call(this,scene);
-
-	this.materialDefault = new CGFappearance(this);
 	
 	this.minX = minX || -0.5;
 	this.minY = minY || -0.5;

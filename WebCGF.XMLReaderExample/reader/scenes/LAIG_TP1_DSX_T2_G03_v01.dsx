@@ -1,37 +1,27 @@
 <dsx>
-	
-	<scene root="root" axis_length="3" />
 
+	<scene root="root" axis_length="3" />
 	
-    <views default="p1" >
+	<views default="default" >
 
         <!-- declaracao obrigatoria de pelo menos uma vista; -->
         <!-- se varias vistas declaradas, o default e' a -->
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="15" y="20" z="210" />
-            <to x="5" y="5" z="5" />
-        </perspective>
-
-        <perspective id="p2" near="0.1" far="1500" angle="40">
-            <from x="25" y="25" z="25" />
+        <perspective id="default" near="0.4" far="500" angle="45">
+            <from x="12" y="8" z="12" />
             <to x="0" y="0" z="0" />
-        </perspective>
-
-        <perspective id="p3" near="0.1" far="1500" angle="40">
-            <from x="100" y="25" z="200" />
+			
+		</perspective>
+		<perspective id="v1" near="0.5" far="800" angle="0.9">
+            <from x="-7" y="7" z="-7" />	
             <to x="0" y="0" z="0" />
-        </perspective>
 
-        <perspective id="p4" near="0.1" far="1500" angle="25">
-            <from x="300" y="0" z="800" />
-            <to x="3" y="0" z="0" />
-        </perspective>
-    </views>	
+		</perspective>
+    </views>
 
-    <illumination doublesided="1" local="1" >
+	<illumination doublesided="1" local="1" >
 
         <ambient r="0.5" g="0.5" b="0.5" a="0.8" />
         <background r="0.1" g="0.1" b="0.2" a="1" />
@@ -61,27 +51,35 @@
 	
     <textures>
     
-        <texture id="linoleum" file="/scenes/linoleum.jpg" length_s="1" length_t="1" />  
-        <texture id="cone" file="/scenes/cone.png" length_s="1" length_t="1" />  
-        <texture id="netnet" file="/scenes/net.png" length_s="0.5" length_t="0.5" />  
-        <texture id="leather" file="/scenes/net.png" length_s="1" length_t="1" />  
-        <texture id="sky" file="/scenes/forest.png" length_s="1" length_t="1" />  
+        <texture id="grass" file="scenes\\grass.png" length_s="1" length_t="1" />  
+        <texture id="cone" file="scenes\\cone.png" length_s="1" length_t="1" />  
+        <texture id="netnet" file="scenes\\net.jpg" length_s="1" length_t="1" />  
+        <texture id="leather" file="scenes\\leather.jpg" length_s="1" length_t="1" />  
+        <texture id="sky" file="scenes\\forest.png" length_s="1" length_t="1" />  
 
         
     </textures>
+	
+	<materials>
     
-    <materials>
-    
-        <material id="linoleum" >
+        <material id="default" >
             <emission r="0" g="0" b="0" a="1" />
             <ambient r="0.3" g="0.3" b="0.3" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.2" g="0.2" b="0.5" a="1" />
             <shininess value="70" />
         </material>
+
+        <material id="sky" >
+            <emission r="0.8" g="0.8" b="0.8" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+            <specular r="0.2" g="0.2" b="0.5" a="1" />
+            <shininess value="100" />
+        </material>		
 		
         <material id="metal" >
-            <emission r="0" g="0" b="0" a="1" />
+            <emission r="0.5" g="0.5" b="0.5" a="1" />
             <ambient r="0.3" g="0.3" b="0.3" a="1" />
             <diffuse r="0.5" g="0.5" b="0.5" a="5" />
             <specular r="1" g="1" b="1" a="1" />
@@ -89,7 +87,7 @@
         </material>
 		
         <material id="netnet" >
-            <emission r="0" g="0" b="0" a="1" />
+            <emission r="0.5" g="0.5" b="0.5" a="0.5" />
             <ambient r="0.2" g="0.2" b="0.2" a="1" />
             <diffuse r="0.5" g="0.5" b="0.5" a="5" />
             <specular r="0" g="0" b="0" a="1" />
@@ -98,24 +96,23 @@
         
     </materials>
 	
-	
     <transformations>
     
         <transformation id="leftx">
-           <rotate axis="y" angle="1.570795" />
+           <rotate axis="y" angle="90" />
         </transformation>
         
-    </transformations>	
+    </transformations>
 	
-    <primitives>
+	<primitives>
     
 
         <primitive id="rectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
 
-        <primitive id="cone">
-            <cylinder base="0.5" top="0.1" height="1" slices="8" stacks="20" />
+        <primitive id="conep">
+            <cylinder base="0.6" top="0.1" height="2" slices="8" stacks="20" />
             
         </primitive>
 
@@ -124,34 +121,13 @@
         </primitive>
 
         <primitive id="coneBase">
-            <torus inner="0.5" outer="0.8" slices="8" loops="20" />            
+            <torus inner="0.2" outer="0.7" slices="8" loops="20" />            
         </primitive>
-        
-     
-    <primitives>
-    
-        
-        <primitive id="rectangle">
-            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
-        </primitive>
-
-        <primitive id="cone">
-            <cylinder base="0.5" top="0.1" height="1.5" slices="20" stacks="20" />
-            
-        </primitive>
-
-        <primitive id="sphere">
-            <sphere radius="1" slices="20" stacks="20" />            
-        </primitive>
-
-        <primitive id="coneBase">
-            <torus inner="0.5" outer="0.8" slices="8" loops="20" />            
-        </primitive>
+  
         
     </primitives>
-    
-    
-    <components>
+	
+	<components>
         
         <component id="root">
         
@@ -182,41 +158,60 @@
         <component id="floor">
         
             <transformation>
+                <translate x="5" y="0" z="5" /> 
+                <rotate axis="x" angle="-90"/>			
                 <scale x="10" y="10" z="1" />
-                <rotate axis="x" angle="-1.570795"/>
-                <translate x="5" y="0" z="5" />
             </transformation>
        
             <materials>
-                <material id="linoleum" />
+                <material id="default" />
             </materials>
 
-            <texture id="linoleum" />
+            <texture id="grass" />
             <children>
                 <primitiveref id="rectangle" />
             </children>
             
         </component>
+		
+        <component id="coneaux">
+        
+            <transformation>
+				<translate x="0" y="0" z="0"/>
+            </transformation>
+       
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="conep" />
+
+            </children>
+            
+        </component>			
 
         <component id="cone">
         
             <transformation>
-				<scale x="0.3" y="0.3" z="0.3" />
-				<rotate axis="x" angle="-1.570795" />
+				<rotate axis="x" angle="-90" />
+				<scale x="0.3" y="0.3" z="0.3" />				
             </transformation>
        
             <materials>
-                <material id="cone" />
+                <material id="default" />
             </materials>
 
-            <texture id="linoleum" />
+            <texture id="inherit" />
             <children>
-                <primitiveref id="coneBase" />
-                <primitiveref id="cone" />
+                <primitiveref id="coneBase" /> 
+                <componentref id="coneaux" />
 
             </children>
             
         </component>
+		
 
         <component id="cone1">
         
@@ -225,10 +220,10 @@
             </transformation>
        
             <materials>
-                <material id="cone" />
+                <material id="default" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="cone" />
             <children>
                 <componentref id="cone" />
             </children>
@@ -242,10 +237,10 @@
             </transformation>
        
             <materials>
-                <material id="cone" />
+                <material id="default" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="cone" />
             <children>
                 <componentref id="cone" />
             </children>
@@ -259,10 +254,10 @@
             </transformation>
        
             <materials>
-                <material id="cone" />
+                <material id="default" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="cone" />
             <children>
                 <componentref id="cone" />
             </children>
@@ -276,10 +271,10 @@
             </transformation>
        
             <materials>
-                <material id="cone" />
+                <material id="default" />
             </materials>
 
-            <texture id="inherit" />
+            <texture id="cone" />
             <children>
                 <componentref id="cone" />
             </children>
@@ -289,12 +284,12 @@
         <component id="ball">
         
             <transformation>
-                <scale x="0.2" y="0.2" z="0.2" />
-                <translate x="1.5" y="0.5" z="1.5" />
+                <translate x="3" y="0.1" z="3" />
+                <scale x="0.2" y="0.2" z="0.2" />				
             </transformation>
        
             <materials>
-                <material id="linoleum" />
+                <material id="default" />
             </materials>
 
             <texture id="leather" />
@@ -307,8 +302,8 @@
         <component id="net">
         
             <transformation>
-				<rotate axis="y" angle="-1.570795"/>
 				<translate x="4" y="0" z="4"/>
+				<rotate axis="y" angle="90"/>
             </transformation>
 
             <materials>
@@ -330,8 +325,8 @@
         <component id="netnet1">
         
             <transformation>
-                <scale x="4" y="1" z="1" />
                 <translate x="0" y="2.5" z="0" />
+                <scale x="4" y="1" z="1" />				
             </transformation>
        
             <materials>
@@ -348,9 +343,9 @@
         <component id="netnet2">
         
             <transformation>
-				<rotate axis="y" angle="3.14159"/>
-                <scale x="4" y="1" z="1" />
-                <translate x="0" y="2.5" z="0" />
+                <translate x="0" y="2.5" z="0" />			
+                <scale x="4" y="1" z="1" />			
+				<rotate axis="y" angle="180"/>
             </transformation>
        
             <materials>
@@ -372,7 +367,7 @@
             </transformation>
        
             <materials>
-                <material id="net" />
+                <material id="inherit" />
             </materials>
 
             <texture id="inherit" />
@@ -384,12 +379,12 @@
         <component id="backLegFace">
         
             <transformation>
+				<rotate axis="y" angle="180" />			
                 <translate x="0" y="0" z="0.5" />
-				<rotate axis="y" angle="3.14159" />
             </transformation>
        
             <materials>
-                <material id="net" />
+                <material id="inherit" />
             </materials>
 
             <texture id="inherit" />
@@ -401,12 +396,12 @@
         <component id="rightLegFace">
         
             <transformation>
+				<rotate axis="y" angle="-90" />			
                 <translate x="0" y="0" z="0.5" />
-				<rotate axis="y" angle="-1.570795" />
             </transformation>
        
             <materials>
-                <material id="net" />
+                <material id="inherit" />
             </materials>
 
             <texture id="inherit" />
@@ -419,12 +414,12 @@
         <component id="leftLegFace">
         
             <transformation>
+				<rotate axis="y" angle="90" />			
                 <translate x="0" y="0" z="0.5" />			
-				<rotate axis="y" angle="1.570795" />
             </transformation>
        
             <materials>
-                <material id="net" />
+                <material id="inherit" />
             </materials>
 
             <texture id="inherit" />
@@ -435,11 +430,11 @@
 		
         <component id="leg">  
             <transformation>
-                <scale x="0.1" y="3" z="0.1" />
-                <translate x="0" y="1.5" z="0" />				
+                <translate x="0" y="1.5" z="0" />	
+                <scale x="0.1" y="3" z="0.1" />				
             </transformation>     
             <materials>
-                <material id="net" />
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -455,7 +450,7 @@
                 <translate x="-2" y="0" z="0" />				
             </transformation>     
             <materials>
-                <material id="net" />
+                <material id="metal" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -468,7 +463,7 @@
                 <translate x="2" y="0" z="0" />				
             </transformation>     
             <materials>
-                <material id="net" />
+                <material id="metal" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -479,13 +474,13 @@
         <component id="sky1">
         
             <transformation>
+                <translate x="0.1" y="2.5" z="5" />			
+				<rotate axis="y" angle="90"/>			
 				<scale x="10" y="5" z="0" />
-				<rotate axis="y" angle="1.570795"/>
-                <translate x="0" y="2.5" z="5" />
             </transformation>
        
             <materials>
-                <material id="linoleum" />
+                <material id="sky" />
             </materials>
 
             <texture id="sky" />
@@ -498,12 +493,12 @@
         <component id="sky2">
         
             <transformation>
+                <translate x="5" y="2.5" z="0.1" />			
 				<scale x="10" y="5" z="0" />
-                <translate x="5" y="2.5" z="0" />
             </transformation>
        
             <materials>
-                <material id="linoleum" />
+                <material id="sky" />
             </materials>
 
             <texture id="sky" />
@@ -512,8 +507,5 @@
             </children>
 			
 		</component>
-					
-
     </components>
-
 </dsx>

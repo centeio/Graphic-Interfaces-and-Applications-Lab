@@ -256,6 +256,10 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 	}	
 }
 
+MySceneGraph.prototype.getAngle = function(angle){
+	return Math.PI*angle/180;
+}
+
 MySceneGraph.prototype.parseComponents = function(rootElement) {
 	var rootComponents = rootElement.getElementsByTagName('components');
 	if(rootComponents[0].children.length == 0)
@@ -294,7 +298,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 			mat4.identity(matrix);
 
 			var nTransformations = transformation.children.length;
-			for(var j = (nTransformations - 1); j >= 0; j--) {
+			for(var j = 0; j<nTransformations ; j++) {
 				var t = transformation.children[j];
 
 				switch(t.tagName) {
@@ -304,13 +308,13 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 					case 'rotate':
 						switch(this.reader.getString(t,"axis",bool)) {
 							case "x":
-								mat4.rotate(matrix, matrix, this.reader.getFloat(t,"angle",bool), [1,0,0]);
+								mat4.rotate(matrix, matrix, this.getAngle(this.reader.getFloat(t,"angle",bool)), [1,0,0]);
 								break;
 							case "y":
-								mat4.rotate(matrix, matrix, this.reader.getFloat(t,"angle",bool), [0,1,0]);
+								mat4.rotate(matrix, matrix, this.getAngle(this.reader.getFloat(t,"angle",bool)), [0,1,0]);
 								break;
 							case "z":
-								mat4.rotate(matrix, matrix, this.reader.getFloat(t,"angle",bool), [0,0,1]);
+								mat4.rotate(matrix, matrix, this.getAngle(this.reader.getFloat(t,"angle",bool)), [0,0,1]);
 								break;
 							default:
 								break;
@@ -474,7 +478,7 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 				this.scene, this.reader.getString(texture, "file", bool))));
 		this.textures.get(id).setLengthS(this.reader.getString(texture, "length_s", bool));
 		this.textures.get(id).setLengthT(this.reader.getString(texture, "length_t", bool));
-		//console.debug("Textures: " + this.textures.get(id));
+		//console.debug("Textures: " + id + " " + this.textures.get(id).texture);
 	}
 }
 

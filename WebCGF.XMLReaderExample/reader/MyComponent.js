@@ -39,8 +39,6 @@ MyComponent.prototype.addPrimitive = function(primitive) {
 
 MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 
-	this.scene.pushMatrix();
-
 	var matrix = mat4.create();
 	if(this.transformationRef != "null") {
 		mat4.multiply(matrix, oldMatrix, this.scene.graph.transformations.get(this.transformationRef));
@@ -68,9 +66,7 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 		materialRef = this.materialsRef[0];
 		//console.log("Material: " + material);
 	}
-	//material.setTextureWrap('REPEAT','REPEAT');
-	material.apply();
-	
+	//material.setTextureWrap('REPEAT','REPEAT');	
 	if(this.textureRef == "inherit")
 		textureRef = oldTexture;
 	else
@@ -83,6 +79,8 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 		this.scene.graph.components.get(this.components[i]).display(matrix, materialRef, textureRef);
 	}
 
+	this.scene.pushMatrix();
+	material.apply();
 	//console.debug("Material: " + material);
 	this.scene.multMatrix(matrix);
 	for(var i = 0; i < this.primitives.length; i++)

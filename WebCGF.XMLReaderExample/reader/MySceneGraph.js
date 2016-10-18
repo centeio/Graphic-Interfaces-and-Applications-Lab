@@ -53,13 +53,20 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 	
 	var rootViews = rootElement.getElementsByTagName('views');
 	if(rootViews[0].children.length == 0)
-		return "Views are missing."
+		console.error("Views are missing.");
+
+	else{
+
+	this.viewsID = [];	
 
 	this.views = new Map();
 	var nperspectives = rootViews[0].children.length;
+
+
 	for(var i = 0; i < nperspectives; i++) {
 		var element = rootViews[0].children[i];
 		var bool;
+		var defaultID = -1;
 		console.log("Read list item " + element);
 		var npositions = rootViews[0].children[i].children.length;
 
@@ -81,13 +88,19 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 					break;
 			}
 		}
-
+		if(this.reader.getString(element, "id", bool) == "default")
+			defaultID = viewsID.length;
+			
+		this.viewsID.push(this.reader.getString(element, "id", bool));
 		this.views.set(this.reader.getString(element, "id", bool),
 		new CGFcamera(this.getRadiansAngle(this.reader.getString(element, "angle", bool)),
 			this.reader.getString(element, "near", bool),
 			this.reader.getString(element, "far", bool),
 			vec3.fromValues(x1, y1, z1), 
 			vec3.fromValues(x2, y2, z2)));
+	}
+	if(-1 == defaultID)
+		console.error("Default view missing not declared");
 	}
 }
 

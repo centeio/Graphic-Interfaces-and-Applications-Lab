@@ -9,6 +9,7 @@ XMLscene.prototype.constructor = XMLscene;
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
+	this.camCounter = 0;
     this.initCameras();
 
     this.initLights();
@@ -34,6 +35,11 @@ XMLscene.prototype.initLights = function () {
 XMLscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 0.4, 500, vec3.fromValues(18, 8, 18), vec3.fromValues(0, 0, 0));
 };
+
+XMLscene.prototype.setCamera = function() {
+
+	this.camCounter = (this.camCounter + 1) % this.graph.viewsID.length;
+}
 
 XMLscene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -91,7 +97,13 @@ XMLscene.prototype.display = function () {
 		
 		var matrix = mat4.create();
 		mat4.identity(matrix);
+		
+		console.log("cam counter: " + this.camCounter);
+		console.log("cam :" + this.graph.views.get(this.graph.viewsID[this.camCounter]));
+	
+		this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);	 
 
-		this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
+		this.graph.components.get("root").display(matrix, "null", "null");
+
 	};	
 };

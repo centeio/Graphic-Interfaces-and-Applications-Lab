@@ -2,9 +2,10 @@
  * MyInterface
  * @constructor
  */
-function MyInterface() {
+function MyInterface(scene) {
 	//call CGFinterface constructor 
 	CGFinterface.call(this);
+	this.scene = scene;
 };
 
 MyInterface.prototype = Object.create(CGFinterface.prototype);
@@ -67,29 +68,10 @@ MyInterface.prototype.processKeyDown = function(event) {
 	var char = String.fromCharCode(event.keyCode);
 	switch (char)
 	{
-		case('W'):
-		case('w'):
-			break;
-		case('S'):
-		case('s'):
-			break;
-		case ('A'):
-		case ('a'):
-			break;
-		case('D'):
-		case('d'):
-			break;
-		case('I'):
-		case('i'):
-			break;
-		case('J'):
-		case('j'):
-			break;
-		case('P'):
-		case('p'):
-			break;
-		case('L'):
-		case('l'):
+		case('V'):
+		case('v'):
+		if (this.scene.graph.loadedOk)
+			this.scene.setCamera();
 			break;
 	};
 };

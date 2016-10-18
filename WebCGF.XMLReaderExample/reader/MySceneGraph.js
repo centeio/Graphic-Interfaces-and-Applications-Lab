@@ -40,6 +40,10 @@ MySceneGraph.prototype.onXMLReady=function()
 	this.scene.onGraphLoaded();
 };
 
+// Converts degrees to radians
+MySceneGraph.prototype.getRadiansAngle = function(angle){
+	return Math.PI*angle/180;
+}
 
 /*
  * Example of method that parses elements of one block and stores information in a specific data structure
@@ -78,7 +82,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 		}
 
 		this.views.set(this.reader.getString(element, "id", bool),
-		new CGFcamera(this.reader.getString(element, "angle", bool),
+		new CGFcamera(this.getRadiansAngle(this.reader.getString(element, "angle", bool)),
 			this.reader.getString(element, "near", bool),
 			this.reader.getString(element, "far", bool),
 			vec3.fromValues(x1, y1, z1), 
@@ -168,7 +172,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 					this.reader.getFloat(specular, "b", bool),
 					this.reader.getFloat(specular, "a", bool));
 
-				this.scene.lights[i].setSpotCutOff(this.reader.getFloat(child, "angle", bool));
+				this.scene.lights[i].setSpotCutOff(this.getRadiansAngle(this.reader.getFloat(child, "angle", bool)));
 				this.scene.lights[i].setSpotDirection(
 					(this.reader.getFloat(target, "x", bool) - this.reader.getFloat(location, "x", bool)),
 					(this.reader.getFloat(target, "y", bool) - this.reader.getFloat(location, "y", bool)),
@@ -211,7 +215,6 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 						this.reader.getFloat(element, "x2", bool),
 						this.reader.getFloat(element, "y1", bool),
 						this.reader.getFloat(element, "y2", bool)));
-					console.log(this.primitives.get(this.reader.getString(rootPrimitives[0].children[i], "id", bool)));
 				break;
 			case "triangle":
 				this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
@@ -254,10 +257,6 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 				break;
 		}
 	}	
-}
-
-MySceneGraph.prototype.getAngle = function(angle){
-	return Math.PI*angle/180;
 }
 
 MySceneGraph.prototype.parseComponents = function(rootElement) {
@@ -306,19 +305,23 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 						mat4.translate(matrix, matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
 						break;
 					case 'rotate':
+						var rotationAxis;
+						//console.log("axis " + this.reader.getString(t,"axis",bool));
 						switch(this.reader.getString(t,"axis",bool)) {
 							case "x":
-								mat4.rotate(matrix, matrix, this.getAngle(this.reader.getFloat(t,"angle",bool)), [1,0,0]);
+								rotationAxis = [1,0,0];
+								//console.log("angle " + this.reader.getFloat(t,"angle",bool));
 								break;
 							case "y":
-								mat4.rotate(matrix, matrix, this.getAngle(this.reader.getFloat(t,"angle",bool)), [0,1,0]);
+								rotationAxis = [0,1,0];
 								break;
 							case "z":
-								mat4.rotate(matrix, matrix, this.getAngle(this.reader.getFloat(t,"angle",bool)), [0,0,1]);
+								rotationAxis = [0,0,1];
 								break;
 							default:
 								break;
 						}
+						mat4.rotate(matrix,matrix,this.getRadiansAngle(this.reader.getFloat(t,"angle",bool)),rotationAxis);
 						break;
 					case 'scale':
 						mat4.scale(matrix, matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
@@ -400,32 +403,34 @@ MySceneGraph.prototype.parseTransformations = function(rootElement) {
 
 			switch(t.tagName) {
 				case "translate":
-				mat4.translate(matrix,matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
-				//console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
-				break;
+					mat4.translate(matrix,matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
+					//console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
+					break;
 				case "rotate":
+					var rotationAxis;
 					//console.log("axis " + this.reader.getString(t,"axis",bool));
 					switch(this.reader.getString(t,"axis",bool)) {
 						case "x":
-							mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[1,0,0]);
+							rotationAxis = [1,0,0];
 							//console.log("angle " + this.reader.getFloat(t,"angle",bool));
 							break;
 						case "y":
-							mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[0,1,0]);
+							rotationAxis = [0,1,0];
 							break;
 						case "z":
-							mat4.rotate(matrix,matrix,this.reader.getFloat(t,"angle",bool),[0,0,1]);
+							rotationAxis = [0,0,1];
 							break;
 						default:
 							break;
 					}
-				break;		
+					mat4.rotate(matrix,matrix,this.getRadiansAngle(this.reader.getFloat(t,"angle",bool)),rotationAxis);
+					break;		
 				case "scale":
 					mat4.scale(matrix,matrix,[this.reader.getFloat(t,"x",bool), this.reader.getFloat(t,"y",bool), this.reader.getFloat(t,"z",bool)]);
 					//console.log("x " + this.reader.getFloat(t,"x",bool) + " y "+this.reader.getFloat(t,"y",bool) + " z " +this.reader.getFloat(t,"z",bool));
-				break;
+					break;
 				default:
-				break;				
+					break;				
 			}
 		}
 		this.transformations.set(this.reader.getString(rootTranformations[0].children[i],"id", bool),matrix);

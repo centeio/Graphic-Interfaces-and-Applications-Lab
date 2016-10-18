@@ -298,7 +298,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 			mat4.identity(matrix);
 
 			var nTransformations = transformation.children.length;
-			for(var j = 0; j<nTransformations ; j++) {
+			for(var j = 0; j < nTransformations ; j++) {
 				var t = transformation.children[j];
 
 				switch(t.tagName) {

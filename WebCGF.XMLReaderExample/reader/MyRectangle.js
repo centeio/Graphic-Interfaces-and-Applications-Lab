@@ -52,3 +52,21 @@ MyRectangle.prototype.initBuffers = function () {
 	this.primitiveType = this.scene.gl.TRIANGLES;
 	this.initGLBuffers();
 };
+
+MyRectangle.prototype.updateTexCoords = function (minS, maxS, minT, maxT) {
+
+	this.minS = minS;
+	this.maxS = maxS;
+	this.minT = minT;
+	this.maxT = maxT;
+	
+    this.texCoords = [
+    	this.minS, this.maxT,
+    	this.maxS, this.maxT,
+    	this.minS, this.minT,
+   		this.maxS, this.minT  
+    ];
+	
+	this.primitiveType = this.scene.gl.TRIANGLES;
+	this.initGLBuffers();
+};

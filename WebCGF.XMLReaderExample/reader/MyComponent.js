@@ -80,14 +80,24 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	}
 
 	this.scene.pushMatrix();
-	material.apply();
 	//console.debug("Material: " + material);
 	this.scene.multMatrix(matrix);
-	for(var i = 0; i < this.primitives.length; i++)
+	for(var i = 0; i < this.primitives.length; i++) {
+		if((this.scene.graph.primitives.get(this.primitives[i]) instanceof MyRectangle
+				|| this.scene.graph.primitives.get(this.primitives[i]) instanceof MyTriangle) &&
+				textureRef != "none") {
+					this.scene.graph.primitives.get(this.primitives[i]).updateTexCoords(
+						0,
+						1 / this.scene.graph.textures.get(String(textureRef)).lengthS,
+						0,
+						1 / this.scene.graph.textures.get(String(textureRef)).lengthT
+					);
+					material.setTextureWrap('REPEAT', 'REPEAT');
+		}
+		material.apply();
 		this.scene.graph.primitives.get(this.primitives[i]).display();
+	}
 	
 	this.scene.popMatrix();
-	if(textureRef != "none")
-		this.scene.graph.textures.get(String(textureRef)).texture.unbind();
 }  
 

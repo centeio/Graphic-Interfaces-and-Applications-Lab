@@ -20,8 +20,8 @@ XMLscene.prototype.init = function (application) {
     this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
+	this.sceneTagReady = false;
 
-	this.axis = new CGFaxis(this);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -53,31 +53,33 @@ XMLscene.prototype.onGraphLoaded = function ()
 };
 
 XMLscene.prototype.display = function () {
-	// ---- BEGIN Background, camera and axis setup
-	
-	// Clear image and depth buffer everytime we update the scene
-    this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+	if(this.sceneTagReady) {
+		// ---- BEGIN Background, camera and axis setup
+		this.axis = new CGFaxis(this, this.graph.axisLength);
 
-	// Initialize Model-View matrix as identity (no transformation
-	this.updateProjectionMatrix();
-    this.loadIdentity();
+		// Clear image and depth buffer everytime we update the scene
+		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-	// Apply transformations corresponding to the camera position relative to the origin
-	this.applyViewMatrix();
+		// Initialize Model-View matrix as identity (no transformation
+		this.updateProjectionMatrix();
+		this.loadIdentity();
 
-	// Draw axis
-	this.axis.display();
+		// Apply transformations corresponding to the camera position relative to the origin
+		this.applyViewMatrix();
 
-	this.setDefaultAppearance();
-	
-	// ---- END Background, camera and axis setup
+		// Draw axis
+		this.axis.display();
 
-	// it is important that things depending on the proper loading of the graph
-	// only get executed after the graph has loaded correctly.
-	// This is one possible way to do it
-	if (this.graph.loadedOk)
-	{
+		this.setDefaultAppearance();
+		
+		// ---- END Background, camera and axis setup
+
+		// it is important that things depending on the proper loading of the graph
+		// only get executed after the graph has loaded correctly.
+		// This is one possible way to do it
+	}
+	if (this.graph.loadedOk) {	
 		for(var i = 0; i < this.lights.length; i++)
 			this.lights[i].update();
 			
@@ -90,6 +92,6 @@ XMLscene.prototype.display = function () {
 		var matrix = mat4.create();
 		mat4.identity(matrix);
 
-		this.graph.components.get("root").display(matrix, "null", "null");
+		this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
 	};	
 };

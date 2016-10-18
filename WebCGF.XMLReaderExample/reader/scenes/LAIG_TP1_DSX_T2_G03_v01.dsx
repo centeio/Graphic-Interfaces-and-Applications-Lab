@@ -1,6 +1,6 @@
 <dsx>
 
-	<scene root="root" axis_length="3" />
+	<scene root="root" axis_length="10" />
 	
 	<views default="default" >
 
@@ -14,7 +14,7 @@
             <to x="0" y="0" z="0" />
 			
 		</perspective>
-        
+
 		<perspective id="v1" near="0.5" far="800" angle="45">
             <from x="-7" y="7" z="-7" />	
             <to x="0" y="0" z="0" />

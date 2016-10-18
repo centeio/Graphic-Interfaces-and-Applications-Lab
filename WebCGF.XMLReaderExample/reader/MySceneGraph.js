@@ -50,6 +50,7 @@ MySceneGraph.prototype.getRadiansAngle = function(angle){
  */
 
 MySceneGraph.prototype.parseViews = function(rootElement) {
+	
 	var rootViews = rootElement.getElementsByTagName('views');
 	if(rootViews[0].children.length == 0)
 		return "Views are missing."
@@ -443,6 +444,7 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 	var sceneInfo = rootElement.getElementsByTagName('scene');
 	this.rootName = this.reader.getString(sceneInfo[0], "root", bool);
 	this.axisLength = this.reader.getFloat(sceneInfo[0], "axis_length", bool);
+	this.scene.sceneTagReady = true;
 }
 
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
@@ -540,7 +542,7 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
 	}
 }
 
-MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {	
+MySceneGraph.prototype.parseGlobalsExample = function(rootElement) {	
 
 	this.parseScene(rootElement);
 	this.parseViews(rootElement);
@@ -556,7 +558,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 /*
  * Callback to be executed on any read error
  */
-MySceneGraph.prototype.onXMLError=function (message) {
+MySceneGraph.prototype.onXMLError = function (message) {
 	console.error("XML Loading Error: "+message);	
 	this.loadedOk=false;
 };

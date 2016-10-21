@@ -70,10 +70,12 @@ MyInterface.prototype.processKeyDown = function(event) {
 	{
 		case('V'):
 		case('v'):
-		if (this.scene.graph.loadedOk)
-			this.scene.setCamera();
+			if (this.scene.graph.loadedOk) {
+				this.scene.changeCamera();
+				this.setActiveCamera(this.scene.camera);
+			}
 			break;
-	};
+	}
 };
 
 /**

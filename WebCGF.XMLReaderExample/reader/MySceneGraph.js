@@ -54,55 +54,58 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 	var rootViews = rootElement.getElementsByTagName('views');
 	if(rootViews[0].children.length == 0)
 		console.error("Views are missing.");
+	else {
+		this.viewsID = [];	
+		this.views = new Map();
+		var nperspectives = rootViews[0].children.length;
+		var defaultView = this.reader.getString(rootViews[0], "default", bool);
+		this.viewDefaultID = -1;
 
-	else{
-
-	this.viewsID = [];	
-
-	this.views = new Map();
-	var nperspectives = rootViews[0].children.length;
-
-
-	for(var i = 0; i < nperspectives; i++) {
-		var element = rootViews[0].children[i];
-		var bool;
-		var defaultID = -1;
-		console.log("Read list item " + element);
-		var npositions = rootViews[0].children[i].children.length;
-
-		for(var j = 0; j < npositions; j++) {
-			var innerElement = element.children[j];
-
-			switch(innerElement.tagName) {
-				case "from":
-					var x1 = this.reader.getFloat(innerElement, "x", bool);
-					var y1 = this.reader.getFloat(innerElement, "y", bool);
-					var z1 = this.reader.getFloat(innerElement, "z", bool);
-					break;
-				case "to":
-					var x2 = this.reader.getFloat(innerElement, "x", bool);
-					var y2 = this.reader.getFloat(innerElement, "y", bool);
-					var z2 = this.reader.getFloat(innerElement, "z", bool);
-					break;
-				default:
-					break;
-			}
-		}
-		if(this.reader.getString(element, "id", bool) == "default")
-			defaultID = viewsID.length;
+		for(var i = 0; i < nperspectives; i++) {
+			var element = rootViews[0].children[i];
+			var bool;
 			
-		this.viewsID.push(this.reader.getString(element, "id", bool));
-		this.views.set(this.reader.getString(element, "id", bool),
-		new CGFcamera(this.getRadiansAngle(this.reader.getString(element, "angle", bool)),
-			this.reader.getString(element, "near", bool),
-			this.reader.getString(element, "far", bool),
-			vec3.fromValues(x1, y1, z1), 
-			vec3.fromValues(x2, y2, z2)));
-	}
-	if(-1 == defaultID)
-		console.error("Default view missing not declared");
+			//console.log("Read list item " + element);
+			var npositions = rootViews[0].children[i].children.length;
+			for(var j = 0; j < npositions; j++) {
+
+				var innerElement = element.children[j];
+				switch(innerElement.tagName) {
+					case "from":
+						var x1 = this.reader.getFloat(innerElement, "x", bool);
+						var y1 = this.reader.getFloat(innerElement, "y", bool);
+						var z1 = this.reader.getFloat(innerElement, "z", bool);
+						break;
+					case "to":
+						var x2 = this.reader.getFloat(innerElement, "x", bool);
+						var y2 = this.reader.getFloat(innerElement, "y", bool);
+						var z2 = this.reader.getFloat(innerElement, "z", bool);
+						break;
+					default:
+						break;
+				}
+			}
+			
+			this.viewsID.push(this.reader.getString(element, "id", bool));
+			
+			if(this.reader.getString(element, "id", bool) == String(defaultView))
+				this.viewDefaultID = this.viewsID.length - 1;
+
+			this.views.set(this.reader.getString(element, "id", bool),
+			new CGFcamera(this.getRadiansAngle(this.reader.getString(element, "angle", bool)),
+				this.reader.getFloat(element, "near", bool),
+				this.reader.getFloat(element, "far", bool),
+				vec3.fromValues(x1, y1, z1), 
+				vec3.fromValues(x2, y2, z2)));
+		}
+
+		if(-1 == this.viewDefaultID)
+			console.error("Default view missing not declared");
+
+		this.scene.sceneTagReady = true;
 	}
 }
+
 
 MySceneGraph.prototype.parseLights = function(rootElement) {
 	var rootLights = rootElement.getElementsByTagName('lights');
@@ -457,7 +460,6 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 	var sceneInfo = rootElement.getElementsByTagName('scene');
 	this.rootName = this.reader.getString(sceneInfo[0], "root", bool);
 	this.axisLength = this.reader.getFloat(sceneInfo[0], "axis_length", bool);
-	this.scene.sceneTagReady = true;
 }
 
 MySceneGraph.prototype.parseIllumination = function(rootElement) {

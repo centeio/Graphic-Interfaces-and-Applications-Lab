@@ -9,17 +9,18 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="default" near="0.4" far="500" angle="45">
-            <from x="12" y="8" z="12" />
-            <to x="0" y="0" z="0" />
-			
-		</perspective>
 
 		<perspective id="v1" near="0.5" far="800" angle="45">
             <from x="-7" y="7" z="-7" />	
             <to x="0" y="0" z="0" />
 
 		</perspective>
+
+        <perspective id="default" near="0.4" far="500" angle="20">
+            <from x="18" y="8" z="18" />
+            <to x="0" y="0" z="0" />
+		</perspective>
+
     </views>
 
 	<illumination doublesided="1" local="1" >

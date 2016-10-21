@@ -10,7 +10,6 @@ XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
 	this.camCounter = 0;
-    this.initCameras();
 
     this.initLights();
 	this.enableTextures(true);
@@ -22,6 +21,7 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 	this.sceneTagReady = false;
+	this.sceneBasicsLoaded = false;
 
 };
 
@@ -33,12 +33,14 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 0.4, 500, vec3.fromValues(18, 8, 18), vec3.fromValues(0, 0, 0));
+	//this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
+	this.updateProjectionMatrix();
 };
 
-XMLscene.prototype.setCamera = function() {
-
+XMLscene.prototype.changeCamera = function() {
 	this.camCounter = (this.camCounter + 1) % this.graph.viewsID.length;
+	this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
+	console.log("Changing Camera.");
 }
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -59,15 +61,30 @@ XMLscene.prototype.onGraphLoaded = function ()
 };
 
 XMLscene.prototype.display = function () {
-	if(this.sceneTagReady) {
+	if(this.sceneTagReady && !this.sceneBasicsLoaded) {
 		// ---- BEGIN Background, camera and axis setup
 		this.axis = new CGFaxis(this, this.graph.axisLength);
+		this.camCounter = this.graph.viewDefaultID;
+		this.initCameras();
+		
+		console.log("Initializing scene.");
+		this.sceneBasicsLoaded = true;
+		// ---- END Background, camera and axis setup
 
+		// it is important that things depending on the proper loading of the graph
+		// only get executed after the graph has loaded correctly.
+		// This is one possible way to do it
+	}
+
+	if(this.sceneBasicsLoaded) {
+		console.log("Scene display!");
+		//console.log(this.camera);
 		// Clear image and depth buffer everytime we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
 		// Initialize Model-View matrix as identity (no transformation
+		//console.log(this.camera);
 		this.updateProjectionMatrix();
 		this.loadIdentity();
 
@@ -78,32 +95,24 @@ XMLscene.prototype.display = function () {
 		this.axis.display();
 
 		this.setDefaultAppearance();
-		
-		// ---- END Background, camera and axis setup
 
-		// it is important that things depending on the proper loading of the graph
-		// only get executed after the graph has loaded correctly.
-		// This is one possible way to do it
-	}
-	if (this.graph.loadedOk) {	
-		for(var i = 0; i < this.lights.length; i++)
-			this.lights[i].update();
+		if (this.graph.loadedOk) {	
+			for(var i = 0; i < this.lights.length; i++)
+				this.lights[i].update();
+				
+			/*for(var [key, value] of this.graph.views.entries()) {
+				console.log(key + " near: " + value.near + " far: " + value.far + " angle: " + value.angle + " from ["
+					+ value.fromX + "," + value.fromY + "," + value.fromZ + "] to [" + value.toX + "," + value.toY + ","
+					+ value.toZ + "]");		
+			}*/
 			
-		/*for(var [key, value] of this.graph.views.entries()) {
-			console.log(key + " near: " + value.near + " far: " + value.far + " angle: " + value.angle + " from ["
-				+ value.fromX + "," + value.fromY + "," + value.fromZ + "] to [" + value.toX + "," + value.toY + ","
-				+ value.toZ + "]");		
-		}*/
-		
-		var matrix = mat4.create();
-		mat4.identity(matrix);
-		
-		console.log("cam counter: " + this.camCounter);
-		console.log("cam :" + this.graph.views.get(this.graph.viewsID[this.camCounter]));
-	
-		this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);	 
+			var matrix = mat4.create();
+			mat4.identity(matrix);
 
-		this.graph.components.get("root").display(matrix, "null", "null");
-
-	};	
+			//console.log("cam counter: " + this.camCounter);
+			//console.log("cam :" + this.graph.views.get(this.graph.viewsID[this.camCounter]));
+		
+			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
+		}
+	}	
 };

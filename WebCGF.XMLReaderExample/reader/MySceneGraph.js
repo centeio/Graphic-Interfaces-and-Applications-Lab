@@ -101,8 +101,6 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 
 		if(-1 == this.viewDefaultID)
 			console.error("Default view missing not declared");
-
-		this.scene.sceneTagReady = true;
 	}
 }
 
@@ -110,6 +108,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 MySceneGraph.prototype.parseLights = function(rootElement) {
 	var rootLights = rootElement.getElementsByTagName('lights');
 	var nLights = rootLights[0].children.length;
+	this.lights = [];
 
 	if(nLights > 8)
 		return "WebGL only supports 8 lights."
@@ -118,9 +117,14 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 
 	for(var i = 0; i < nLights; i++) {
 		var child = rootLights[0].children[i];
+		var light = [];
 
 		switch(child.tagName) {
 			case "omni":
+				light.push("omni");
+				light.push(this.reader.getString(child, "id", bool));
+				this.lights.push(light);
+
 				var location = child.getElementsByTagName('location')[0];
 				var ambient = child.getElementsByTagName('ambient')[0];
 				var diffuse = child.getElementsByTagName('diffuse')[0];
@@ -159,6 +163,10 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 				break;
 
 			case "spot":
+				light.push("spot");
+				light.push(this.reader.getString(child, "id", bool));
+				this.lights.push(light);
+
 				var target = child.getElementsByTagName('target')[0];
 				var location = child.getElementsByTagName('location')[0];
 				var ambient = child.getElementsByTagName('ambient')[0];
@@ -206,6 +214,8 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 				break;
 		}
 	}
+
+	this.scene.sceneTagReady = true;
 }
 
 MySceneGraph.prototype.parsePrimitives = function(rootElement) {
@@ -280,7 +290,6 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 	var rootComponents = rootElement.getElementsByTagName('components');
 	if(rootComponents[0].children.length == 0)
 		return "Components are missing."
-	//console.debug(rootComponents[0]);
 
 	this.components = new Map();
 	var ncomponents = rootComponents[0].children.length;

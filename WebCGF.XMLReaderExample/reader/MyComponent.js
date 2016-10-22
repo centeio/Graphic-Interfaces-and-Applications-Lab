@@ -11,11 +11,16 @@ function MyComponent(scene) {
 	this.textureRef = "null";
 	this.components = [];
 	this.primitives = [];
+	this.materialCounter = 0;
 };
 
 MyComponent.prototype.addTransformationRef = function(transformationRef) {
 	this.transformationRef = transformationRef;
-} 
+}
+
+MyComponent.prototype.changeMaterialCounter = function() {
+	this.materialCounter = (this.materialCounter + 1) % this.materialsRef.length;
+}  
 
 MyComponent.prototype.addTransformation = function(transformation) {
 	this.transformation = transformation;
@@ -48,25 +53,17 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	}
 
 	var material = new CGFappearance(this.scene);
-	/*material.setAmbient(0.4,0.4,0.4,1);
-	console.log(this.scene.graph.textures.get(String("cone")));*/
 	var materialRef, textureRef;
 
 	if(this.materialsRef == "inherit") {
-		//console.log("Old material: " + oldMaterial);
-		//console.log(this.scene.graph.materials.get(oldMaterial));
 		material = this.scene.graph.materials.get(oldMaterial);
 		materialRef = oldMaterial;
-		//console.log("Material: " + material);
 	}
 	else {
-		//console.log("New Material: " + this.materialsRef[0]);
-		//console.log(this.scene.graph.materials.get(this.materialsRef[0]));
-		material = this.scene.graph.materials.get(this.materialsRef[0]);
-		materialRef = this.materialsRef[0];
-		//console.log("Material: " + material);
+		material = this.scene.graph.materials.get(this.materialsRef[this.materialCounter]);
+		materialRef = this.materialsRef[this.materialCounter];
 	}
-	//material.setTextureWrap('REPEAT','REPEAT');	
+
 	if(this.textureRef == "inherit")
 		textureRef = oldTexture;
 	else
@@ -80,12 +77,11 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	}
 
 	this.scene.pushMatrix();
-	//console.debug("Material: " + material);
 	this.scene.multMatrix(matrix);
 	for(var i = 0; i < this.primitives.length; i++) {
 		if((this.scene.graph.primitives.get(this.primitives[i]) instanceof MyRectangle
 				|| this.scene.graph.primitives.get(this.primitives[i]) instanceof MyTriangle) &&
-				textureRef != "none") {
+				textureRef != "none" && material.texture != null) {
 					this.scene.graph.primitives.get(this.primitives[i]).updateTexCoords(
 						0,
 						1 / this.scene.graph.textures.get(String(textureRef)).lengthS,

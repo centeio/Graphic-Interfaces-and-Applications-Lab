@@ -2,10 +2,9 @@
  * MyInterface
  * @constructor
  */
-function MyInterface(scene) {
+function MyInterface() {
 	//call CGFinterface constructor 
 	CGFinterface.call(this);
-	this.scene = scene;
 };
 
 MyInterface.prototype = Object.create(CGFinterface.prototype);
@@ -33,16 +32,12 @@ MyInterface.prototype.init = function(application) {
 
 	// add a group of controls (and open/expand by defult)
 	
-	var group=this.gui.addFolder("Luzes");
-	group.open();
+	this.omni = this.gui.addFolder("Omni Ligths");
+
+	this.spot = this.gui.addFolder("Spot Ligths");
 
 	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
 	// e.g. this.option1=true; this.option2=false;
-	
-	//group.add(this.scene, 'Luz1');
-	//group.add(this.scene, 'Luz2');
-	//group.add(this.scene, 'Luz3');
-	//group.add(this.scene, 'Luz4');
 	
 	// add a slider
 	// must be a numeric variable of the scene, initialized in scene.init e.g.
@@ -51,6 +46,17 @@ MyInterface.prototype.init = function(application) {
 	//this.gui.add(this.scene, 'currDroneAppearance', this.scene.droneAppearanceList);
 
 	return true;
+};
+
+MyInterface.prototype.addLights = function() {
+
+	for(var i = 0; i < this.scene.graph.lights.length; i++) {
+		if(this.scene.graph.lights[i][0] == "omni")
+			this.omni.add(this.scene.lights[i], "enabled").name(this.scene.graph.lights[i][1]);
+		else
+			this.spot.add(this.scene.lights[i], "enabled").name(this.scene.graph.lights[i][1]);
+	}
+	
 };
 
 /**
@@ -70,10 +76,13 @@ MyInterface.prototype.processKeyDown = function(event) {
 	{
 		case('V'):
 		case('v'):
-			if (this.scene.graph.loadedOk) {
+			if (this.scene.graph.loadedOk)
 				this.scene.changeCamera();
-				this.setActiveCamera(this.scene.camera);
-			}
+			break;
+		case('M'):
+		case('m'):
+			if (this.scene.graph.loadedOk)
+				this.scene.changeMaterial();
 			break;
 	}
 };

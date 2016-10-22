@@ -1,6 +1,7 @@
 
-function XMLscene() {
+function XMLscene(myInterface) {
     CGFscene.call(this);
+	this.interface = myInterface;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -23,6 +24,12 @@ XMLscene.prototype.init = function (application) {
 	this.sceneTagReady = false;
 	this.sceneBasicsLoaded = false;
 
+	this.Luz1 = true;
+	this.Luz2 = true;
+	this.Luz3 = true;
+	this.Luz4 = true;
+
+	this.setUpdatePeriod(30);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -33,14 +40,19 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-	//this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
-	this.updateProjectionMatrix();
+	this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
+	this.interface.setActiveCamera(this.camera);
 };
 
 XMLscene.prototype.changeCamera = function() {
 	this.camCounter = (this.camCounter + 1) % this.graph.viewsID.length;
 	this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
-	console.log("Changing Camera.");
+	this.interface.setActiveCamera(this.camera);
+}
+
+XMLscene.prototype.changeMaterial = function() {
+	for (var component of this.graph.components.values())
+		component.changeMaterialCounter();
 }
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -49,6 +61,10 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);	
 };
+
+XMLscene.prototype.update = function(currTime) {
+	//console.log(this.interface.gui.__folders);
+}
 
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
@@ -66,9 +82,9 @@ XMLscene.prototype.display = function () {
 		this.axis = new CGFaxis(this, this.graph.axisLength);
 		this.camCounter = this.graph.viewDefaultID;
 		this.initCameras();
-		
-		console.log("Initializing scene.");
+
 		this.sceneBasicsLoaded = true;
+		this.interface.addLights();
 		// ---- END Background, camera and axis setup
 
 		// it is important that things depending on the proper loading of the graph

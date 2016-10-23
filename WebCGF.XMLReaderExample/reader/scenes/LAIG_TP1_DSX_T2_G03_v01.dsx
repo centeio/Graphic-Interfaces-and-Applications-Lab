@@ -56,7 +56,7 @@
         <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" />  
         <texture id="cone" file="scenes/resources/cone.png" length_s="1" length_t="1" />  
         <texture id="netnet" file="scenes/resources/net.jpg" length_s="0.5" length_t="0.5" />  
-        <texture id="leather" file="scenes/resources/leather.jpg" length_s="1" length_t="1" />  
+        <texture id="leather" file="scenes/resources/lifeguard.jpg" length_s="1" length_t="1" />  
         <texture id="sky" file="scenes/resources/forest.png" length_s="1" length_t="1" />  
 
         
@@ -110,7 +110,15 @@
             <diffuse r="0" g="1" b="0" a="1" />
             <specular r="0" g="1" b="0" a="1" />
             <shininess value="10" />
-        </material>				
+        </material>	
+
+        <material id="cone" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="1" g="0.3" b="0" a="1" />
+            <diffuse r="1" g="0.3" b="0" a="1" />
+            <specular r="1" g="0.2" b="0" a="1" />
+            <shininess value="0" />
+        </material>			
         
     </materials>
 	
@@ -201,7 +209,7 @@
             </transformation>
        
             <materials>
-                <material id="default" />
+                <material id="inherit" />
             </materials>
 
             <texture id="inherit" />
@@ -220,18 +228,35 @@
             </transformation>
        
             <materials>
-                <material id="default" />
+                <material id="inherit" />
             </materials>
 
             <texture id="inherit" />
             <children>
-                <primitiveref id="coneBase" /> 
+                <componentref id="coneBaseAux" /> 
                 <componentref id="coneaux" />
 
             </children>
             
         </component>
 		
+        <component id="coneBaseAux">
+        
+            <transformation>
+		
+            </transformation>
+       
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+            <children>
+                <primitiveref id="coneBase" /> 
+
+            </children>
+            
+        </component>		
 
         <component id="cone1">
         
@@ -240,7 +265,7 @@
             </transformation>
        
             <materials>
-                <material id="default" />
+                <material id="cone" />
             </materials>
 
             <texture id="cone" />
@@ -257,7 +282,7 @@
             </transformation>
        
             <materials>
-                <material id="default" />
+                <material id="cone" />
             </materials>
 
             <texture id="cone" />
@@ -274,7 +299,7 @@
             </transformation>
        
             <materials>
-                <material id="default" />
+                <material id="cone" />
             </materials>
 
             <texture id="cone" />
@@ -291,7 +316,7 @@
             </transformation>
        
             <materials>
-                <material id="default" />
+                <material id="cone" />
             </materials>
 
             <texture id="cone" />

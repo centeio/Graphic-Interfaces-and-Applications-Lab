@@ -52,6 +52,7 @@ MySceneGraph.prototype.getRadiansAngle = function(angle){
 MySceneGraph.prototype.parseViews = function(rootElement) {
 	
 	var rootViews = rootElement.getElementsByTagName('views');
+	
 	if(rootViews.length <= 0)
 		console.error("Views missing.");
 	if(rootViews[0].children.length == 0)
@@ -120,13 +121,10 @@ function find(lights, id){
 
 MySceneGraph.prototype.parseLights = function(rootElement) {
 	var rootLights = rootElement.getElementsByTagName('lights');
+	
 	if(rootLights.length <= 0)
 		console.error("Lights missing.");
-	var nLights = rootLights[0].children.length;
-	if(rootLights[0].getElementsByTagName("omni").length<=0)
-		console.error("No omni light declared.");
-	if(rootLights[0].getElementsByTagName("spot").length<=0)
-		console.error("No spot light declared.");		
+	var nLights = rootLights[0].children.length;		
 	this.lights = [];
 
 	if(nLights > 8)
@@ -252,14 +250,12 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 
 	console.log("Parsing Primitives");
 
-	for (var i=0; i < nnodes; i++)
-	{
-		if(rootPrimitives[0].children[i].length!=1)
+	for (var i=0; i < nnodes; i++) {
+		if(rootPrimitives[0].children[i].children.length != 1)
 			console.error("One and only one tag per primitive.");
 		var element = rootPrimitives[0].children[i].children[0];
-		console.log("Read list item " + element);
 
-		if(primitives.get(this.reader.getString(rootPrimitives[0].children[i])) != undefined)
+		if(this.primitives.get(this.reader.getString(rootPrimitives[0].children[i], "id", bool)) != undefined)
 			console.error("Primitives id repeated.");
 		switch(element.tagName) {
 			case "rectangle":
@@ -450,6 +446,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 MySceneGraph.prototype.parseTransformations = function(rootElement) {
 	
 	var rootTranformations =  rootElement.getElementsByTagName('transformations');
+	
 	if(rootTranformations.length <= 0)
 		console.error("Transformations missing.");	
 	if (rootTranformations[0].children.length == 0) {

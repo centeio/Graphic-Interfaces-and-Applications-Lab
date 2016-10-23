@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<dsx>
+
+	<scene root="study" axis_length="10" />
+
+    <views default="general" >
+    
+        <!-- declaracao obrigatoria de pelo menos uma vista; -->
+        <!-- se varias vistas declaradas, o default e' a -->
+        <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
+        <!-- a vista muda para a proxima da lista; da --> 
+        <!-- ultima vista da lista volta 'a primeira -->
+        <perspective id="general" near="0.1" far="500" angle="20">
+            <from x="50" y="50" z="50" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+
+        <perspective id="pencase" near="0.1" far="500" angle="20">
+            <from x="13" y="10" z="10" />
+            <to x="8.5" y="6" z="1.5" />
+        </perspective>
+
+        <perspective id="books" near="0.1" far="500" angle="20">
+            <from x="10" y="10" z="10" />
+            <to x="0.9" y="6.3" z="0.3" />
+        </perspective>
+
+        <perspective id="shelf" near="0.1" far="500" angle="20">
+            <from x="12" y="20" z="12" />
+            <to x="1.5" y="10" z="1.5" />
+        </perspective>
+        
+    </views>
+    
+	<illumination doublesided="1" local="0" >
+    
+        <ambient r="0" g="0" b="0" a="0" />
+        <background r="0" g="0" b="0" a="1" />
+        
+    </illumination>
+
+    <lights>
+    
+        <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <omni id="parede" enabled="1" >
+            <location x="15" y="15" z="0" w="1" />          <!-- light position -->
+            <ambient r="0" g="0" b="0" a="1" />      <!-- ambient component -->
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />      <!-- diffuse component -->
+            <specular r="0" g="0" b="0" a="1" /> 
+        </omni>
+        
+        <omni id="shelf" enabled="1" >
+            <location x="1.5" y="15" z="1.5" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
+        </omni>
+        
+        <omni id="lava lamp" enabled="1" >
+            <location x="1.5" y="11.5" z="1.5" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
+        </omni>
+
+        <spot id="spotlight" enabled="1" angle="20" exponent="4.5">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <target x="8.5" y="6" z="1.5" />
+            <location x="8.5" y="15" z="1.5" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1" />
+            <diffuse r="0" g="0" b="0" a="1" />
+            <specular r="0.3" g="0.3" b="0.3" a="1" />
+        </spot>
+    </lights>
+
+    <textures>
+        <texture id="wood" file="scenes/resources/table.png" length_s="5" length_t="5" />
+        <texture id="window" file="scenes/resources/window.png" length_s="5" length_t="3" /> 
+		<texture id="pencil" file="scenes/resources/yellow.png" length_s="4" length_t="4" />
+		<texture id="pencilpoint" file="scenes/resources/pencilpoint.png" length_s="5" length_t="5" />
+		<texture id="wallpaper" file="scenes/resources/wall.png" length_s="5" length_t="5" />
+		<texture id="lava" file="scenes/resources/lava.png" length_s="1" length_t="1" />
+		<texture id="bookCover" file="scenes/resources/bookCover.png" length_s="1.2" length_t="2" />
+		<texture id="bookSpine" file="scenes/resources/bookSpine.png" length_s="0.4" length_t="2" />
+    </textures>
+
+    <materials>
+        <material id="wood" >
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.545098" g="0.270588" b="0.0745098" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+            <shininess value="3" />
+        </material>
+
+        <material id="metal" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1" />
+            <diffuse r="0.839216" g="0.839216" b="0.839216" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+            <shininess value="5" />
+        </material>
+
+        <material id="light_blue" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.4" g="0.4" b="1" a="1" />
+            <diffuse r="0.4" g="0.4" b="1" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+            <shininess value="5" />
+        </material>
+
+        <material id="yellow" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.8" g="0.8" b="0" a="1" />
+            <diffuse r="0.8" g="0.8" b="0" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+            <shininess value="5" />
+        </material>
+
+        <material id="florescent" >
+            <emission r="1" g="0.5" b="0.5" a="1" />
+            <ambient r="0.6" g="0.2" b="0.2" a="1" />
+            <diffuse r="0.6" g="0.2" b="0.2" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+            <shininess value="5" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="none">
+           <translate x="0" y="0" z="0" />
+        </transformation>
+    </transformations>
+
+    <primitives>
+    
+        <!-- Deve existir um ou mais blocos "primitive" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <primitive id="square">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />          
+        </primitive>
+
+        <primitive id="wall">
+            <rectangle x1="0" y1="0" x2="15" y2="15" />          
+        </primitive>
+
+        <primitive id="shelfBase">
+            <triangle x1="5" y1="0" z1="0" x2="0" y2="0" z2="0" x3="0" y3="0" z3="5" />  
+        </primitive>
+
+        <primitive id="shelfSide">
+            <rectangle x1="-3.54" y1="-0.15" x2="3.54" y2="0.15" />          
+        </primitive>
+
+        <primitive id="cylinder">
+            <cylinder base="1" top="1" height="1" slices="8" stacks="1" />
+        </primitive>
+		
+		<primitive id="cone">
+			<cylinder base="1" top="0" height="1" slices="15" stacks="1" />
+		</primitive>
+
+        <primitive id="sphere">
+            <sphere radius="1" slices="10" stacks="10" />
+        </primitive>
+
+        <primitive id="torus">
+            <torus inner="0.05" outer="0.5" slices="5" loops="6" />
+        </primitive>
+		
+		<primitive id="tableleg">
+			<cylinder base="0.2" top="0.2" height="5" slices="15" stacks="3" />
+		</primitive>
+
+		<primitive id="bookCover">
+			<rectangle x1="-0.6" y1="-1" x2="0.6" y2="1" />
+		</primitive>
+
+		<primitive id="bookSpine">
+			<rectangle x1="-0.2" y1="-1" x2="0.2" y2="1" />
+		</primitive>
+
+		<primitive id="bookThickness">
+			<rectangle x1="-0.2" y1="-0.6" x2="0.2" y2="0.6" />
+		</primitive>
+        
+    </primitives>
+
+    <components>
+    	<component id="study">
+            <transformation>
+            	 <transformationref id="none" />
+            </transformation>
+
+            <materials>
+                <material id="wood" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="desk" />
+                <componentref id="frontWall" />
+                <componentref id="sideWall" />
+                <componentref id="lavaLamp" /> 
+                <componentref id="shelf" />      
+            </children>
+        </component>
+
+        <component id="desk">
+            <transformation>
+             
+                <translate x="1" y="0" z="1" />
+            </transformation>
+
+            <materials>
+                <material id="wood" />
+            </materials>
+
+            <texture id="wood" />
+
+            <children>
+                <componentref id="leg1" />
+				<componentref id="leg2" />
+                <componentref id="leg3" />
+				<componentref id="leg4" />
+				<componentref id="tabletop" />
+				<componentref id="pencase" />
+				<componentref id="book1"/>
+				<componentref id="book2"/>
+				<componentref id="book3"/>
+                              
+            </children>
+            
+        </component>
+		
+		<component id="leg1">
+			<transformation>		
+            	<rotate axis="x" angle="-90" />
+			</transformation>
+			
+			<materials>
+                <material id="metal" />
+			</materials>
+			
+			<texture id="none" />
+			
+			<children>
+                <primitiveref id="tableleg" />                             
+            </children>
+		</component>
+        
+		<component id="leg2">
+			<transformation>
+				<translate x="10" y="0" z="0" />			
+            	<rotate axis="x" angle="-90" />
+			</transformation>
+			
+			<materials>
+				<material id="metal" />
+			</materials>
+			<texture id="none" />
+			
+			<children>
+                <primitiveref id="tableleg" />                             
+            </children>
+		</component>
+		
+		<component id="leg3">
+			<transformation>
+				<translate x="0" y="0" z="6" />			
+            	<rotate axis="x" angle="-90" />
+			</transformation>
+			
+			<materials>
+				<material id="metal" />
+			</materials>
+			
+			<texture id="none" />
+			
+			<children>
+                <primitiveref id="tableleg" />                             
+            </children>
+		</component>
+		
+        <component id="leg4">
+			<transformation>
+				<translate x="10" y="0" z="6" />			
+            	<rotate axis="x" angle="-90" />
+			</transformation>
+			
+			<materials>
+				<material id="metal" />
+			</materials>
+			
+			<texture id="none" />
+			
+			<children>
+                <primitiveref id="tableleg" />                             
+            </children>
+		</component>
+		
+		<component id="tabletop">
+			<transformation>
+				<translate x="5" y="5" z="3" />
+				<scale x="11" y="0.5" z="7" />
+			</transformation>
+			
+			<materials>
+				<material id="inherit" />
+			</materials>
+			
+			<texture id="inherit" />
+			
+			<children>
+				<componentref id="topface" />
+				<componentref id="bottomface" />
+				<componentref id="leftface" />
+				<componentref id="rightface" />
+				<componentref id="frontface" />
+				<componentref id="backface" />                         
+            </children>
+		</component>
+		
+		<component id="pencase">
+			<transformation>
+				<translate x="8.5" y="6" z="1.5" />
+			</transformation>
+			
+			<materials>
+                <material id="light_blue" />
+            </materials>
+
+            <texture id="none" />
+			
+			<children>
+				<componentref id="bottomface" />
+				<componentref id="leftface" />
+				<componentref id="rightface" />
+				<componentref id="frontface" />
+				<componentref id="backface" /> 
+				<componentref id="pencil1" /> 
+				<componentref id="pencil2" />
+				
+			</children>
+		</component>
+		
+		<component id="frontface">
+            <transformation>
+                <translate x="0" y="0" z="0.5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="square" />                             
+            </children>
+            
+        </component>
+
+        <component id="backface">
+            <transformation>
+            	<translate x="0" y="0" z="-0.5" />
+            	<rotate axis="x" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="square" />                             
+            </children>
+            
+        </component>
+
+        <component id="topface">
+            <transformation>
+                <translate x="0" y="0.5" z="0" />
+            	<rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="square" />                             
+            </children>
+            
+        </component>
+
+        <component id="bottomface">
+            <transformation>
+                <translate x="0" y="-0.5" z="0" />
+            	<rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="square" />                             
+            </children>
+            
+        </component>
+
+        <component id="rightface">
+            <transformation>
+                <translate x="0.5" y="0" z="0" />
+            	<rotate axis="y" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="square" />                             
+            </children>
+            
+        </component>
+
+        <component id="leftface">
+            <transformation>
+                <translate x="-0.5" y="0" z="0" />
+            	<rotate axis="y" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="square" />                             
+            </children>
+            
+        </component>
+		
+		<component id="pencil1">
+			<transformation>
+				<rotate axis="x" angle="-84" />
+				<scale x="0.05" y="0.05" z="1" />
+			</transformation>
+			
+			<materials>
+				<material id="yellow" />
+			</materials>
+			
+			<texture id="none" />
+			
+			<children>
+				<componentref id="point" />
+                <primitiveref id="cylinder" />                             
+            </children>
+		</component>
+		
+		<component id="pencil2">
+			<transformation>				
+				<translate x="0" y="0" z="0.2" />
+				<rotate axis="x" angle="-79" />
+				<scale x="0.05" y="0.05" z="1" />
+			</transformation>
+			
+			<materials>
+				<material id="yellow" />
+			</materials>
+			
+			<texture id="none" />
+			
+			<children>
+				<componentref id="point" />
+                <primitiveref id="cylinder" />                             
+            </children>
+		</component>
+		
+		<component id="point">
+			<transformation>	
+				<translate x="0" y="0" z="1" />
+				<scale x="1" y="1" z="0.3" />
+			</transformation>
+			
+			<materials>
+				<material id="metal" />
+			</materials>
+			
+			<texture id="pencilpoint" />
+			
+			<children>
+                <primitiveref id="cone" />                             
+            </children>
+		</component>
+
+		<component id="frontWall">
+			<transformation>
+                 <transformationref id="none" />
+            </transformation>
+
+            <materials>
+                <material id="light_blue" />
+                <material id="yellow" />
+            </materials>
+
+            <texture id="wallpaper" />
+
+            <children>
+                <primitiveref id="wall" />                             
+            </children>
+		</component>
+
+		<component id="sideWall">
+			<transformation>
+                <translate x="0" y="0" z="15" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="light_blue" />
+                <material id="yellow" />
+            </materials>
+
+            <texture id="wallpaper" />
+
+            <children>
+                <primitiveref id="wall" />                             
+            </children>
+		</component>
+
+		<component id="lavaLamp">
+			<transformation>
+                <translate x="1.5" y="11.5" z="1.5" />
+				<scale x="1.5" y="1.5" z="1.5" />
+            </transformation>
+
+            <materials>
+                <material id="florescent" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="lava" />
+                <componentref id="lampBase" />
+                <componentref id="lampTop" />                         
+            </children>
+		</component>
+
+		<component id="lava">
+			<transformation>
+				<scale x="0.4" y="1" z="0.4" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="lava" />
+
+            <children>
+                <primitiveref id="sphere" />                             
+            </children>
+		</component>
+
+		<component id="lampBase">
+			<transformation>
+				<translate x="0" y="-0.8" z="0" />
+				<scale x="1" y="0.7" z="1" />
+				<rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="metal" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="torus" />                             
+            </children>
+		</component>
+
+		<component id="lampTop">
+			<transformation>
+				<translate x="0" y="0.85" z="0" />
+				<scale x="1" y="0.7" z="1" />
+				<rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="metal" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="torus" />                             
+            </children>
+		</component>
+
+		<component id="shelf">
+			<transformation>
+				<translate x="0" y="10" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="wood" />
+            </materials>
+
+            <texture id="wood" />
+
+            <children>
+                <componentref id="shelfTop" />
+                <componentref id="shelfBottom" />
+                <componentref id="shelfSide" />                             
+            </children>
+		</component>
+
+		<component id="shelfTop">
+			<transformation>
+				<translate x="0" y="0.15" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="shelfBase" />                             
+            </children>
+		</component>
+
+		<component id="shelfBottom">
+			<transformation>
+				<translate x="0" y="-0.15" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="shelfBase" />                             
+            </children>
+		</component>
+
+		<component id="shelfSide">
+			<transformation>
+				<translate x="2.5" y="0" z="2.5" />
+				<rotate axis="y" angle="45" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="shelfSide" />                             
+            </children>
+		</component>
+
+		<component id="book1">
+			<transformation>
+				<translate x="0" y="6.3" z="0.4" />
+				<scale x="1.2" y="1" z="1" />
+            </transformation>
+
+            <materials>
+                <material id="yellow" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="book"/>                       
+            </children>
+		</component>
+
+		<component id="book2">
+			<transformation>
+				<translate x="0.4" y="6" z="0.4" />
+				<scale x="1" y="0.7" z="1" />
+            </transformation>
+
+            <materials>
+                <material id="light_blue" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="book"/>                       
+            </children>
+		</component>
+
+		<component id="book3">
+			<transformation>
+				<translate x="0.9" y="6.3" z="0.3" />
+				<scale x="1.4" y="1" z="0.8" />
+            </transformation>
+
+            <materials>
+                <material id="yellow" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="book"/>                       
+            </children>
+		</component>
+
+		<component id="book">
+			<transformation>
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="bookCover" />
+                <componentref id="bookBack" />
+                <componentref id="bookSpine" />
+                <componentref id="bookPages" />                           
+            </children>
+		</component>
+
+		<component id="bookCover">
+			<transformation>
+                <translate x="-0.2" y="0" z="0" />
+				<rotate axis="y" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="bookCover" />                             
+            </children>
+		</component>
+
+		<component id="bookBack">
+			<transformation>
+                <translate x="0.2" y="0" z="0" />
+				<rotate axis="y" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="bookCover" />
+
+            <children>
+                <primitiveref id="bookCover" />                             
+            </children>
+		</component>
+
+		<component id="bookSpine">
+			<transformation>
+                <translate x="0" y="0" z="0.6" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="bookSpine" />
+
+            <children>
+                <primitiveref id="bookSpine" />                             
+            </children>
+		</component>
+
+		<component id="bookPages">
+			<transformation>
+                <translate x="0" y="0.95" z="0" />
+				<rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="metal" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="bookThickness" />                             
+            </children>
+		</component>
+		
+    </components>
+	
+</dsx>

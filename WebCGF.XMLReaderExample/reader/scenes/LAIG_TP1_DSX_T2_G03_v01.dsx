@@ -2,7 +2,7 @@
 
 	<scene root="root" axis_length="10" />
 	
-	<views default="default" >
+	<views default="v2" >
 
         <!-- declaracao obrigatoria de pelo menos uma vista; -->
         <!-- se varias vistas declaradas, o default e' a -->
@@ -16,7 +16,7 @@
 
 		</perspective>
 
-        <perspective id="default" near="0.4" far="500" angle="20">
+        <perspective id="v2" near="0.4" far="500" angle="20">
             <from x="18" y="8" z="18" />
             <to x="0" y="0" z="0" />
 		</perspective>

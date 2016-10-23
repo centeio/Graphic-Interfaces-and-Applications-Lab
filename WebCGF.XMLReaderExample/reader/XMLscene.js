@@ -80,7 +80,6 @@ XMLscene.prototype.display = function () {
 	if(this.sceneTagReady && !this.sceneBasicsLoaded) {
 		// ---- BEGIN Background, camera and axis setup
 		this.axis = new CGFaxis(this, this.graph.axisLength);
-		this.camCounter = this.graph.viewDefaultID;
 		this.initCameras();
 
 		this.sceneBasicsLoaded = true;
@@ -93,7 +92,6 @@ XMLscene.prototype.display = function () {
 	}
 
 	if(this.sceneBasicsLoaded) {
-		console.log("Scene display!");
 		//console.log(this.camera);
 		// Clear image and depth buffer everytime we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);

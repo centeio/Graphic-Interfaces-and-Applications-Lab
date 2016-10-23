@@ -56,7 +56,7 @@
         <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" />  
         <texture id="cone" file="scenes/resources/cone.png" length_s="1" length_t="1" />  
         <texture id="netnet" file="scenes/resources/net.jpg" length_s="0.5" length_t="0.5" />  
-        <texture id="leather" file="scenes/resources/leather.jpg" length_s="1" length_t="1" />  
+        <texture id="leather" file="scenes/resources/lifeguard.jpg" length_s="1" length_t="1" />  
         <texture id="sky" file="scenes/resources/forest.png" length_s="1" length_t="1" />  
 
         

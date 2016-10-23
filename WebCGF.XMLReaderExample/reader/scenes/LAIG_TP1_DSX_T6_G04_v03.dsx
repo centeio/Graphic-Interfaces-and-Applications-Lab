@@ -70,23 +70,23 @@
     
     <textures>    
         <texture id="greytex" file="scenes/resources/base.png" length_s="1.0" length_t="1.0" />
-        <texture id="face" file="scenesresources/face.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="tex_member" file="scenesresources/member.jpg" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_body" file="scenesresources/body3.png" length_s="1.0" length_t="1.0" />
-        <texture id="tex_eye" file="scenesresources/eye2.png" length_s="1.0" length_t="1.0" />
-        <texture id="tex_eye_hold" file="scenesresources/eyehold.png" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_cigar" file="scenesresources/cigar.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="tex_ash" file="scenesresources/cigar2.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="tex_wall" file="scenesresources/wall.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="tex_floor" file="scenesresources/floor.jpg" length_s="10.0" length_t="10.0" />
-        <texture id="tex_boia" file="scenesresources/lifeguard.jpg" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_ball" file="scenesresources/soccer3.jpg" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_beer" file="scenesresources/beer.jpg" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_beer_label" file="scenesresources/beerlabel.png" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_cap" file="scenesresources/cap.png" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_pedestal" file="scenesresources/column.jpg" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_pedestal_top" file="scenesresources/tampas.png" length_s="1.0" length_t="1.0"/>
-        <texture id="tex_planet" file="scenesresources/jupiter.png" length_s="1.0" length_t="1.0"/>
+        <texture id="face" file="scenes/resources/face.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="tex_member" file="scenes/resources/member.jpg" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_body" file="scenes/resources/body3.png" length_s="1.0" length_t="1.0" />
+        <texture id="tex_eye" file="scenes/resources/eye2.png" length_s="1.0" length_t="1.0" />
+        <texture id="tex_eye_hold" file="scenes/resources/eyehold.png" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_cigar" file="scenes/resources/cigar.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="tex_ash" file="scenes/resources/cigar2.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="tex_wall" file="scenes/resources/wall.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="tex_floor" file="scenes/resources/floor.jpg" length_s="10.0" length_t="10.0" />
+        <texture id="tex_boia" file="scenes/resources/lifeguard.jpg" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_ball" file="scenes/resources/soccer3.jpg" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_beer" file="scenes/resources/beer.jpg" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_beer_label" file="scenes/resources/beerlabel.png" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_cap" file="scenes/resources/cap.png" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_pedestal" file="scenes/resources/column.jpg" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_pedestal_top" file="scenes/resources/tampas.png" length_s="1.0" length_t="1.0"/>
+        <texture id="tex_planet" file="scenes/resources/jupiter.png" length_s="1.0" length_t="1.0"/>
 
     </textures>
 

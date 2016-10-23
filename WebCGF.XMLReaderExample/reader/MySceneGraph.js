@@ -328,6 +328,7 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 
 		var id = this.reader.getString(component, "id", bool);
 		this.components.set(id, new MyComponent(this.scene));
+		this.components.get(id).addID(id);
 
 		/* Transformation ---------------------- */
 		if(component.getElementsByTagName('transformation').length != 1)
@@ -462,7 +463,7 @@ MySceneGraph.prototype.parseTransformations = function(rootElement) {
 		
 		mat4.identity(matrix);
 
-		for(var j=snodes-1; j >= 0; j--){
+		for(var j = 0; j < snodes; j++){
 
 			var t = rootTranformations[0].children[i].children[j];
 			var bool;

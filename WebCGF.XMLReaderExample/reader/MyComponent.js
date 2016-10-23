@@ -5,6 +5,7 @@
 function MyComponent(scene) {	
 	
 	this.scene = scene;
+	this.ID = "null";
 	this.transformationRef = "null";
 	this.transformation = [];
 	this.materialsRef = [];
@@ -16,6 +17,10 @@ function MyComponent(scene) {
 
 MyComponent.prototype.addTransformationRef = function(transformationRef) {
 	this.transformationRef = transformationRef;
+}
+
+MyComponent.prototype.addID = function(ID) {
+	this.ID = ID;
 }
 
 MyComponent.prototype.changeMaterialCounter = function() {
@@ -68,7 +73,8 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 		textureRef = oldTexture;
 	else
 		textureRef = this.textureRef;
-
+	
+	console.log(this.ID);
 	if(textureRef != "none" && material != undefined)
 		material.setTexture(this.scene.graph.textures.get(String(textureRef)).texture);
 

@@ -1,0 +1,580 @@
+<dsx>
+
+    <scene root="root" axis_length="3" />
+
+    <views default="initView" >
+
+        <perspective id="initView" near="0.1" far="500.0" angle="25">
+            <from x="0" y="20.0" z="40.0" />
+            <to x="0.0" y="0.0" z="0.0" />
+        </perspective>
+
+        <perspective id="view2" near="0.1" far="500.0" angle="25">
+            <from x="60.0" y="40.0" z="0.0" />
+            <to x="0.0" y="0.0" z="0.0" />
+        </perspective>
+
+        <perspective id="view3" near="0.1" far="500.0" angle="25">
+            <from x="-60.0" y="40.0" z="0.0" />
+            <to x="0.0" y="0.0" z="0.0" />
+        </perspective>
+
+    </views>
+
+    <illumination doublesided="1" local="1" >
+
+        <ambient r="0.4" g="0.4" b="0.4" a="1" />
+        <background r="0" g="0" b="0" a="1" />
+
+    </illumination>
+
+    <lights>
+
+        <omni id="omniLight" enabled="1" >
+            <location x="5" y="5" z="0" w="1" />
+            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+        </omni>
+
+        <spot id="spotLight" enabled="0" angle="45" exponent="0.1">
+            <target x="2" y="2" z="0" />
+            <location x="0" y="5" z="5" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
+        </spot>
+
+    </lights>
+
+    <textures>
+        <texture id="floorText" file="scenes/resources/texture_floor.jpg" length_s="15" length_t="15" />
+        <texture id="woodText" file="scenes/resources/texture_wood.jpg" length_s="8" length_t="8" />
+        <texture id="topTreeText" file="scenes/resources/texture_topTree.jpg" length_s="8" length_t="8" />
+        <texture id="streetText" file="scenes/resources/texture_street.jpg" length_s="7" length_t="7" />
+        <texture id="sandText" file="scenes/resources/texture_sand.jpg" length_s="10" length_t="10" />
+    </textures>
+
+    <materials>
+
+        <material id="blueMat" >
+            <emission r="0" g="0" b="1" a="1" />
+            <ambient r="0" g="0" b="1" a="1" />
+            <diffuse r="0" g="0" b="1" a="1" />
+            <specular r="0" g="0" b="1" a="1" />
+            <shininess value="1" />
+        </material>
+
+        <material id="default" >
+            <emission r="0.1" g="0.1" b="0.1" a="1" />
+            <ambient r="1" g="1" b="1" a="1" />
+            <diffuse r="0.8" g="0.8" b="0.8" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+            <shininess value="0.5" />
+        </material>
+
+    </materials>
+
+    <transformations>
+
+        <transformation id="trans1">
+           <translate x="1" y="1" z="1" />
+           <rotate axis="x" angle="90" />
+           <scale x="1" y="1" z="1" />
+        </transformation>
+
+        <transformation id="trans2">
+            <rotate axis="y" angle="-90" />
+        </transformation>
+
+    </transformations>
+
+    <primitives>
+
+        <primitive id="Pfloor">
+            <rectangle x1="-11" y1="-11" x2="11" y2="11" />
+        </primitive>
+
+        <primitive id="Ptronco">
+            <cylinder base="0.3" top="0.3" height="2" slices="20" stacks="20" />
+        </primitive>
+
+        <primitive id="Pcopa">
+            <cylinder base="0.8" top="0" height="2" slices="20" stacks="20" />
+        </primitive>
+
+        <primitive id="Pstreet">
+            <rectangle x1="-3" y1="-5" x2="3" y2="5" />
+        </primitive>
+
+        <primitive id="PborderStreet">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+
+        <primitive id="Ppilar">
+            <cylinder base="0.5" top="0.5" height="5" slices="20" stacks="30" />
+        </primitive>
+
+        <primitive id="Ppilar2">
+            <cylinder base="0.5" top="0.5" height="5.66" slices="20" stacks="30" />
+        </primitive>
+
+        <primitive id="Ppilar3">
+            <sphere radius="0.5" slices="15" stacks="15" />
+        </primitive>
+
+        <primitive id="rectangle1">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+
+        <primitive id="tri1">
+            <triangle x1="-1" y1="-1" z1="0" x2="1" y2="-1" z2="0" x3="0" y3="1" z3="0" />
+        </primitive>
+
+        <primitive id="torus1">
+            <torus inner="0.3" outer="1" slices="20" loops="20" />
+        </primitive>
+
+    </primitives>
+
+    <components>
+
+        <component id="root" >
+
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="floor" />
+                <componentref id="street" />
+                <componentref id="filaArvores1" />
+                <componentref id="filaArvores2" />
+                <componentref id="templo" />
+            </children>
+
+        </component>
+
+        <component id="templo" >
+
+            <transformation>
+                <translate x="0" y="0" z="-2" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="sandText" />
+
+            <children>
+                <componentref id="pilar1" />
+                <componentref id="pilar2" />
+                <componentref id="pilar3" />
+                <componentref id="pilar4" />
+                <componentref id="ponte1" />
+                <componentref id="ponte2" />
+                <componentref id="esferaEnvol1" />
+                <componentref id="esferaEnvol2" />
+                <componentref id="esferaEnvol3" />
+                <componentref id="esferaEnvol4" />
+            </children>
+
+        </component>
+
+        <component id="esferaEnvol1" >
+
+            <transformation>
+                <translate x="-2" y="5" z="-1" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="blueMat" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="Ppilar3" />
+            </children>
+
+        </component>
+
+        <component id="esferaEnvol2" >
+
+            <transformation>
+                <translate x="-2" y="5" z="-5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="blueMat" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar3" />
+            </children>
+
+        </component>
+
+        <component id="esferaEnvol3" >
+
+            <transformation>
+                <translate x="2" y="5" z="-5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="blueMat" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar3" />
+            </children>
+
+        </component>
+
+        <component id="esferaEnvol4" >
+
+            <transformation>
+                <translate x="2" y="5" z="-1" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="blueMat" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar3" />
+            </children>
+
+        </component>
+
+        <component id="ponte1" >
+
+            <transformation>
+                <translate x="0" y="5" z="-3" />
+				<rotate axis="y" angle="45" />
+				<translate x="0" y="0" z="-2.825" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar2" />
+            </children>
+
+        </component>
+
+        <component id="ponte2" >
+
+            <transformation>
+                <translate x="0" y="5" z="-3" />
+				<rotate axis="y" angle="-45" />
+				<translate x="0" y="0" z="-2.825" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar2" />
+            </children>
+
+        </component>
+
+        <component id="pilar1" >
+
+            <transformation>
+                <translate x="-2" y="0" z="-1" />
+				<rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar" />
+            </children>
+
+        </component>
+
+        <component id="pilar2" >
+
+            <transformation>
+                <translate x="-2" y="0" z="-5" />
+				<rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar" />
+            </children>
+
+        </component>
+
+        <component id="pilar3" >
+
+            <transformation>
+                <translate x="2" y="0" z="-5" />
+				<rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar" />
+            </children>
+
+        </component>
+
+        <component id="pilar4" >
+
+            <transformation>
+                <translate x="2" y="0" z="-1" />
+				<rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+
+            <children>
+                <primitiveref id="Ppilar" />
+            </children>
+
+        </component>
+
+        <component id="floor" >
+
+            <transformation>
+                <rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="floorText" />
+
+            <children>
+                <primitiveref id="Pfloor" />
+            </children>
+
+        </component>
+
+        <component id="street" >
+
+            <transformation>
+                <translate x="0" y="0.2" z="5" />
+				<rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="streetText" />
+
+            <children>
+                <primitiveref id="Pstreet" />
+            </children>
+
+        </component>
+
+
+        <component id="filaArvores1" >
+
+            <transformation>
+                <translate x="-3.75" y="0" z="0.5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="arvore1" />
+                <componentref id="arvore2" />
+                <componentref id="arvore3" />
+                <componentref id="arvore4" />
+            </children>
+
+        </component>
+
+        <component id="filaArvores2" >
+
+            <transformation>
+                <translate x="3.75" y="0" z="0.5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="arvore1" />
+                <componentref id="arvore2" />
+                <componentref id="arvore3" />
+                <componentref id="arvore4" />
+            </children>
+
+        </component>
+
+        <component id="arvore1">
+
+            <transformation>
+                <translate x="0" y="0" z="9" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="tronco" />
+                <componentref id="copa" />
+            </children>
+
+        </component>
+
+
+        <component id="arvore2">
+
+            <transformation>
+                <translate x="0" y="0" z="6" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="tronco" />
+                <componentref id="copa" />
+            </children>
+
+        </component>
+
+        <component id="arvore3">
+
+            <transformation>
+                <translate x="0" y="0" z="3" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="tronco" />
+                <componentref id="copa" />
+            </children>
+
+        </component>
+
+        <component id="arvore4">
+
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="tronco" />
+                <componentref id="copa" />
+            </children>
+
+        </component>
+
+        <component id="tronco">
+
+            <transformation>
+                <rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="woodText" />
+
+            <children>
+                <primitiveref id="Ptronco" />
+            </children>
+
+        </component>
+
+        <component id="copa">
+
+            <transformation>
+                <translate x="0" y="2" z="0" />    <!-- y e altura do tronco da arvore -->
+				<rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="topTreeText" />
+
+            <children>
+                <primitiveref id="Pcopa" />
+            </children>
+
+        </component>
+
+
+    </components>
+
+</dsx>

@@ -84,14 +84,46 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	this.scene.pushMatrix();
 	this.scene.multMatrix(matrix);
 	for(var i = 0; i < this.primitives.length; i++) {
-		if((this.scene.graph.primitives.get(this.primitives[i]) instanceof MyRectangle
-				|| this.scene.graph.primitives.get(this.primitives[i]) instanceof MyTriangle) &&
+		if((this.scene.graph.primitives.get(this.primitives[i]) instanceof MyRectangle) &&
 				textureRef != "none" && material.texture != null) {
+					
+					var lengthH = this.scene.graph.primitives.get(this.primitives[i]).maxX
+						- this.scene.graph.primitives.get(this.primitives[i]).minX;
+					var lengthV = this.scene.graph.primitives.get(this.primitives[i]).maxY
+						- this.scene.graph.primitives.get(this.primitives[i]).minY; 
+					
 					this.scene.graph.primitives.get(this.primitives[i]).updateTexCoords(
 						0,
-						1 / this.scene.graph.textures.get(String(textureRef)).lengthS,
+						lengthH / this.scene.graph.textures.get(String(textureRef)).lengthS,
 						0,
-						1 / this.scene.graph.textures.get(String(textureRef)).lengthT
+						lengthV / this.scene.graph.textures.get(String(textureRef)).lengthT
+					);
+					material.setTextureWrap('REPEAT', 'REPEAT');
+		}
+
+		if((this.scene.graph.primitives.get(this.primitives[i]) instanceof MyTriangle) &&
+				textureRef != "none" && material.texture != null) {
+					
+					var lengthH = Math.max(this.scene.graph.primitives.get(this.primitives[i]).x1,
+						this.scene.graph.primitives.get(this.primitives[i]).x2,
+						this.scene.graph.primitives.get(this.primitives[i]).x3)
+						-
+						Math.min(this.scene.graph.primitives.get(this.primitives[i]).x1,
+						this.scene.graph.primitives.get(this.primitives[i]).x2,
+						this.scene.graph.primitives.get(this.primitives[i]).x3);
+					var lengthV = Math.max(this.scene.graph.primitives.get(this.primitives[i]).y1,
+						this.scene.graph.primitives.get(this.primitives[i]).y2,
+						this.scene.graph.primitives.get(this.primitives[i]).y3)
+						-
+						Math.min(this.scene.graph.primitives.get(this.primitives[i]).y1,
+						this.scene.graph.primitives.get(this.primitives[i]).y2,
+						this.scene.graph.primitives.get(this.primitives[i]).y3);
+					
+					this.scene.graph.primitives.get(this.primitives[i]).updateTexCoords(
+						0,
+						lengthH / this.scene.graph.textures.get(String(textureRef)).lengthS,
+						0,
+						lengthV / this.scene.graph.textures.get(String(textureRef)).lengthT
 					);
 					material.setTextureWrap('REPEAT', 'REPEAT');
 		}

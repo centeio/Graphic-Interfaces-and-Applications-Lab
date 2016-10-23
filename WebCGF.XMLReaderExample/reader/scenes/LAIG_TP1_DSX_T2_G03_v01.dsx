@@ -225,13 +225,30 @@
 
             <texture id="inherit" />
             <children>
-                <primitiveref id="coneBase" /> 
+                <componentref id="coneBaseAux" /> 
                 <componentref id="coneaux" />
 
             </children>
             
         </component>
 		
+        <component id="coneBaseAux">
+        
+            <transformation>
+		
+            </transformation>
+       
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="none" />
+            <children>
+                <primitiveref id="coneBase" /> 
+
+            </children>
+            
+        </component>		
 
         <component id="cone1">
         

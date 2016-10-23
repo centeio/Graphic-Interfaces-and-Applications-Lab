@@ -69,7 +69,7 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	else
 		textureRef = this.textureRef;
 
-	if(textureRef != "none")
+	if(textureRef != "none" && material != undefined)
 		material.setTexture(this.scene.graph.textures.get(String(textureRef)).texture);
 
 	for(var i = 0; i < this.components.length; i++) {
@@ -90,7 +90,8 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 					);
 					material.setTextureWrap('REPEAT', 'REPEAT');
 		}
-		material.apply();
+		if(material != undefined)
+			material.apply();
 		this.scene.graph.primitives.get(this.primitives[i]).display();
 	}
 	

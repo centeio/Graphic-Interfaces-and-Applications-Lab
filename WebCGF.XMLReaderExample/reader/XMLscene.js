@@ -113,18 +113,9 @@ XMLscene.prototype.display = function () {
 		if (this.graph.loadedOk) {	
 			for(var i = 0; i < this.lights.length; i++)
 				this.lights[i].update();
-				
-			/*for(var [key, value] of this.graph.views.entries()) {
-				console.log(key + " near: " + value.near + " far: " + value.far + " angle: " + value.angle + " from ["
-					+ value.fromX + "," + value.fromY + "," + value.fromZ + "] to [" + value.toX + "," + value.toY + ","
-					+ value.toZ + "]");		
-			}*/
 			
 			var matrix = mat4.create();
 			mat4.identity(matrix);
-
-			//console.log("cam counter: " + this.camCounter);
-			//console.log("cam :" + this.graph.views.get(this.graph.viewsID[this.camCounter]));
 		
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
 		}

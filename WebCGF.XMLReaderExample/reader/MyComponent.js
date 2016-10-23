@@ -60,7 +60,7 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	var material = new CGFappearance(this.scene);
 	var materialRef, textureRef;
 
-	if(this.materialsRef == "inherit") {
+	if(this.materialsRef[this.materialCounter] == "inherit") {
 		material = this.scene.graph.materials.get(oldMaterial);
 		materialRef = oldMaterial;
 	}
@@ -74,8 +74,7 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	else
 		textureRef = this.textureRef;
 	
-	console.log(this.ID);
-	if(textureRef != "none" && material != undefined)
+	if(textureRef != "none")
 		material.setTexture(this.scene.graph.textures.get(String(textureRef)).texture);
 
 	for(var i = 0; i < this.components.length; i++) {
@@ -96,8 +95,7 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 					);
 					material.setTextureWrap('REPEAT', 'REPEAT');
 		}
-		if(material != undefined)
-			material.apply();
+		material.apply();
 		this.scene.graph.primitives.get(this.primitives[i]).display();
 	}
 	

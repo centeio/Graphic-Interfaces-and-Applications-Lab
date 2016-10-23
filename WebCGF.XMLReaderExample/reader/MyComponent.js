@@ -76,6 +76,8 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	
 	if(textureRef != "none")
 		material.setTexture(this.scene.graph.textures.get(String(textureRef)).texture);
+	else
+		material.setTexture(null);
 
 	for(var i = 0; i < this.components.length; i++) {
 		this.scene.graph.components.get(this.components[i]).display(matrix, materialRef, textureRef);

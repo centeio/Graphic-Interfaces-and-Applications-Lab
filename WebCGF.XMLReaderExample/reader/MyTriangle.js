@@ -23,6 +23,11 @@ function MyTriangle(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3, minS, maxS, minT,
 	this.minT = minT || 0;
 	this.maxT = maxT || 1;
 
+	this.lengthH = Math.max(this.x1, this.x2, this.x3) -
+		Math.min(this.x1, this.x2, this.x3);
+	this.lengthV = Math.max(this.y1, this.y2, this.y3) -
+		Math.min(this.y1, this.y2, this.y3);
+
 	this.initBuffers();
 };
 

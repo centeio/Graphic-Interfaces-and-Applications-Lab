@@ -16,6 +16,9 @@ function MyRectangle(scene, minX, maxX, minY, maxY, minS, maxS, minT, maxT) {
 	this.minT = minT || 0;
 	this.maxT = maxT || 1;
 
+	this.lengthH = this.maxX - this.minX;
+	this.lengthV = this.maxY - this.minY;
+
 	this.initBuffers();
 };
 

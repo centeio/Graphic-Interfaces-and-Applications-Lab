@@ -384,6 +384,18 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 		} 
 		/* ------------------------------------- */
 
+		/* Animations -------------------------- */
+		if(component.getElementsByTagName('animationref').length != 0) {
+			var animations = component.getElementsByTagName('animationref');
+			var nAnimations = animations.length;
+
+			for(j = 0; j < nAnimations; j++) {
+				this.components.get(id).addAnimation(
+					this.reader.getString(animations[j], "id", bool));
+			}
+		}
+		/* ------------------------------------- */
+
 		/* Materials --------------------------- */
 		if(component.getElementsByTagName('materials').length != 1)
 			console.error("One and only one materials tag in each component.");
@@ -636,8 +648,8 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 	var bool, nnodes;
 	var rootAnimations =  rootElement.getElementsByTagName('animations');
 	
-	if(rootMaterials.length <= 0)
-		console.error("animations tag is missing.");
+	if(rootAnimations.length <= 0)
+		console.error("Animations tag is missing.");
 
 	this.animations = new Map();
 
@@ -646,24 +658,53 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 	if(nnodes <= 0)
 		console.error("Animations not declared.");
 
-	for(var i=0; i < nnodes; i++)
-	{
+	for(var i=0; i < nnodes; i++) {
 		var animation = rootAnimations[0].children[i];
 		var id = this.reader.getString(animation, "id", bool);
 		
-		if(this.materials.get(id) != undefined)
+		if(this.animations.get(id) != undefined)
 			console.error("Animation ID repeated.");
 
-		if(this.reader.getString(animation, "type", bool) == 'linear')
-			this.animations.set(id, new MyLinearAnimation(this.scene));
-		else if(this.reader.getString(animation, "type", bool) == 'circular')
-			this.animations.set(id, new MyCircularAnimation(this.scene));
+		var span = this.reader.getFloat(animation, "span", bool);
+
+		if(this.reader.getString(animation, "type", bool) == 'linear') {
+			this.animations.set(id, new MyLinearAnimation(this.scene, span));
+
+			var controlPoints = animation.getElementsByTagName('controlpoint');
+			var nControlPoints = controlPoints.length;
+
+			if(nControlPoints == 0)
+				console.error('Missing control points in linear animation.');
+
+			for(var j = 0; j < nControlPoints; j++) {
+				var controlPoint = controlPoints[j];
+
+				var x = this.reader.getFloat(controlPoint, "xx", bool);
+				var y = this.reader.getFloat(controlPoint, "yy", bool);
+				var z = this.reader.getFloat(controlPoint, "zz", bool);
+
+				this.animations.get(id).addControlPoint(x,y,z);
+			}
+		}
+		else if(this.reader.getString(animation, "type", bool) == 'circular') {
+			this.animations.set(id, new MyCircularAnimation(this.scene, span));
+			
+			var centerX = this.reader.getFloat(animation, "centerx", bool);
+			var centerY = this.reader.getFloat(animation, "centery", bool);
+			var centerZ = this.reader.getFloat(animation, "centerz", bool);
+			this.animations.get(id).addCenter(centerX, centerY, centerZ);
+
+			var radius = this.reader.getFloat(animation, "radius", bool);
+			this.animations.get(id).addRadius(radius);
+
+			var initialAngle = this.reader.getFloat(animation, "startang", bool);
+			this.animations.get(id).addInitialAngle(initialAngle);
+
+			var angle = this.reader.getFloat(animation, "rotang", bool);
+			this.animations.get(id).addAngle(angle);
+		}
 		else
-			console.error('Invalid animation type');
-
-		
-
-		
+			console.error('Invalid animation type');	
 	}
 }
 

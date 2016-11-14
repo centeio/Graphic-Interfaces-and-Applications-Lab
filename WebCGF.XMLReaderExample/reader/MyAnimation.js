@@ -1,23 +1,30 @@
 /**
- @constructor
- @abstract
+ * MyAnimation
+ * @constructor
+ * @abstract
  */
 function Animation(scene) {
     if (this.constructor === Animal) {
       throw new Error("Can't instantiate abstract class!");
     }
+}
 
-    this.span = 0;
-    this.controlPoints = [];
-    this.center = null;
-    this.radius = 0;
-    this.initialAngle = 0;
-    this.angle = 0;
+Animation.prototype.scene = null;
+Animation.prototype.span = 0;
+Animation.prototype.controlPoints = [];
+Animation.prototype.center = null;
+Animation.prototype.radius = 0;
+Animation.prototype.initialAngle = 0;
+Animation.prototype.angle = 0;
+
+Animation.prototype.getSpan = function() {
+    console.log(this.span);
+    return this.span;
 }
 
 /**
  @abstract
  */
-Animal.prototype.position = function(currTime) {
+Animation.prototype.position = function(currTime) {
     throw new Error("Abstract method!");
 }

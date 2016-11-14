@@ -24,6 +24,10 @@ serialInclude([
                 'MyInterface.js',
                 'MyComponent.js',
                 'MyTexture.js',
+                'MyPoint.js',
+                'MyAnimation.js',
+                'MyLinearAnimation.js',
+                'MyCircularAnimation.js',
 
 main=function()
 {

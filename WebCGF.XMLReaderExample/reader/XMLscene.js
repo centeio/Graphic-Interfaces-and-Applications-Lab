@@ -29,7 +29,7 @@ XMLscene.prototype.init = function (application) {
 	this.Luz3 = true;
 	this.Luz4 = true;
 
-	this.setUpdatePeriod(30);
+	this.setUpdatePeriod(100);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -119,5 +119,15 @@ XMLscene.prototype.display = function () {
 		
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
 		}
-	}	
+	}
+};
+
+XMLscene.prototype.update = function(currTime) {
+
+	if(this.graph.loadedOk)
+		this.graph.update(currTime);
+
+	/*if(this.plane)
+		this.plane.update();*/
+
 };

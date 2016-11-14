@@ -103,5 +103,5 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	}
 	
 	this.scene.popMatrix();
-}  
+}
 

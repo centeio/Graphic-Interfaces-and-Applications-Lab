@@ -129,9 +129,24 @@
         </transformation>
         
     </transformations>
+
+    <!-- novo bloco de animacao -->
+    <animations>
+        <!-- podem existir zero ou mais nós "animation" -->
+        <!-- span é o tempo, em segundos, que a animação deve -->
+        <!-- demorar. Nesta versão do formato DSX, type pode ter -->
+        <!-- o valor "linear" ou "circular"; na animacao circular -->
+        <!-- os angulos sao expressos em graus  -->
+        <animation id="ss" span="ff" type="linear">
+            <controlpoint xx="ff" yy="ff" zz="ff />
+                    ...
+        </animation>
+        <animation id="ss" span="ff" type="circular"
+            centerx="ff" centery="ff" centerz="ff"
+            radius="ff" startang="ff" rotang="ff" />
+    </animations>
 	
 	<primitives>
-    
 
         <primitive id="rectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />

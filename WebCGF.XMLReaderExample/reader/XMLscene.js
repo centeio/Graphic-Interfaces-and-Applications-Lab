@@ -29,13 +29,12 @@ XMLscene.prototype.init = function (application) {
 	this.Luz3 = true;
 	this.Luz4 = true;
 
-	this.plane = new Plane(this,10,10,1,1); 
+	this.plane = new Patch(this, 3, 2, 7, 9); 
 
 	this.setUpdatePeriod(30);
 };
 
 XMLscene.prototype.initLights = function () {
-
 	this.lights[0].setPosition(2, 3, 3, 1);
     this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
     this.lights[0].update();
@@ -94,6 +93,12 @@ XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
 		
 	var knots1 = this.getKnotsVector(degree1); 
 	var knots2 = this.getKnotsVector(degree2); 
+
+	console.log(knots1);
+	console.log(knots2);
+	console.log(degree1);
+	console.log(degree2);
+	console.log(controlvertexes);				
 		
 	var nurbsSurface = new CGFnurbsSurface(degree1, degree2, knots1, knots2, controlvertexes); 
 
@@ -143,5 +148,6 @@ XMLscene.prototype.display = function () {
 		
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
 		}
+	
 	}	
 };

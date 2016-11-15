@@ -29,6 +29,8 @@ XMLscene.prototype.init = function (application) {
 	this.Luz3 = true;
 	this.Luz4 = true;
 
+	this.plane = new Plane(this,10,10,1,1); 
+
 	this.setUpdatePeriod(30);
 };
 
@@ -75,6 +77,28 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.lights[0].setVisible(true);
     //this.lights[0].enable();
 };
+
+XMLscene.prototype.getKnotsVector = function(degree) {
+	
+	var v = new Array();
+	for (var i=0; i<=degree; i++) {
+		v.push(0);
+	}
+	for (var i=0; i<=degree; i++) {
+		v.push(1);
+	}
+	return v;
+}
+
+XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
+		
+	var knots1 = this.getKnotsVector(degree1); 
+	var knots2 = this.getKnotsVector(degree2); 
+		
+	var nurbsSurface = new CGFnurbsSurface(degree1, degree2, knots1, knots2, controlvertexes); 
+
+	return nurbsSurface;	
+}
 
 XMLscene.prototype.display = function () {
 	if(this.sceneTagReady && !this.sceneBasicsLoaded) {

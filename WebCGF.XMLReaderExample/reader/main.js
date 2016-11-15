@@ -24,6 +24,7 @@ serialInclude([
                 'MyInterface.js',
                 'MyComponent.js',
                 'MyTexture.js',
+                'Plane.js',
 
 main=function()
 {

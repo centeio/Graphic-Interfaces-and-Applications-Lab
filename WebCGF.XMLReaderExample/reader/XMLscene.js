@@ -34,7 +34,6 @@ XMLscene.prototype.init = function (application) {
 };
 
 XMLscene.prototype.initLights = function () {
-
 	this.lights[0].setPosition(2, 3, 3, 1);
     this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
     this.lights[0].update();
@@ -72,6 +71,34 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.lights[0].setVisible(true);
     //this.lights[0].enable();
 };
+
+XMLscene.prototype.getKnotsVector = function(degree) {
+	
+	var v = new Array();
+	for (var i=0; i<=degree; i++) {
+		v.push(0);
+	}
+	for (var i=0; i<=degree; i++) {
+		v.push(1);
+	}
+	return v;
+}
+
+XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
+		
+	var knots1 = this.getKnotsVector(degree1); 
+	var knots2 = this.getKnotsVector(degree2); 
+
+	console.log(knots1);
+	console.log(knots2);
+	console.log(degree1);
+	console.log(degree2);
+	console.log(controlvertexes);				
+		
+	var nurbsSurface = new CGFnurbsSurface(degree1, degree2, knots1, knots2, controlvertexes); 
+
+	return nurbsSurface;	
+}
 
 XMLscene.prototype.display = function () {
 	if(this.sceneTagReady && !this.sceneBasicsLoaded) {
@@ -116,10 +143,15 @@ XMLscene.prototype.display = function () {
 		
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
 		}
+<<<<<<< HEAD
 	}
 };
 
 XMLscene.prototype.update = function(currTime) {
 
 	this.currentTime = currTime;
+=======
+	
+	}	
+>>>>>>> c78f2a6117b58299969fbc1d199486fdb3c69ae1
 };

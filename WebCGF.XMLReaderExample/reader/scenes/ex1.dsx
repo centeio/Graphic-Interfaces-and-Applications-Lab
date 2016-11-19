@@ -1,0 +1,168 @@
+<dsx>
+
+	<scene root="root" axis_length="10" />
+	
+	<views default="v2" >
+
+        <!-- declaracao obrigatoria de pelo menos uma vista; -->
+        <!-- se varias vistas declaradas, o default e' a -->
+        <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
+        <!-- a vista muda para a proxima da lista; da -->
+        <!-- ultima vista da lista volta 'a primeira -->
+
+		<perspective id="v1" near="0.5" far="800" angle="45">
+            <from x="-7" y="7" z="-7" />	
+            <to x="0" y="0" z="0" />
+
+		</perspective>
+
+        <perspective id="v2" near="0.4" far="500" angle="20">
+            <from x="18" y="8" z="18" />
+            <to x="0" y="0" z="0" />
+		</perspective>
+
+    </views>
+
+	<illumination doublesided="1" local="1" >
+
+        <ambient r="0.5" g="0.5" b="0.5" a="0.8" />
+        <background r="0.1" g="0.1" b="0.2" a="1" />
+
+    </illumination>
+
+    <lights>
+   
+       <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
+       <!-- Os identificadores "id" nao podem ser repetidos -->
+
+       <omni id="twet" enabled="1" >
+           <location x="5" y="5" z="5" w="1" />
+           <ambient r="0" g="0" b="0" a="1" />
+           <diffuse r="1" g="1" b="1" a="1" />
+           <specular r="0" g="0" b="0" a="1" />
+       </omni>
+
+       <spot id="l2" enabled="1" angle="1.47" exponent="1">
+           <target x="0" y="0" z="0" />
+           <location x="0" y="0" z="5" />
+           <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+           <diffuse r="0.9" g="0.4" b="0.9" a="1.0" />
+           <specular r="0.1" g="0.1" b="0.1" a="1.0" />
+       </spot>
+    </lights>
+	
+    <textures>
+    
+        <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" />  
+        <texture id="cone" file="scenes/resources/cone.png" length_s="1" length_t="1" />  
+        <texture id="netnet" file="scenes/resources/net.jpg" length_s="0.5" length_t="0.5" />  
+        <texture id="leather" file="scenes/resources/lifeguard.jpg" length_s="1" length_t="1" />  
+        <texture id="sky" file="scenes/resources/forest.png" length_s="1" length_t="1" />  
+
+        
+    </textures>
+	
+	<materials>
+    
+        <material id="default" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+            <specular r="0.2" g="0.2" b="0.5" a="1" />
+            <shininess value="70" />
+        </material>
+
+        <material id="sky" >
+            <emission r="0.8" g="0.8" b="0.8" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+            <specular r="0.2" g="0.2" b="0.5" a="1" />
+            <shininess value="100" />
+        </material>		
+		
+        <material id="metal" >
+            <emission r="0.5" g="0.5" b="0.5" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="5" />
+            <specular r="1" g="1" b="1" a="1" />
+            <shininess value="80" />
+        </material>
+		
+        <material id="netnet" >
+            <emission r="0.5" g="0.5" b="0.5" a="0.5" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="5" />
+            <specular r="0" g="0" b="0" a="1" />
+            <shininess value="10" />
+        </material>
+
+        <material id="test1" >
+            <emission r="0.0" g="0.0" b="0.0" a="0.0" />
+            <ambient r="1.0" g="0.0" b="0.0" a="1" />
+            <diffuse r="1.0" g="0.0" b="0.0" a="1" />
+            <specular r="1.0" g="0" b="0" a="1" />
+            <shininess value="10" />
+        </material>
+
+        <material id="test2" >
+            <emission r="0" g="0" b="0" a="0" />
+            <ambient r="0" g="1" b="0" a="1" />
+            <diffuse r="0" g="1" b="0" a="1" />
+            <specular r="0" g="1" b="0" a="1" />
+            <shininess value="10" />
+        </material>	
+
+        <material id="cone" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="1" g="0.3" b="0" a="1" />
+            <diffuse r="1" g="0.3" b="0" a="1" />
+            <specular r="1" g="0.2" b="0" a="1" />
+            <shininess value="0" />
+        </material>			
+        
+    </materials>
+	
+    <transformations>
+    
+        <transformation id="leftx">
+           <rotate axis="y" angle="90" />
+        </transformation>
+        
+    </transformations>
+	
+	<primitives>
+    
+        <primitive id="conep">
+            <cylinder base="0.6" top="0.1" height="2" slices="8" stacks="20" />
+            
+        </primitive>
+		
+        <primitive id="aero">
+            <vehicle/>
+            
+        </primitive>		
+        
+    </primitives>
+	
+	<components>
+        
+        <component id="root">
+        
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="none" />
+			
+            <children>
+                <primitiveref id="aero" />								
+            </children>
+            
+        </component>
+		
+    </components>
+</dsx>

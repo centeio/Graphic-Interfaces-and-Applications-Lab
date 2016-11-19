@@ -135,13 +135,14 @@
     <animations>
         <animation id="linearAnim" span="5" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="1" yy="1" zz="0" />
-            <controlpoint xx="2" yy="1" zz="0" />
-            <controlpoint xx="3" yy="1" zz="0" />
+            <controlpoint xx="0" yy="0" zz="1" />
+            <controlpoint xx="1" yy="1" zz="1" />
+            <controlpoint xx="2" yy="1" zz="1" />
+            <controlpoint xx="3" yy="1" zz="1" />
         </animation>
 
         <animation id="linearAnim2" span="5" type="linear">
-            <controlpoint xx="3" yy="1" zz="0" />
+            <controlpoint xx="3" yy="1" zz="1" />
             <controlpoint xx="4" yy="1" zz="1" />
             <controlpoint xx="5" yy="1" zz="3" />
         </animation>
@@ -232,7 +233,8 @@
                 <translate x="3" y="1" z="5" /> 
             </transformation>
 
-            <animationref id="circularAnim" />
+            <animationref id="linearAnim" />
+            <animationref id="linearAnim2" />
        
             <materials>
                 <material id="default" />

@@ -76,14 +76,11 @@ MyLinearAnimation.prototype.position = function(initialTime, currTime, previousA
     if(z > this.controlPoints[this.controlPoints.length - 1].z)
         z = this.controlPoints[this.controlPoints.length - 1].z;
 
-    var angle = 0;
+    var angle = Math.PI / 2;
 
     if((this.controlPoints[indice + 1].x - this.controlPoints[indice].x) != 0)
         angle = Math.atan((this.controlPoints[indice + 1].z - this.controlPoints[indice].z) / 
                             (this.controlPoints[indice + 1].x - this.controlPoints[indice].x));
-    else {
-        angle = Math.PI / 2;
-    }
     
     ret.push(new MyPoint(x,y,z));
     ret.push(angle);

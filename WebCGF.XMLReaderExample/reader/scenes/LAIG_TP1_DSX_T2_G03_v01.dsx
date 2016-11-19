@@ -147,9 +147,9 @@
             <controlpoint xx="5" yy="1" zz="3" />
         </animation>
 
-        <animation id="circularAnim" span="30" type="circular"
-            centerx="1" centery="1" centerz="1"
-            radius="5" startang="30" rotang="10" />
+        <animation id="circularAnim" span="10" type="circular"
+            centerx="1" centery="2" centerz="5"
+            radius="5" startang="0" rotang="10" />
     </animations>
 	
 	<primitives>
@@ -230,11 +230,10 @@
        <component id="aero">
         
             <transformation>
-                <translate x="3" y="1" z="5" /> 
+                <translate x="2" y="0" z="0" />
             </transformation>
 
-            <animationref id="linearAnim" />
-            <animationref id="linearAnim2" />
+            <animationref id="circularAnim" />
        
             <materials>
                 <material id="default" />

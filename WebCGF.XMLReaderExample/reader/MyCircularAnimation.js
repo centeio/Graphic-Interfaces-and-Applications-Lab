@@ -38,14 +38,14 @@ MyCircularAnimation.prototype.position = function(initialTime, currTime, previou
         ret.push(previousAngle);
     }
 
-    var angularVelocity = ((currTime - initialTime) / 1000) * this.angle;
+    var angle = ((currTime - initialTime) / 1000) * this.angle;
 
-    var x = this.center.x + this.radius * Math.cos((Math.PI * (this.initialAngle + angularVelocity)) / 180);
+    var x = this.center.x + this.radius * Math.cos((Math.PI * (this.initialAngle + angle)) / 180);
     var y = this.center.y;
-    var z = this.center.z - this.radius * Math.sin((Math.PI * (this.initialAngle + angularVelocity)) / 180);
+    var z = this.center.z - this.radius * Math.sin((Math.PI * (this.initialAngle + angle)) / 180);
 
     ret.push(new MyPoint(x,y,z));
-    ret.push(0);
+    ret.push(-(Math.PI / 2) - (Math.PI * (this.initialAngle + angle) / 180));
 
     return ret;
 }

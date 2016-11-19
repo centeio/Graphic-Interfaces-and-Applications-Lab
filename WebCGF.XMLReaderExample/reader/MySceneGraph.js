@@ -434,6 +434,18 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 		} 
 		/* ------------------------------------- */
 
+		/* Animations -------------------------- */
+		if(component.getElementsByTagName('animationref').length != 0) {
+			var animations = component.getElementsByTagName('animationref');
+			var nAnimations = animations.length;
+
+			for(j = 0; j < nAnimations; j++) {
+				this.components.get(id).addAnimation(
+					this.reader.getString(animations[j], "id", bool));
+			}
+		}
+		/* ------------------------------------- */
+
 		/* Materials --------------------------- */
 		if(component.getElementsByTagName('materials').length != 1)
 			console.error("One and only one materials tag in each component.");
@@ -682,13 +694,77 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
 	}
 }
 
+MySceneGraph.prototype.parseAnimations = function(rootElement) {
+	var bool, nnodes;
+	var rootAnimations =  rootElement.getElementsByTagName('animations');
+	
+	if(rootAnimations.length <= 0)
+		console.error("Animations tag is missing.");
+
+	this.animations = new Map();
+
+	nnodes = rootAnimations[0].children.length;
+	
+	if(nnodes <= 0)
+		console.error("Animations not declared.");
+
+	for(var i=0; i < nnodes; i++) {
+		var animation = rootAnimations[0].children[i];
+		var id = this.reader.getString(animation, "id", bool);
+		
+		if(this.animations.get(id) != undefined)
+			console.error("Animation ID repeated.");
+
+		var span = this.reader.getFloat(animation, "span", bool);
+
+		if(this.reader.getString(animation, "type", bool) == 'linear') {
+			this.animations.set(id, new MyLinearAnimation(this.scene, span));
+
+			var controlPoints = animation.getElementsByTagName('controlpoint');
+			var nControlPoints = controlPoints.length;
+
+			if(nControlPoints == 0)
+				console.error('Missing control points in linear animation.');
+
+			for(var j = 0; j < nControlPoints; j++) {
+				var controlPoint = controlPoints[j];
+
+				var x = this.reader.getFloat(controlPoint, "xx", bool);
+				var y = this.reader.getFloat(controlPoint, "yy", bool);
+				var z = this.reader.getFloat(controlPoint, "zz", bool);
+
+				this.animations.get(id).addControlPoint(x,y,z);
+			}
+		}
+		else if(this.reader.getString(animation, "type", bool) == 'circular') {
+			this.animations.set(id, new MyCircularAnimation(this.scene, span));
+			
+			var centerX = this.reader.getFloat(animation, "centerx", bool);
+			var centerY = this.reader.getFloat(animation, "centery", bool);
+			var centerZ = this.reader.getFloat(animation, "centerz", bool);
+			this.animations.get(id).addCenter(centerX, centerY, centerZ);
+
+			var radius = this.reader.getFloat(animation, "radius", bool);
+			this.animations.get(id).addRadius(radius);
+
+			var initialAngle = this.reader.getFloat(animation, "startang", bool);
+			this.animations.get(id).addInitialAngle(initialAngle);
+
+			var angle = this.reader.getFloat(animation, "rotang", bool);
+			this.animations.get(id).addAngle(angle);
+		}
+		else
+			console.error('Invalid animation type');	
+	}
+}
+
 MySceneGraph.prototype.parseGlobalsExample = function(rootElement) {	
 			
 	if(rootElement.children[0].tagName != "scene" || rootElement.children[1].tagName != "views" ||
 	rootElement.children[2].tagName != "illumination" || rootElement.children[3].tagName != "lights" ||
 	rootElement.children[4].tagName != "textures" || rootElement.children[5].tagName != "materials" ||
-	rootElement.children[6].tagName != "transformations" || rootElement.children[7].tagName != "primitives" ||
-	rootElement.children[8].tagName != "components")
+	rootElement.children[6].tagName != "transformations" || rootElement.children[7].tagName != "animations" ||
+	rootElement.children[8].tagName != "primitives" ||	rootElement.children[9].tagName != "components")
 		console.error("Tags unordered.");
 
 	this.parseScene(rootElement);
@@ -698,6 +774,7 @@ MySceneGraph.prototype.parseGlobalsExample = function(rootElement) {
 	this.parseTextures(rootElement);
 	this.parseMaterials(rootElement);
 	this.parseTransformations(rootElement);
+	this.parseAnimations(rootElement);
 	this.parsePrimitives(rootElement);
 	this.parseComponents(rootElement);
 };
@@ -708,6 +785,15 @@ MySceneGraph.prototype.parseGlobalsExample = function(rootElement) {
 MySceneGraph.prototype.onXMLError = function (message) {
 	console.error("XML Loading Error: "+message);	
 	this.loadedOk=false;
+};
+
+MySceneGraph.prototype.update = function(currTime) {
+
+	/*if(this.plane)
+		this.plane.update();*/
+
+	console.log(currTime);
+
 };
 
 

@@ -27,6 +27,10 @@ serialInclude([
                 'Plane.js',
                 'Patch.js',
                 'Vehicle.js',
+                'MyPoint.js',
+                'MyAnimation.js',
+                'MyLinearAnimation.js',
+                'MyCircularAnimation.js',
 
 main=function()
 {

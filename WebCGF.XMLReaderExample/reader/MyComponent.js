@@ -13,6 +13,7 @@ function MyComponent(scene) {
 	this.components = [];
 	this.primitives = [];
 	this.materialCounter = 0;
+	this.animations = [];
 };
 
 MyComponent.prototype.addTransformationRef = function(transformationRef) {
@@ -45,6 +46,10 @@ MyComponent.prototype.addComponent = function(component) {
 
 MyComponent.prototype.addPrimitive = function(primitive) {
 	this.primitives.push(primitive);
+}
+
+MyComponent.prototype.addAnimation = function(animation) {
+	this.animations.push(animation);
 }
 
 MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
@@ -103,5 +108,5 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	}
 	
 	this.scene.popMatrix();
-}  
+}
 

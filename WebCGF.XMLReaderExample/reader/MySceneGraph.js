@@ -418,7 +418,6 @@ MySceneGraph.prototype.parseComponents = function(rootElement) {
 
 		var texture = component.getElementsByTagName('texture')[0];
 		
-		//console.log("Texture ID: " + this.reader.getString(texture, "id", bool));
 		this.components.get(id).addTextureRef(
 			this.reader.getString(texture, "id", bool));
 		/* ------------------------------------- */
@@ -661,20 +660,24 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 	for(var i=0; i < nnodes; i++) {
 		var animation = rootAnimations[0].children[i];
 		var id = this.reader.getString(animation, "id", bool);
+		console.log("Indice: " + i + " ID: " + id);
 		
 		if(this.animations.get(id) != undefined)
 			console.error("Animation ID repeated.");
 
 		var span = this.reader.getFloat(animation, "span", bool);
 
-		if(this.reader.getString(animation, "type", bool) == 'linear') {
-			this.animations.set(id, new MyLinearAnimation(this.scene, span));
+		if(this.reader.getString(animation, "type", bool) == "linear") {
+			this.animations.set(id, new MyLinearAnimation(span));
+			console.debug(this.animations.get(id).controlPoints);
 
 			var controlPoints = animation.getElementsByTagName('controlpoint');
 			var nControlPoints = controlPoints.length;
 
 			if(nControlPoints == 0)
 				console.error('Missing control points in linear animation.');
+
+			console.log("Control points length Graph: " + nControlPoints);
 
 			for(var j = 0; j < nControlPoints; j++) {
 				var controlPoint = controlPoints[j];
@@ -685,9 +688,11 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 
 				this.animations.get(id).addControlPoint(x,y,z);
 			}
+
+			this.animations.get(id).calculateSegmentDurations();
 		}
 		else if(this.reader.getString(animation, "type", bool) == 'circular') {
-			this.animations.set(id, new MyCircularAnimation(this.scene, span));
+			this.animations.set(id, new MyCircularAnimation(span));
 			
 			var centerX = this.reader.getFloat(animation, "centerx", bool);
 			var centerY = this.reader.getFloat(animation, "centery", bool);
@@ -705,6 +710,11 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 		}
 		else
 			console.error('Invalid animation type');	
+	}
+
+
+	for(var [key, value] of this.animations) {
+		console.debug(value);
 	}
 }
 
@@ -739,10 +749,7 @@ MySceneGraph.prototype.onXMLError = function (message) {
 
 MySceneGraph.prototype.update = function(currTime) {
 
-	/*if(this.plane)
-		this.plane.update();*/
-
-	console.log(currTime);
+	this.animations.get("linearAnim").position(currTime);
 
 };
 

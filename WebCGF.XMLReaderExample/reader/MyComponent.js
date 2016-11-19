@@ -14,6 +14,11 @@ function MyComponent(scene) {
 	this.primitives = [];
 	this.materialCounter = 0;
 	this.animations = [];
+	this.currentAnimation = 0;
+	this.initialAnimationTime = 0;
+	this.lastX = 0;
+	this.lastY = 0;
+	this.lastZ = 0;
 };
 
 MyComponent.prototype.addTransformationRef = function(transformationRef) {
@@ -54,12 +59,37 @@ MyComponent.prototype.addAnimation = function(animation) {
 
 MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 
+	if(this.ID == "ball")
+		console.log(this.currentAnimation);
+
 	var matrix = mat4.create();
 	if(this.transformationRef != "null") {
 		mat4.multiply(matrix, oldMatrix, this.scene.graph.transformations.get(this.transformationRef));
 	}
 	else {
 		mat4.multiply(matrix, oldMatrix, this.transformation);	
+	}
+
+	if(this.animations.length != 0) {
+		if(this.initialAnimationTime == 0)
+			this.initialAnimationTime = this.scene.currentTime;
+		
+		if(this.currentAnimation < this.animations.length) {
+			
+			var point = this.scene.graph.animations.get(this.animations[this.currentAnimation]).position(this.initialAnimationTime, this.scene.currentTime);
+			if(point != "done") {
+				this.lastX = point.x;
+				this.lastY = point.y;
+				this.lastZ = point.z;
+				mat4.translate(matrix, matrix, [point.x, point.y, point.z]);
+			}
+			else {
+				mat4.translate(matrix, matrix, [this.lastX, this.lastY, this.lastZ]);
+				this.currentAnimation++;
+				this.initialAnimationTime = 0;
+			}
+		} else 
+			mat4.translate(matrix, matrix, [this.lastX, this.lastY, this.lastZ]);
 	}
 
 	var material = new CGFappearance(this.scene);

@@ -3,9 +3,12 @@
  * @constructor
  * @abstract
  */
-function MyCircularAnimation(scene, span) {
-    this.scene = scene;
+function MyCircularAnimation(span) {
     this.span = span;
+    this.center = null;
+    this.radius = 0;
+    this.initialAngle = 0;
+    this.angle = 0;
 }
 
 MyCircularAnimation.prototype = Object.create(Animation.prototype);

@@ -137,11 +137,18 @@
         <!-- demorar. Nesta versão do formato DSX, type pode ter -->
         <!-- o valor "linear" ou "circular"; na animacao circular -->
         <!-- os angulos sao expressos em graus  -->
-        <animation id="linearAnim" span="10" type="linear">
+        <animation id="linearAnim" span="5" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="1" yy="1" zz="0" />
             <controlpoint xx="2" yy="1" zz="0" />
             <controlpoint xx="3" yy="1" zz="0" />
+        </animation>
+
+        <animation id="linearAnim2" span="5" type="linear">
+            <controlpoint xx="3" yy="1" zz="0" />
+            <controlpoint xx="3" yy="2" zz="0" />
+            <controlpoint xx="3" yy="3" zz="0" />
+            <controlpoint xx="4" yy="4" zz="0" />
         </animation>
 
         <animation id="circularAnim" span="8" type="circular"
@@ -348,13 +355,8 @@
         
             <transformation>
                 <translate x="3" y="0.1" z="3" />
-                <scale x="0.2" y="0.2" z="0.2" />		
-				<rotate axis="x" angle="30" />				
-				<rotate axis="y" angle="30" />				
-				<rotate axis="z" angle="30" />								
+                <scale x="0.2" y="0.2" z="0.2" />							
             </transformation>
-
-            <animationref id="linearAnim" />
        
             <materials>
                 <material id="default" />

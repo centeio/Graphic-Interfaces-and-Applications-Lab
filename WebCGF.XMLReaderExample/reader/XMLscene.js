@@ -11,6 +11,7 @@ XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
 	this.camCounter = 0;
+	this.currentTime = 0;
 
     this.initLights();
 	this.enableTextures(true);
@@ -29,7 +30,7 @@ XMLscene.prototype.init = function (application) {
 	this.Luz3 = true;
 	this.Luz4 = true;
 
-	this.setUpdatePeriod(100);
+	this.setUpdatePeriod(10);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -61,10 +62,6 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);	
 };
-
-XMLscene.prototype.update = function(currTime) {
-	//console.log(this.interface.gui.__folders);
-}
 
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
@@ -124,10 +121,5 @@ XMLscene.prototype.display = function () {
 
 XMLscene.prototype.update = function(currTime) {
 
-	if(this.graph.loadedOk)
-		this.graph.update(currTime);
-
-	/*if(this.plane)
-		this.plane.update();*/
-
+	this.currentTime = currTime;
 };

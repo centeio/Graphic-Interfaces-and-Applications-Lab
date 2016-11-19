@@ -143,15 +143,9 @@ XMLscene.prototype.display = function () {
 		
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
 		}
-<<<<<<< HEAD
 	}
 };
 
 XMLscene.prototype.update = function(currTime) {
-
 	this.currentTime = currTime;
-=======
-	
-	}	
->>>>>>> c78f2a6117b58299969fbc1d199486fdb3c69ae1
 };

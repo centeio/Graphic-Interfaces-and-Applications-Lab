@@ -19,6 +19,7 @@ function MyComponent(scene) {
 	this.lastX = 0;
 	this.lastY = 0;
 	this.lastZ = 0;
+	this.angle = 0;
 };
 
 MyComponent.prototype.addTransformationRef = function(transformationRef) {
@@ -76,7 +77,8 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 		
 		if(this.currentAnimation < this.animations.length) {
 			
-			var point = this.scene.graph.animations.get(this.animations[this.currentAnimation]).position(this.initialAnimationTime, this.scene.currentTime);
+			var point = this.scene.graph.animations.get(this.animations[this.currentAnimation]).position(this.initialAnimationTime, this.scene.currentTime, this.angle);
+			console.log("Angle: " + this.angle);
 			if(point != "done") {
 				this.lastX = point.x;
 				this.lastY = point.y;

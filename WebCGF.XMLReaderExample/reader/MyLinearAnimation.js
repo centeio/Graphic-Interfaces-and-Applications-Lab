@@ -36,7 +36,7 @@ MyLinearAnimation.prototype.calculateSegmentDurations = function() {
     }
 }
 
-MyLinearAnimation.prototype.position = function(initialTime, currTime) {
+MyLinearAnimation.prototype.position = function(initialTime, currTime, angle) {
     
     var indice = 0;
     var time = this.segmentDurations[indice];
@@ -65,10 +65,6 @@ MyLinearAnimation.prototype.position = function(initialTime, currTime) {
                 velocityY * (currTime - (initialTime + time));
     var z = this.controlPoints[indice].z +
                 velocityZ * (currTime - (initialTime + time));
-
-    /*console.log("X: " + this.controlPoints[indice].x);
-    console.log("Y: " + this.controlPoints[indice].y);
-    console.log("Z: " + this.controlPoints[indice].z);*/
     
     if(x > this.controlPoints[this.controlPoints.length - 1].x)
         x = this.controlPoints[this.controlPoints.length - 1].x;
@@ -78,6 +74,9 @@ MyLinearAnimation.prototype.position = function(initialTime, currTime) {
 
     if(z > this.controlPoints[this.controlPoints.length - 1].z)
         z = this.controlPoints[this.controlPoints.length - 1].z;
+
+    angle = Math.atan((this.controlPoints[indice + 1].z - this.controlPoints[indice].z) / 
+                            (this.controlPoints[indice + 1].x - this.controlPoints[indice].x));
 
     return new MyPoint(x,y,z);
 }

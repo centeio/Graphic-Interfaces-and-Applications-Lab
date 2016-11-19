@@ -22,11 +22,14 @@ function Vehicle(scene) {
 }
 
 Vehicle.prototype.display = function () {
+    this.scene.pushMatrix();
+    this.scene.rotate(-Math.PI / 2, 0, 1, 0);
     this.cover.display();
 
     this.scene.pushMatrix();
     this.scene.scale(1.5,0.5,1);
     this.scene.rotate(Math.PI/2,1,0,0);
     this.body.display();
+    this.scene.popMatrix();
     this.scene.popMatrix();
 }

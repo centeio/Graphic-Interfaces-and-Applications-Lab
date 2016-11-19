@@ -30,6 +30,22 @@ MyCircularAnimation.prototype.addAngle = function(angle) {
     this.angle = angle;
 }
 
-MyCircularAnimation.prototype.position = function(currTime) {
-    
+MyCircularAnimation.prototype.position = function(initialTime, currTime, previousAngle) {
+    var ret = [];
+
+    if(((currTime - initialTime) / 1000) >= this.span) {
+        ret.push("done");
+        ret.push(previousAngle);
+    }
+
+    var angularVelocity = ((currTime - initialTime) / 1000) * this.angle;
+
+    var x = this.center.x + this.radius * Math.cos((Math.PI * (this.initialAngle + angularVelocity)) / 180);
+    var y = this.center.y;
+    var z = this.center.z - this.radius * Math.sin((Math.PI * (this.initialAngle + angularVelocity)) / 180);
+
+    ret.push(new MyPoint(x,y,z));
+    ret.push(0);
+
+    return ret;
 }

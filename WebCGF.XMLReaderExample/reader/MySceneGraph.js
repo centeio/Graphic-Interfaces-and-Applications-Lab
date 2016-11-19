@@ -710,7 +710,6 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 	for(var i=0; i < nnodes; i++) {
 		var animation = rootAnimations[0].children[i];
 		var id = this.reader.getString(animation, "id", bool);
-		console.log("Indice: " + i + " ID: " + id);
 		
 		if(this.animations.get(id) != undefined)
 			console.error("Animation ID repeated.");
@@ -719,7 +718,6 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 
 		if(this.reader.getString(animation, "type", bool) == "linear") {
 			this.animations.set(id, new MyLinearAnimation(span));
-			console.debug(this.animations.get(id).controlPoints);
 
 			var controlPoints = animation.getElementsByTagName('controlpoint');
 			var nControlPoints = controlPoints.length;
@@ -727,7 +725,6 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 			if(nControlPoints == 0)
 				console.error('Missing control points in linear animation.');
 
-			console.log("Control points length Graph: " + nControlPoints);
 
 			for(var j = 0; j < nControlPoints; j++) {
 				var controlPoint = controlPoints[j];

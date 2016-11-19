@@ -19,14 +19,12 @@ MyLinearAnimation.prototype.addControlPoint = function(x,y,z) {
 
 MyLinearAnimation.prototype.calculateSegmentDurations = function() {
     var totalDistance = 0;
-    console.log("Control points length: " + this.controlPoints.length);
     for(var i = 0; i < (this.controlPoints.length - 1); i++) {
         totalDistance += Math.sqrt(Math.pow(this.controlPoints[i + 1].x - this.controlPoints[i].x, 2) + 
                 Math.pow(this.controlPoints[i + 1].y - this.controlPoints[i].y, 2) +
                 Math.pow(this.controlPoints[i + 1].z - this.controlPoints[i].z, 2));
     }
 
-    console.log("Total distance: " + totalDistance);
     for(var i = 0; i < (this.controlPoints.length - 1); i++) {
         this.segmentDurations.push(
             (Math.sqrt(Math.pow(this.controlPoints[i + 1].x - this.controlPoints[i].x, 2) + 
@@ -36,10 +34,11 @@ MyLinearAnimation.prototype.calculateSegmentDurations = function() {
     }
 }
 
-MyLinearAnimation.prototype.position = function(initialTime, currTime, angle) {
+MyLinearAnimation.prototype.position = function(initialTime, currTime, previousAngle) {
     
     var indice = 0;
     var time = this.segmentDurations[indice];
+    var ret = [];
 
     while((currTime - initialTime) > time) {
         indice++;
@@ -47,7 +46,9 @@ MyLinearAnimation.prototype.position = function(initialTime, currTime, angle) {
     }
 
     if(indice >= this.segmentDurations.length) {
-        return "done";
+        ret.push("done");
+        ret.push(previousAngle);
+        return ret;
     }
 
     time -= this.segmentDurations[indice];
@@ -75,8 +76,18 @@ MyLinearAnimation.prototype.position = function(initialTime, currTime, angle) {
     if(z > this.controlPoints[this.controlPoints.length - 1].z)
         z = this.controlPoints[this.controlPoints.length - 1].z;
 
-    angle = Math.atan((this.controlPoints[indice + 1].z - this.controlPoints[indice].z) / 
-                            (this.controlPoints[indice + 1].x - this.controlPoints[indice].x));
+    var angle;
 
-    return new MyPoint(x,y,z);
+    if((this.controlPoints[indice + 1].z - this.controlPoints[indice].z) == 0)
+        angle = Math.PI / 2;
+    else if((this.controlPoints[indice + 1].x - this.controlPoints[indice].x) == 0)
+        angle = 0;
+    else
+        angle = Math.atan((this.controlPoints[indice + 1].z - this.controlPoints[indice].z) / 
+                            (this.controlPoints[indice + 1].x - this.controlPoints[indice].x));
+    
+    ret.push(new MyPoint(x,y,z));
+    ret.push(angle);
+
+    return ret;
 }

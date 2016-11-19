@@ -58,6 +58,7 @@
         <texture id="netnet" file="scenes/resources/net.jpg" length_s="0.5" length_t="0.5" />  
         <texture id="leather" file="scenes/resources/lifeguard.jpg" length_s="1" length_t="1" />  
         <texture id="sky" file="scenes/resources/forest.png" length_s="1" length_t="1" />  
+        <texture id="space" file="scenes/resources/spaceship.png" length_s="1" length_t="1" />  
 
         
     </textures>
@@ -132,11 +133,6 @@
 
     <!-- novo bloco de animacao -->
     <animations>
-        <!-- podem existir zero ou mais nós "animation" -->
-        <!-- span é o tempo, em segundos, que a animação deve -->
-        <!-- demorar. Nesta versão do formato DSX, type pode ter -->
-        <!-- o valor "linear" ou "circular"; na animacao circular -->
-        <!-- os angulos sao expressos em graus  -->
         <animation id="linearAnim" span="5" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="1" yy="1" zz="0" />
@@ -146,13 +142,12 @@
 
         <animation id="linearAnim2" span="5" type="linear">
             <controlpoint xx="3" yy="1" zz="0" />
-            <controlpoint xx="3" yy="2" zz="0" />
-            <controlpoint xx="3" yy="3" zz="0" />
-            <controlpoint xx="4" yy="4" zz="0" />
+            <controlpoint xx="4" yy="1" zz="1" />
+            <controlpoint xx="5" yy="1" zz="3" />
         </animation>
 
-        <animation id="circularAnim" span="8" type="circular"
-            centerx="0" centery="0" centerz="0"
+        <animation id="circularAnim" span="30" type="circular"
+            centerx="1" centery="1" centerz="1"
             radius="5" startang="30" rotang="10" />
     </animations>
 	
@@ -164,7 +159,6 @@
 
         <primitive id="conep">
             <cylinder base="0.6" top="0.1" height="2" slices="8" stacks="20" />
-            
         </primitive>
 
         <primitive id="sphere">
@@ -174,6 +168,10 @@
         <primitive id="coneBase">
             <torus inner="0.2" outer="0.7" slices="8" loops="20" />            
         </primitive>
+		
+        <primitive id="vehicle">
+            <vehicle />            
+        </primitive>		
   
         
     </primitives>
@@ -201,7 +199,8 @@
                 <componentref id="ball" />
                 <componentref id="net" />
                 <componentref id="sky1" />	
-                <componentref id="sky2" />								
+                <componentref id="sky2" />		
+                <componentref id="aero" />					
             </children>
             
         </component>
@@ -226,6 +225,27 @@
             </children>
             
         </component>
+		
+       <component id="aero">
+        
+            <transformation>
+                <translate x="3" y="1" z="5" /> 
+            </transformation>
+
+            <animationref id="circularAnim" />
+       
+            <materials>
+                <material id="default" />
+
+            </materials>
+
+            <texture id="space" />
+            <children>
+                <primitiveref id="vehicle" />
+            </children>
+            
+        </component>
+		
 		
         <component id="coneaux">
         
@@ -353,11 +373,13 @@
 
         <component id="ball">
         
-            <transformation>						
+            <transformation>		
+                <translate x="3" y="0.1" z="3" />
+                <scale x="0.2" y="0.2" z="0.2" />		
+                <rotate axis="x" angle="30" />				
+                <rotate axis="y" angle="30" />				
+                <rotate axis="z" angle="30" /> 				
             </transformation>
-
-            <animationref id="linearAnim" />
-            <animationref id="linearAnim2" />
        
             <materials>
                 <material id="default" />

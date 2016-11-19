@@ -60,9 +60,6 @@ MyComponent.prototype.addAnimation = function(animation) {
 
 MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 
-	if(this.ID == "ball")
-		console.log(this.currentAnimation);
-
 	var matrix = mat4.create();
 	if(this.transformationRef != "null") {
 		mat4.multiply(matrix, oldMatrix, this.scene.graph.transformations.get(this.transformationRef));
@@ -77,8 +74,10 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 		
 		if(this.currentAnimation < this.animations.length) {
 			
-			var point = this.scene.graph.animations.get(this.animations[this.currentAnimation]).position(this.initialAnimationTime, this.scene.currentTime, this.angle);
-			console.log("Angle: " + this.angle);
+			var ret = this.scene.graph.animations.get(this.animations[this.currentAnimation]).position(this.initialAnimationTime, this.scene.currentTime, this.angle);
+			var point = ret[0];
+			this.angle = ret[1];
+
 			if(point != "done") {
 				this.lastX = point.x;
 				this.lastY = point.y;
@@ -90,8 +89,11 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 				this.currentAnimation++;
 				this.initialAnimationTime = 0;
 			}
-		} else 
+			mat4.rotate(matrix, matrix, Math.PI / 2 - this.angle, [0,1,0]);
+		} else { 
 			mat4.translate(matrix, matrix, [this.lastX, this.lastY, this.lastZ]);
+			mat4.rotate(matrix, matrix, Math.PI / 2 - this.angle, [0,1,0]);
+		}
 	}
 
 	var material = new CGFappearance(this.scene);

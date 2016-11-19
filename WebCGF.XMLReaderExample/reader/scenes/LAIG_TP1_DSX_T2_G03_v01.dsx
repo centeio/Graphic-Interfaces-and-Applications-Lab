@@ -58,6 +58,7 @@
         <texture id="netnet" file="scenes/resources/net.jpg" length_s="0.5" length_t="0.5" />  
         <texture id="leather" file="scenes/resources/lifeguard.jpg" length_s="1" length_t="1" />  
         <texture id="sky" file="scenes/resources/forest.png" length_s="1" length_t="1" />  
+        <texture id="space" file="scenes/resources/spaceship.png" length_s="1" length_t="1" />  
 
         
     </textures>
@@ -174,6 +175,10 @@
         <primitive id="coneBase">
             <torus inner="0.2" outer="0.7" slices="8" loops="20" />            
         </primitive>
+		
+        <primitive id="vehicle">
+            <vehicle />            
+        </primitive>		
   
         
     </primitives>
@@ -201,7 +206,8 @@
                 <componentref id="ball" />
                 <componentref id="net" />
                 <componentref id="sky1" />	
-                <componentref id="sky2" />								
+                <componentref id="sky2" />		
+                <componentref id="aero" />					
             </children>
             
         </component>
@@ -226,6 +232,25 @@
             </children>
             
         </component>
+		
+       <component id="aero">
+        
+            <transformation>
+                <translate x="7" y="2" z="5" /> 
+            </transformation>
+       
+            <materials>
+                <material id="default" />
+
+            </materials>
+
+            <texture id="space" />
+            <children>
+                <primitiveref id="vehicle" />
+            </children>
+            
+        </component>
+		
 		
         <component id="coneaux">
         

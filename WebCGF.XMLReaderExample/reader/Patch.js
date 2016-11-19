@@ -20,8 +20,6 @@ function Patch(scene, dU, dV, uDiv, vDiv, controlvertexes) {
 
     this.init();
 
-//    CGFnurbsObject.call(this.scene, getSurfacePoint, this.xDiv, this.yDiv);
-
 };
 
 Patch.prototype = Object.create(CGFnurbsObject.prototype);
@@ -41,7 +39,6 @@ Patch.prototype.init = function () {
 
     this.patch = new CGFnurbsObject(this.scene, getSurfacePoint, this.uDiv, this.vDiv);
 
-//  CGFnurbsObject.prototype.initBuffers.call(this.scene);
     this.patch.initBuffers(this.scene);
     this.primitiveType=this.scene.gl.TRIANGLES;
 	this.initGLBuffers();

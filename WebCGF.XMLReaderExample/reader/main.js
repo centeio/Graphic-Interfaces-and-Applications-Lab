@@ -26,6 +26,7 @@ serialInclude([
                 'MyTexture.js',
                 'Plane.js',
                 'Patch.js',
+                'Vehicle.js',
 
 main=function()
 {

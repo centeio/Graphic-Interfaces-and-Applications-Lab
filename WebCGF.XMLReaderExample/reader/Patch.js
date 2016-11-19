@@ -1,4 +1,4 @@
-function Patch(scene, dU, dV, uDiv, vDiv) {
+function Patch(scene, dU, dV, uDiv, vDiv, controlvertexes) {
     if(dU < 1 || dU > 3){
     	console.error("u divisions invalid");
     }
@@ -8,31 +8,14 @@ function Patch(scene, dU, dV, uDiv, vDiv) {
     }
         
     this.scene = scene;
-    this.dU = dU -1;
-    this.dV = dV -1;
+    this.dU = dU;
+    this.dV = dV;
     this.uDiv = uDiv;
     this.vDiv = vDiv;
-//	this.controlvertexes = controlvertexes;
+	this.controlvertexes = controlvertexes;
 
-	var cv =       [	// U = 0
-						[ // V = 0..1;
-							 [ -1.5, -1.5, 0.0, 1 ],
-							 [ -1.5,  1.5, 0.0, 1 ]
-							
-						],
-						// U = 1
-						[ // V = 0..1
-							 [ 0, -1.5, 3.0, 1 ],
-							 [ 0,  1.5, 3.0, 1 ]							 
-						],
-						// U = 2
-						[ // V = 0..1							 
-							[ 1.5, -1.5, 0.0, 1 ],
-							[ 1.5,  1.5, 0.0, 1 ]
-						]
-					];
 	
-	this.surface = this.scene.makeSurface(this.dU, this.dV, cv);
+	this.surface = this.scene.makeSurface(this.dU, this.dV, controlvertexes);
 	console.log(this.surface);
 
     this.init();

@@ -29,8 +29,6 @@ XMLscene.prototype.init = function (application) {
 	this.Luz3 = true;
 	this.Luz4 = true;
 
-	this.plane = new Patch(this, 3, 2, 7, 9); 
-
 	this.setUpdatePeriod(30);
 };
 

@@ -303,6 +303,56 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 						this.reader.getFloat(element, "slices", bool),
 						this.reader.getFloat(element, "loops", bool)));
 				break;
+			case "plane":
+				this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
+					new Plane(this.scene,
+						this.reader.getFloat(element, "dimX", bool),
+						this.reader.getFloat(element, "dimY", bool),
+						this.reader.getFloat(element, "partsX", bool),
+						this.reader.getFloat(element, "partsY", bool)));
+				break;
+			case "patch":
+						var orderU = this.reader.getFloat(element, "orderU", bool);
+						var orderV = this.reader.getFloat(element, "orderV", bool);
+						var partsU = this.reader.getFloat(element, "partsU", bool);
+						var partsV = this.reader.getFloat(element, "partsV", bool);
+						
+						var controlvx = [];
+						ncontrolpoints = element.children.length;
+						console.log("CONTROL POINTS "+ncontrolpoints);
+
+						if(ncontrolpoints != (orderU+1)*(orderV+1))
+							console.error("Control Points wrong in number in " + this.reader.getString(rootPrimitives[0].children[i], "id", bool));
+						
+						for(var n = 0; n < orderU+1; n++){
+							var tmp = [];
+							controlvx.push(tmp);
+						}
+
+						for(var k = 0; k < ncontrolpoints; k++){
+							var point = [];
+							point.push(this.reader.getFloat(element.children[k], "x", bool));
+							point.push(this.reader.getFloat(element.children[k], "y", bool));
+							point.push(this.reader.getFloat(element.children[k], "z", bool));
+							point.push(1);
+							console.log("ind: " + k % (orderU+1));
+							console.log(point);
+							controlvx[k % (orderU+1)].push(point);
+
+						}
+
+						console.log(controlvx);
+
+						this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool),
+							new Patch(this.scene, orderU, orderV, partsU, partsV, controlvx));
+
+
+				
+				break;
+			case 'vehicle':
+					this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
+					new Vehicle(this.scene));
+					break;
 			default:
 				console.error("Primitive tag unknown.");
 				break;

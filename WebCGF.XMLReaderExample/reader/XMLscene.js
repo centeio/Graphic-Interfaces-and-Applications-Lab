@@ -31,6 +31,8 @@ XMLscene.prototype.init = function (application) {
 	this.Luz4 = true;
 
 	this.setUpdatePeriod(10);
+
+	this.board = new ChessBoard(this, 8, 8);	
 };
 
 XMLscene.prototype.initLights = function () {

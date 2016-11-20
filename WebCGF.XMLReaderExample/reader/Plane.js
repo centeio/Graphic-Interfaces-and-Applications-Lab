@@ -21,7 +21,6 @@ function Plane(scene, dX, dY, xDiv, yDiv) {
 
     this.init();
 
-//    CGFnurbsObject.call(this.scene, getSurfacePoint, this.xDivs, this.yDivs);
 
 };
 

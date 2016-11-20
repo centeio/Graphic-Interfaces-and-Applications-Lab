@@ -31,6 +31,7 @@ serialInclude([
                 'MyAnimation.js',
                 'MyLinearAnimation.js',
                 'MyCircularAnimation.js',
+                'ChessBoard.js',
 
 main=function()
 {

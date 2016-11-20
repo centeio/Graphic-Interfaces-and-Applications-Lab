@@ -9,10 +9,10 @@ function Plane(scene, dX, dY, xDiv, yDiv) {
     var x = [];
     var y = [];
 
-    x.push([-xDiv/2,-yDiv/2,0,1]);
-    x.push([-xDiv/2,yDiv/2,0,1]);
-    y.push([xDiv/2,-yDiv/2,0,1]);
-    y.push([xDiv/2,yDiv/2,0,1]);   
+    x.push([-dX/2,-dY/2,0,1]);
+    x.push([-dX/2,dY/2,0,1]);
+    y.push([dX/2,-dY/2,0,1]);
+    y.push([dX/2,dY/2,0,1]);   
     controlvertexes.push(x);
     controlvertexes.push(y);     
 

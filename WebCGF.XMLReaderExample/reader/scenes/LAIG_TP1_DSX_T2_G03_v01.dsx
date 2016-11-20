@@ -173,6 +173,14 @@
         <primitive id="vehicle">
             <vehicle />            
         </primitive>		
+		
+        <primitive id="board">
+			<chessboard du="8" dv="8" textureref="space" su="7" sv="3">
+                   <c1 r="0.0" g="0.0" b="1.0" a="1.0" />
+                   <c2 r="0.0" g="1.0" b="1.0" a="1.0" />
+                   <cs r="1.0" g="0.0" b="0.0" a="1.0" />				   
+			</chessboard>            
+        </primitive>		
   
         
     </primitives>
@@ -230,10 +238,8 @@
        <component id="aero">
         
             <transformation>
-                <translate x="2" y="0" z="0" />
+                <translate x="5" y="1" z="5" />
             </transformation>
-
-            <animationref id="circularAnim" />
        
             <materials>
                 <material id="default" />
@@ -242,7 +248,7 @@
 
             <texture id="space" />
             <children>
-                <primitiveref id="vehicle" />
+                <primitiveref id="board" />
             </children>
             
         </component>

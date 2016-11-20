@@ -32,7 +32,7 @@ XMLscene.prototype.init = function (application) {
 
 	this.setUpdatePeriod(10);
 
-	this.board = new ChessBoard(this, 8, 8);	
+//	this.board = new ChessBoard(this, 8, 8);	
 };
 
 XMLscene.prototype.initLights = function () {
@@ -146,7 +146,7 @@ XMLscene.prototype.display = function () {
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
 		}
 	}
-	this.board.display();
+//	this.board.display();
 };
 
 XMLscene.prototype.update = function(currTime) {

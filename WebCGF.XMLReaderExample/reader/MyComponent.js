@@ -125,20 +125,25 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 	this.scene.pushMatrix();
 	this.scene.multMatrix(matrix);
 	for(var i = 0; i < this.primitives.length; i++) {
-		if((this.scene.graph.primitives.get(this.primitives[i]) instanceof MyRectangle || 
-			this.scene.graph.primitives.get(this.primitives[i]) instanceof MyTriangle) &&
-				textureRef != "none" && material.texture != null) {
-					
-					this.scene.graph.primitives.get(this.primitives[i]).updateTexCoords(
-						0,
-						this.scene.graph.primitives.get(this.primitives[i]).lengthH / this.scene.graph.textures.get(String(textureRef)).lengthS,
-						0,
-						this.scene.graph.primitives.get(this.primitives[i]).lengthV / this.scene.graph.textures.get(String(textureRef)).lengthT
-					);
-					material.setTextureWrap('REPEAT', 'REPEAT');
+		if(this.scene.graph.primitives.get(this.primitives[i]) instanceof ChessBoard)
+			this.scene.graph.primitives.get(this.primitives[i]).display();
+			else{
+
+			if((this.scene.graph.primitives.get(this.primitives[i]) instanceof MyRectangle || 
+				this.scene.graph.primitives.get(this.primitives[i]) instanceof MyTriangle) &&
+					textureRef != "none" && material.texture != null) {
+
+						this.scene.graph.primitives.get(this.primitives[i]).updateTexCoords(
+							0,
+							this.scene.graph.primitives.get(this.primitives[i]).lengthH / this.scene.graph.textures.get(String(textureRef)).lengthS,
+							0,
+							this.scene.graph.primitives.get(this.primitives[i]).lengthV / this.scene.graph.textures.get(String(textureRef)).lengthT
+						);
+						material.setTextureWrap('REPEAT', 'REPEAT');
+			}
+			material.apply();
+			this.scene.graph.primitives.get(this.primitives[i]).display();
 		}
-		material.apply();
-		this.scene.graph.primitives.get(this.primitives[i]).display();
 	}
 	
 	this.scene.popMatrix();

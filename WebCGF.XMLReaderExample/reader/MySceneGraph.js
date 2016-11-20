@@ -353,6 +353,54 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 					this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
 					new Vehicle(this.scene));
 					break;
+			case 'chessboard':
+					if(rootPrimitives[0].children[i].children[0].children.length != 3)
+						console.error("Wrong amount of colors in "+ this.reader.getString(rootPrimitives[0].children[i], "id", bool));
+					else{
+						var colorcs = rootPrimitives[0].children[i].children[0].getElementsByTagName('cs');
+						var color1 = rootPrimitives[0].children[i].children[0].getElementsByTagName('c1');
+						var color2 = rootPrimitives[0].children[i].children[0].getElementsByTagName('c2');
+
+						var colorcstemp = [];
+						colorcstemp.push(this.reader.getFloat(colorcs[0], "r", bool));
+						colorcstemp.push(this.reader.getFloat(colorcs[0], "g", bool));
+						colorcstemp.push(this.reader.getFloat(colorcs[0], "b", bool));
+						colorcstemp.push(this.reader.getFloat(colorcs[0], "a", bool));
+
+						var color1temp = [];
+						color1temp.push(this.reader.getFloat(color1[0], "r", bool));
+						color1temp.push(this.reader.getFloat(color1[0], "g", bool));
+						color1temp.push(this.reader.getFloat(color1[0], "b", bool));
+						color1temp.push(this.reader.getFloat(color1[0], "a", bool));
+
+						var color2temp = [];
+						color2temp.push(this.reader.getFloat(color2[0], "r", bool));
+						color2temp.push(this.reader.getFloat(color2[0], "g", bool));
+						color2temp.push(this.reader.getFloat(color2[0], "b", bool));
+						color2temp.push(this.reader.getFloat(color2[0], "a", bool));	
+
+						var colors = [];
+						colors.push(colorcstemp);									
+						colors.push(color1temp);
+						colors.push(color2temp);
+						
+					}
+					var su = -1, sv = -1;
+
+					if(this.reader.hasAttribute(element,"su"))
+						su = this.reader.getFloat(element, "su", bool);
+					if(this.reader.hasAttribute(element,"sv"))
+						sv = this.reader.getFloat(element, "sv", bool);					
+
+					this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
+					new ChessBoard(this.scene,this.reader.getFloat(element, "du", bool),
+					this.reader.getFloat(element, "dv", bool),
+					this.textures.get(this.reader.getString(element, "textureref", bool)),
+					su,
+					sv,
+					colors));									
+
+					break;					
 			default:
 				console.error("Primitive tag unknown.");
 				break;

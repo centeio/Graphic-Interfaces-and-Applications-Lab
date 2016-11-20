@@ -53,11 +53,7 @@
 	
     <textures>
     
-        <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" />  
-        <texture id="cone" file="scenes/resources/cone.png" length_s="1" length_t="1" />  
-        <texture id="netnet" file="scenes/resources/net.jpg" length_s="0.5" length_t="0.5" />  
-        <texture id="leather" file="scenes/resources/lifeguard.jpg" length_s="1" length_t="1" />  
-        <texture id="sky" file="scenes/resources/forest.png" length_s="1" length_t="1" />  
+        <texture id="wood" file="scenes/resources/wood.jpg" length_s="1" length_t="1" />  
 
         
     </textures>
@@ -71,54 +67,7 @@
             <specular r="0.2" g="0.2" b="0.5" a="1" />
             <shininess value="70" />
         </material>
-
-        <material id="sky" >
-            <emission r="0.8" g="0.8" b="0.8" a="1" />
-            <ambient r="0.3" g="0.3" b="0.3" a="1" />
-            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
-            <specular r="0.2" g="0.2" b="0.5" a="1" />
-            <shininess value="100" />
-        </material>		
 		
-        <material id="metal" >
-            <emission r="0.5" g="0.5" b="0.5" a="1" />
-            <ambient r="0.3" g="0.3" b="0.3" a="1" />
-            <diffuse r="0.5" g="0.5" b="0.5" a="5" />
-            <specular r="1" g="1" b="1" a="1" />
-            <shininess value="80" />
-        </material>
-		
-        <material id="netnet" >
-            <emission r="0.5" g="0.5" b="0.5" a="0.5" />
-            <ambient r="0.2" g="0.2" b="0.2" a="1" />
-            <diffuse r="0.5" g="0.5" b="0.5" a="5" />
-            <specular r="0" g="0" b="0" a="1" />
-            <shininess value="10" />
-        </material>
-
-        <material id="test1" >
-            <emission r="0.0" g="0.0" b="0.0" a="0.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1" />
-            <diffuse r="1.0" g="0.0" b="0.0" a="1" />
-            <specular r="1.0" g="0" b="0" a="1" />
-            <shininess value="10" />
-        </material>
-
-        <material id="test2" >
-            <emission r="0" g="0" b="0" a="0" />
-            <ambient r="0" g="1" b="0" a="1" />
-            <diffuse r="0" g="1" b="0" a="1" />
-            <specular r="0" g="1" b="0" a="1" />
-            <shininess value="10" />
-        </material>	
-
-        <material id="cone" >
-            <emission r="0" g="0" b="0" a="1" />
-            <ambient r="1" g="0.3" b="0" a="1" />
-            <diffuse r="1" g="0.3" b="0" a="1" />
-            <specular r="1" g="0.2" b="0" a="1" />
-            <shininess value="0" />
-        </material>			
         
     </materials>
 	
@@ -139,29 +88,17 @@
             <controlpoint xx="2" yy="1" zz="1" />
             <controlpoint xx="3" yy="1" zz="1" />
         </animation>
-
-        <animation id="linearAnim2" span="5" type="linear">
-            <controlpoint xx="3" yy="1" zz="1" />
-            <controlpoint xx="4" yy="1" zz="1" />
-            <controlpoint xx="5" yy="1" zz="3" />
-        </animation>
-
-        <animation id="circularAnim" span="10" type="circular"
-            centerx="1" centery="2" centerz="5"
-            radius="5" startang="0" rotang="10" />
-    </animations>
 	
 	<primitives>
     
-        <primitive id="conep">
-            <cylinder base="0.6" top="0.1" height="2" slices="8" stacks="20" />
-            
+        <primitive id="board">
+			<chessboard du="8" dv="8" textureref="wood" su="7" sv="3">
+                   <c1 r="0.0" g="0.0" b="1.0" a="1.0" />
+                   <c2 r="0.0" g="1.0" b="1.0" a="1.0" />
+                   <cs r="1.0" g="0.0" b="0.0" a="1.0" />				   
+			</chessboard>            
         </primitive>
 		
-        <primitive id="aero">
-            <vehicle/>
-            
-        </primitive>		
         
     </primitives>
 	
@@ -170,7 +107,7 @@
         <component id="root">
         
             <transformation>
-                <translate x="10" y="10" z="10" />
+                <translate x="0" y="0" z="0" />
             </transformation>
 
             <materials>
@@ -180,7 +117,7 @@
             <texture id="none" />
 			
             <children>
-                <primitiveref id="aero" />								
+                <primitiveref id="board" />								
             </children>
             
         </component>

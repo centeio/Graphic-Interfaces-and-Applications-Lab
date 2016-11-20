@@ -1,21 +1,19 @@
-function ChessBoard(scene, dU, dV) {
+function ChessBoard(scene, dU, dV, texture, su, sv, colors) {
     this.dU = dU;
     this.dV = dV;
     this.scene = scene;
-    this.su;
-    this.sv;
+	this.sU = su;
+	this.sV = sv;
 
-    this.texture = new CGFtexture(scene, "scenes/resources/wood.jpg");
+	console.log(texture);
+
+    this.texture = texture.texture;
+
+    this.setColors(colors);
 	    
     console.log(this.texture);
     this.shader = new CGFshader(this.scene.gl, "shaders/test1.vert", "shaders/test1.frag");
-
-	this.sU = 3.0;
-	this.sV = 3.0;
-
-	this.cs = vec4.fromValues(1.0,0.0,0.0,1.0);
-	this.c1 = vec4.fromValues(0.0,0.0,1.0,1.0);
-	this.c2 = vec4.fromValues(0.0,1.0,1.0,1.0);    
+ 
 
 	this.shader.setUniformsValues({uSampler: 1.0});
 	this.shader.setUniformsValues({du: this.dU});
@@ -26,7 +24,7 @@ function ChessBoard(scene, dU, dV) {
 	this.shader.setUniformsValues({c2: this.c2});
 	this.shader.setUniformsValues({cs: this.cs});
 
-    this.plane = new Plane(scene, 1, 1, 8*8, 8*8);
+    this.plane = new Plane(scene, 1, 1, this.dU*10, this.dV*10);
 
     this.init();
 
@@ -39,9 +37,13 @@ ChessBoard.prototype.init = function() {
 	this.appearance.setSpecular(0.0, 0.0, 0.0, 1);	
 	this.appearance.setShininess(50);
 		
-	
-//	this.texture = new CGFtexture(scene, "scenes/resources/wood.jpg");
-//	this.appearance.setTexture(this.texture);
+}
+
+ChessBoard.prototype.setColors = function(colors) {
+		this.cs = vec4.fromValues(colors[0][0],colors[0][1],colors[0][2],colors[0][3]);
+		this.c1 = vec4.fromValues(colors[1][0],colors[1][1],colors[1][2],colors[1][3]);
+		this.c2 = vec4.fromValues(colors[2][0],colors[2][1],colors[2][2],colors[2][3]); 
+
 }
 
 ChessBoard.prototype.display = function () {
@@ -49,6 +51,8 @@ ChessBoard.prototype.display = function () {
 	this.appearance.apply();
 
 	this.scene.pushMatrix();
+	this.scene.scale(6,6,6);
+	this.scene.rotate(-Math.PI/2,1,0,0);
 	this.scene.setActiveShader(this.shader);
     this.texture.bind(0);
 	this.plane.display();

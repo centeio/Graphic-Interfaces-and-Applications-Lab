@@ -390,7 +390,7 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 					if(this.reader.hasAttribute(element,"su"))
 						su = this.reader.getFloat(element, "su", bool);
 					if(this.reader.hasAttribute(element,"sv"))
-						sv = this.reader.getFloat(element, "sv", bool);					
+						sv = this.reader.getFloat(element, "sv", bool);						
 
 					this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
 					new ChessBoard(this.scene,this.reader.getFloat(element, "du", bool),

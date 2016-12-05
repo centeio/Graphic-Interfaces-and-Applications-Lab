@@ -146,7 +146,6 @@ XMLscene.prototype.display = function () {
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
 		}
 	}
-//	this.board.display();
 };
 
 XMLscene.prototype.update = function(currTime) {

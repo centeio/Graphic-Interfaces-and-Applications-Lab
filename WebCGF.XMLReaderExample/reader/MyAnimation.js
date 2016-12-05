@@ -12,7 +12,6 @@ function Animation() {
 Animation.prototype.span = 0;
 
 Animation.prototype.getSpan = function() {
-    console.log(this.span);
     return this.span;
 }
 

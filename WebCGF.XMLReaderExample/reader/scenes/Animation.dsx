@@ -59,8 +59,7 @@
         <texture id="leather" file="scenes/resources/lifeguard.jpg" length_s="1" length_t="1" />  
         <texture id="sky" file="scenes/resources/forest.png" length_s="1" length_t="1" />  
         <texture id="space" file="scenes/resources/spaceship.png" length_s="1" length_t="1" />  
-
-        
+ 
     </textures>
 	
 	<materials>
@@ -194,7 +193,8 @@
                 <componentref id="ball" />
                 <componentref id="sky1" />	
                 <componentref id="sky2" />		
-                <componentref id="aero" />					
+                <componentref id="aero1" />
+                <componentref id="aero2" />						
             </children>
             
         </component>
@@ -220,9 +220,30 @@
             
         </component>
 		
-       <component id="aero">
+       <component id="aero1">
         
             <transformation>
+            </transformation>
+
+            <animationref id="linearAnim" />
+            <animationref id="circularAnim" />
+       
+            <materials>
+                <material id="default" />
+
+            </materials>
+
+            <texture id="space" />
+            <children>
+                <primitiveref id="vehicle" />
+            </children>
+            
+        </component>
+
+        <component id="aero2">
+        
+            <transformation>
+                <translate x="1" y="2" z="1" />
             </transformation>
 
             <animationref id="linearAnim" />

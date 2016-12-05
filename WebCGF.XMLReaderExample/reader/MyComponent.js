@@ -145,7 +145,6 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 			this.scene.graph.primitives.get(this.primitives[i]).display();
 		}
 	}
-	
 	this.scene.popMatrix();
 }
 

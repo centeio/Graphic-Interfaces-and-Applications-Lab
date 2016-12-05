@@ -345,9 +345,6 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 
 						this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool),
 							new Patch(this.scene, orderU, orderV, partsU, partsV, controlvx));
-
-
-				
 				break;
 			case 'vehicle':
 					this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
@@ -400,7 +397,11 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 					sv,
 					colors));									
 
-					break;					
+					break;	
+			case 'nodesboard':
+					this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
+					new NodesBoard(this.scene));
+					break;				
 			default:
 				console.error("Primitive tag unknown.");
 				break;

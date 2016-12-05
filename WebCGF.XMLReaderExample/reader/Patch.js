@@ -14,7 +14,6 @@ function Patch(scene, dU, dV, uDiv, vDiv, controlvertexes) {
     this.vDiv = vDiv;
 	this.controlvertexes = controlvertexes;
 
-	
 	this.surface = this.scene.makeSurface(this.dU, this.dV, controlvertexes);
 	console.log(this.surface);
 

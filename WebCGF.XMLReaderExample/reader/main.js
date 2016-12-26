@@ -33,6 +33,7 @@ serialInclude([
                 'MyCircularAnimation.js',
                 'ChessBoard.js',
                 'NodesBoard.js',
+                'MyPositionQuad.js',
 
 main=function()
 {

@@ -20,8 +20,10 @@ XMLscene.prototype.init = function (application) {
 
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
+    this.gl.enable(this.gl.BLEND);    
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
+    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 	this.sceneTagReady = false;
 	this.sceneBasicsLoaded = false;
 
@@ -102,7 +104,31 @@ XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
 	return nurbsSurface;	
 }
 
+XMLscene.prototype.logPicking = function ()
+{
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				console.debug(obj);
+				if (obj)
+				{
+					var customId = this.pickResults[i][1];				
+					console.log("Picked object: " + obj.column + " " + obj.row + "id: " + customId);
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		}		
+	}
+}
+
 XMLscene.prototype.display = function () {
+	this.logPicking();
+	this.clearPickRegistration();	
+
+	this.pickedId = 1;
+
+	
 	if(this.sceneTagReady && !this.sceneBasicsLoaded) {
 		// ---- BEGIN Background, camera and axis setup
 		this.axis = new CGFaxis(this, this.graph.axisLength);
@@ -144,6 +170,8 @@ XMLscene.prototype.display = function () {
 			mat4.identity(matrix);
 		
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
+
+
 		}
 	}
 };

@@ -34,7 +34,8 @@ XMLscene.prototype.init = function (application) {
 
 	this.setUpdatePeriod(10);
 
-//	this.board = new ChessBoard(this, 8, 8);	
+	this.setPickEnabled(true);
+
 };
 
 XMLscene.prototype.initLights = function () {
@@ -71,9 +72,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
 XMLscene.prototype.onGraphLoaded = function () 
 {
 	this.gl.clearColor(0,0,0,1);
-	//this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	this.lights[0].setVisible(true);
-    //this.lights[0].enable();
 };
 
 XMLscene.prototype.getKnotsVector = function(degree) {
@@ -104,8 +103,8 @@ XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
 	return nurbsSurface;	
 }
 
-XMLscene.prototype.logPicking = function ()
-{
+
+XMLscene.prototype.logPicking = function () {
 	if (this.pickMode == false) {
 		if (this.pickResults != null && this.pickResults.length > 0) {
 			for (var i=0; i< this.pickResults.length; i++) {
@@ -118,6 +117,7 @@ XMLscene.prototype.logPicking = function ()
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
+
 		}		
 	}
 }
@@ -144,7 +144,9 @@ XMLscene.prototype.display = function () {
 	}
 
 	if(this.sceneBasicsLoaded) {
-		//console.log(this.camera);
+		this.logPicking();
+		this.clearPickRegistration();
+		
 		// Clear image and depth buffer everytime we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -179,3 +181,28 @@ XMLscene.prototype.display = function () {
 XMLscene.prototype.update = function(currTime) {
 	this.currentTime = currTime;
 };
+
+XMLscene.prototype.getPrologRequest = function(requestString, onSuccess, onError, port) {
+	var requestPort = port || 8081;
+	var request = new XMLHttpRequest();
+	request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
+
+	request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
+	request.onerror = onError || function(){console.log("Error waiting for response");};
+
+	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+	request.send();
+}
+
+XMLscene.prototype.makeRequest = function() {
+	// Get Parameter Values
+	var requestString = document.querySelector("#query_field").value;				
+	
+	// Make Request
+	getPrologRequest(requestString, handleReply);
+}
+
+//Handle the Reply
+XMLscene.prototype.handleReply = function(data) {
+	document.querySelector("#query_result").innerHTML=data.target.response;
+}

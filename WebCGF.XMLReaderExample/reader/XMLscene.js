@@ -1,4 +1,3 @@
-
 function XMLscene(myInterface) {
     CGFscene.call(this);
 	this.interface = myInterface;
@@ -103,7 +102,6 @@ XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
 	return nurbsSurface;	
 }
 
-
 XMLscene.prototype.logPicking = function () {
 	if (this.pickMode == false) {
 		if (this.pickResults != null && this.pickResults.length > 0) {
@@ -113,11 +111,10 @@ XMLscene.prototype.logPicking = function () {
 				if (obj)
 				{
 					var customId = this.pickResults[i][1];				
-					console.log("Picked object: " + obj.column + " " + obj.row + "id: " + customId);
+					console.log("Picked object with Row: " + obj.row + " Column: " + obj.column + " id: " + customId);
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
-
 		}		
 	}
 }
@@ -172,8 +169,6 @@ XMLscene.prototype.display = function () {
 			mat4.identity(matrix);
 		
 			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
-
-
 		}
 	}
 };

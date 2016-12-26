@@ -2,31 +2,28 @@
  * NodesBoard
  * @constructor
  */
-
 function NodesBoard(scene) {
     this.scene = scene;
     this.board = new MyPolygon(scene, 1, 8);
-    this.sphere = new MyRectangle(scene, -0.5, 0.5, -0.5, 0.5, 0, 1, 0, 1);
     this.texture = new CGFtexture(
 				this.scene, "scenes/resources/Board2.png");
     this.quads = new Map();
-    this.init();
-    				
+	this.units1 = [];
+	this.units2 = [];
+    this.init();			
 }
 
 NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){
 	var x=posX, y=minPosY;
-	do{
+	do {
 		this.quads.set(this.id, new MyPositionQuad(this.scene, this, x, y, x-0.3, x+0.3, y-0.3, y+0.3, 0, 1, 0, 1));
-		console.debug(this.quads.get(this.id));
 		y += delta;
 		this.id++;
-	}while (y <= maxPosY);
-	console.log(this.id);
+	} while (y <= maxPosY);
 	return this.id;
 }
 
-NodesBoard.prototype.getTile= function(row, column) {
+NodesBoard.prototype.getTile = function(row, column) {
 	for(var j=1; j<this.id; j++){
 		if(this.quads.get(j).row == row && this.quads.get(j).column == column)
 			return this.quads.get(j);
@@ -47,18 +44,18 @@ NodesBoard.prototype.init = function(){
 	this.ret(-1*3, -1*3, 1*3, 1);			
 	this.ret(-1*4, -1*2, 1*2, 1);
 
-	this.invisAppearance = new CGFappearance(this.scene);
-	this.invisAppearance.setAmbient(0.3,0.3,0.3,0.1);
-	//this.invisAppearance.setDiffuse(0,0,0,0.1);
-	//this.invisAppearance.setSpecular(0,0,0,0.1);
-	//this.invisAppearance.setEmission(0,0,0,0.1);	
-	//this.invisAppearance.setShininess(1);
-	//this.invisAppearance.setTexture(null);
-	
+	var rows1 = [1,1,1,1,2,2,2,3];
+	var columns = [3,4,6,7,4,5,6,5];
+	var rows2 = [9,9,9,9,8,8,8,7];
+
+	for(var i = 0; i < 8; i++) {
+		console.debug(this.getTile(rows1[i], columns[i]));
+		this.getTile(rows1[i], columns[i]).piece = new MyUnit(this.scene);
+		this.getTile(rows2[i], columns[i]).piece = new MyUnit(this.scene);
+	}
 }
 
 NodesBoard.prototype.display = function () {
-
     this.scene.pushMatrix();
     this.scene.scale(5,5,5);
     this.scene.rotate(Math.PI / 8, 0, 1, 0);
@@ -73,19 +70,29 @@ NodesBoard.prototype.display = function () {
  //   this.sphere.display();
     this.scene.popMatrix();    
 
-	if(this.scene.pickMode == true){
+	if(this.scene.pickMode == true) {
+		for(var j=1; j < this.id; j++) {
+			if(this.quads.get(j).piece == null) {
+				this.scene.pushMatrix();
+				this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+				this.scene.translate(0,0,0.05);
+				this.scene.registerForPick(this.scene.pickedId, this.quads.get(j));
+				this.quads.get(j).display();		
+				this.scene.popMatrix();
 
-		for(var j=1; j<this.id; j++){
+				this.scene.pickedId++;
+			}
+		}
+    }
+	
+	for(var i = 1; i < this.id; i++) {
+		if(this.quads.get(i).piece != null) {
 			this.scene.pushMatrix();
-			this.invisAppearance.apply();
-			this.scene.rotate(-Math.PI / 2, 1, 0, 0);
-			this.scene.translate(0,0,0.05);
-			this.scene.registerForPick(this.scene.pickedId, this.quads.get(j));
-			this.quads.get(j).display();		
+			this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
+			this.quads.get(i).display();
 			this.scene.popMatrix();
 
 			this.scene.pickedId++;
 		}
-
-    }    
+	}
 }

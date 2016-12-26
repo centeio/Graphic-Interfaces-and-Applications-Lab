@@ -34,6 +34,7 @@ serialInclude([
                 'ChessBoard.js',
                 'NodesBoard.js',
                 'MyPositionQuad.js',
+                'MyUnit.js',
 
 main=function()
 {

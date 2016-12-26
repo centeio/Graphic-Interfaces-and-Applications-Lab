@@ -106,10 +106,10 @@ LightingScene.prototype.display = function ()
 	// draw objects
 	for (i =0; i<this.objects.length; i++) {
 		this.pushMatrix();
-	
+
 		this.translate(i*2, 0, 0);
 		this.registerForPick(i+1, this.objects[i]);
-		
+	
 		this.objects[i].display();
 		this.popMatrix();
 	}

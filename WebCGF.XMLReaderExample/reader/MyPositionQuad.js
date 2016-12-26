@@ -17,5 +17,12 @@ MyPositionQuad.prototype.setPiece = function (piece) {
 }
 
 MyPositionQuad.prototype.display = function () {
-    this.quad.display();
+    if(this.piece == null)
+        this.quad.display();
+    else {
+        this.scene.pushMatrix();
+        this.scene.translate(this.column - 5, 0, this.row - 5);
+        this.piece.display();
+        this.scene.popMatrix();
+    }
 }

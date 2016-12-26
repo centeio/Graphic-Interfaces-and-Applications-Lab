@@ -10,6 +10,7 @@ function NodesBoard(scene) {
     this.texture = new CGFtexture(
 				this.scene, "scenes/resources/Board2.png");
     this.quads = new Map();
+    this.node = new MyNode(scene);
     this.init();
     				
 }
@@ -88,4 +89,7 @@ NodesBoard.prototype.display = function () {
 		}
 
     }    
+
+    this.node.display();
+
 }

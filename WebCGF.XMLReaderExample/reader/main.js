@@ -35,6 +35,7 @@ serialInclude([
                 'NodesBoard.js',
                 'MyPositionQuad.js',
                 'MyUnit.js',
+                'MyNode.js',
 
 main=function()
 {

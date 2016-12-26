@@ -8,9 +8,7 @@ function NodesBoard(scene) {
     this.texture = new CGFtexture(
 				this.scene, "scenes/resources/Board2.png");
     this.quads = new Map();
-	this.units1 = [];
-	this.units2 = [];
-    this.init();			
+    this.init();
 }
 
 NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){

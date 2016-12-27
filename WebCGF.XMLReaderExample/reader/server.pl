@@ -110,6 +110,7 @@ parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(moveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- moveUnit(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(moveNode(Row, Column, NewRow, NewColumn, Piece), Success) :- moveNode(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(finish(Player), Answer) :- finish(Player, Answer).
+parse_input(updateBoard, updated) :- updateBoard.
 parse_input(init, init) :- init.
 parse_input(quit, goodbye).
 
@@ -524,19 +525,17 @@ cleanBoard([E1|Es], [H|T]) :-
         cleanLine(E1, l, H),
         cleanBoard(Es, T).
 
-finishMove(Piece, Finish) :-
-        node(Piece), Finish == 1 ->
-                retract(state(NewBoard, LineBoard)),
-                cleanBoard(LineBoard, TempLineBoard),
-                findNode(NewBoard, 1, NewRow1, NewColumn1, node1),
-                setCell(NewRow1, NewColumn1, l, TempLineBoard, NewTempLineBoard2),
-                updateLineBoard(NewRow1, NewColumn1, NewTempLineBoard2, NewTempLineBoard3),
-                findNode(NewBoard, 1, NewRow2, NewColumn2, node2),
-                setCell(NewRow2, NewColumn2, l, NewTempLineBoard3, NewTempLineBoard),
-                updateLineBoard(NewRow2, NewColumn2, NewTempLineBoard, NewLineBoard),
-                assert(state(NewBoard, NewLineBoard)),
-                assert(nodePosition(NewBoard, NewLineBoard));
-        false.
+updateBoard :-
+            retract(state(NewBoard, LineBoard)),
+            cleanBoard(LineBoard, TempLineBoard),
+            findNode(NewBoard, 1, NewRow1, NewColumn1, node1),
+            setCell(NewRow1, NewColumn1, l, TempLineBoard, NewTempLineBoard2),
+            updateLineBoard(NewRow1, NewColumn1, NewTempLineBoard2, NewTempLineBoard3),
+            findNode(NewBoard, 1, NewRow2, NewColumn2, node2),
+            setCell(NewRow2, NewColumn2, l, NewTempLineBoard3, NewTempLineBoard),
+            updateLineBoard(NewRow2, NewColumn2, NewTempLineBoard, NewLineBoard),
+            assert(state(NewBoard, NewLineBoard)).
+            /*assert(nodePosition(NewBoard, NewLineBoard)).*/
 
 moveNode(Row, Column, NewRow, NewColumn, Piece, 1) :-
         retract(state(Board, LineBoard)),
@@ -545,7 +544,9 @@ moveNode(Row, Column, NewRow, NewColumn, Piece, 1) :-
         setCell(Row, Column, empty, Board, NewBoardTemp),
         setCell(NewRow, NewColumn, Piece, NewBoardTemp, NewBoard),
         retract(state(Board, LineBoard)),
-        assert(state(NewBoard, LineBoard)), !.
+        assert(state(NewBoard, LineBoard)), 
+        !,
+        updateBoard.
 
 moveNode(_, _, _, _, _, 0) :- !.
 

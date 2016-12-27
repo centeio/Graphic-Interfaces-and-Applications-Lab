@@ -88,7 +88,8 @@ NodesBoard.prototype.display = function () {
 	for(var i = 1; i < this.id; i++) {
 		if(this.quads.get(i).piece != null) {
 			this.scene.pushMatrix();
-			this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
+			if(this.scene.isFinished == 0)
+				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
 			this.quads.get(i).display();
 			this.scene.popMatrix();
 

@@ -5,9 +5,9 @@
 function NodesBoard(scene) {
     this.scene = scene;
     this.board = new MyPolygon(scene, 1, 8);
-    this.texture = new CGFtexture(
-				this.scene, "scenes/resources/Board2.png");
+    this.texture = new CGFtexture(this.scene, "scenes/resources/Board2.png");
     this.quads = new Map();
+	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
     this.init();
 }
 
@@ -48,9 +48,12 @@ NodesBoard.prototype.init = function(){
 
 	for(var i = 0; i < 8; i++) {
 		console.debug(this.getTile(rows1[i], columns[i]));
-		this.getTile(rows1[i], columns[i]).piece = new MyUnit(this.scene);
-		this.getTile(rows2[i], columns[i]).piece = new MyUnit(this.scene);
+		this.getTile(rows1[i], columns[i]).piece = new MyUnit(this.scene, 1, "unit1");
+		this.getTile(rows2[i], columns[i]).piece = new MyUnit(this.scene, 2, "unit2");
 	}
+
+	this.getTile(1, 5).piece = new MyNode(this.scene, 1, "node1");
+	this.getTile(9, 5).piece = new MyNode(this.scene, 2, "node2");
 }
 
 NodesBoard.prototype.display = function () {
@@ -65,7 +68,6 @@ NodesBoard.prototype.display = function () {
     this.scene.pushMatrix();
     this.scene.translate(1,0.01,0);
     this.scene.scale(0.4, 0.4, 0.4);
- //   this.sphere.display();
     this.scene.popMatrix();    
 
 	if(this.scene.pickMode == true) {
@@ -93,4 +95,10 @@ NodesBoard.prototype.display = function () {
 			this.scene.pickedId++;
 		}
 	}
+}
+
+NodesBoard.prototype.move = function(rowFrom, columnFrom, rowTo, columnTo) {
+	var piece = this.getTile(rowFrom, columnFrom).piece;
+	this.getTile(rowFrom, columnFrom).piece = null;
+	this.getTile(rowTo, columnTo).piece = piece;
 }

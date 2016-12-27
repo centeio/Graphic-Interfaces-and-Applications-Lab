@@ -5,7 +5,12 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
     this.row = -y + 5;
     this.piece = null;
     this.quad = new MyRectangle(scene, minPosX, maxPosX, minPosY, maxPosY, 0, 1, 0, 1);
+    this.pressed = 0;
+}
 
+MyPositionQuad.prototype.setCoordinates = function(row, column) {
+    this.row = row;
+    this.column = column;
 }
 
 MyPositionQuad.prototype.getPiece = function () {

@@ -9,6 +9,8 @@ XMLscene.prototype.constructor = XMLscene;
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
+	this.initServer();
+
 	this.camCounter = 0;
 	this.currentTime = 0;
 
@@ -35,6 +37,15 @@ XMLscene.prototype.init = function (application) {
 
 	this.setPickEnabled(true);
 
+	//Nodes Variable
+	this.rowFrom = -1;
+	this.columnFrom = -1;
+	this.rowTo = -1;
+	this.columnTo = -1;
+	this.pieceName = "";
+	this.moveValid = -1;
+	this.player = 1;
+	this.isFinished = 0;
 };
 
 XMLscene.prototype.initLights = function () {
@@ -107,11 +118,35 @@ XMLscene.prototype.logPicking = function () {
 		if (this.pickResults != null && this.pickResults.length > 0) {
 			for (var i=0; i< this.pickResults.length; i++) {
 				var obj = this.pickResults[i][0];
-				console.debug(obj);
-				if (obj)
-				{
-					var customId = this.pickResults[i][1];				
-					console.log("Picked object with Row: " + obj.row + " Column: " + obj.column + " id: " + customId);
+				if (obj) {
+					if(obj.piece != null && obj.piece.player == this.player) {
+						this.rowFrom = obj.row;
+						this.columnFrom = obj.column;
+						this.graph.primitives.get("NodesBoard").state = 2;
+						//this.pressed = 1;
+						console.log(this.graph.primitives.get("NodesBoard").state);
+						this.chosen = obj.piece;
+					}
+
+					if(this.graph.primitives.get("NodesBoard").state == 2 && obj.piece == null) {
+						this.rowTo = obj.row;
+						this.columnTo = obj.column;
+						
+						if(this.chosen instanceof MyNode)
+							this.moveNode();
+						else
+							this.moveUnit();
+						this.moveValid = document.querySelector("#query_result").innerHTML;
+						if(this.moveValid == 1) {
+							this.graph.primitives.get("NodesBoard").state = 1;
+							this.graph.primitives.get("NodesBoard").move(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+							if(this.chosen instanceof MyNode) {
+								this.finished();
+								this.isFinished = document.querySelector("#query_result").innerHTML;
+								this.player = this.player == 1 ? 2 : 1;
+							}
+						}
+					}
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
@@ -177,7 +212,7 @@ XMLscene.prototype.update = function(currTime) {
 	this.currentTime = currTime;
 };
 
-XMLscene.prototype.getPrologRequest = function(requestString, onSuccess, onError, port) {
+XMLscene.prototype.getPrologInitRequest = function(requestString, onSuccess, onError, port) {
 	var requestPort = port || 8081;
 	var request = new XMLHttpRequest();
 	request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
@@ -189,15 +224,40 @@ XMLscene.prototype.getPrologRequest = function(requestString, onSuccess, onError
 	request.send();
 }
 
-XMLscene.prototype.makeRequest = function() {
-	// Get Parameter Values
-	var requestString = document.querySelector("#query_field").value;				
-	
-	// Make Request
-	getPrologRequest(requestString, handleReply);
+XMLscene.prototype.getPrologRequest = function(requestString, onSuccess, onError, port) {
+	var requestPort = port || 8081;
+	var request = new XMLHttpRequest();
+	request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, false);
+
+	request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
+	request.onerror = onError || function(){console.log("Error waiting for response");};
+
+	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+	request.send();
+}
+
+XMLscene.prototype.initServer = function() {
+	this.getPrologInitRequest("init", this.handleReply);
+}
+
+XMLscene.prototype.moveUnit = function() {
+	// Make Request - MoveUnit
+	this.getPrologRequest("moveUnit("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+this.chosen.name+")", this.handleReply);
+}
+
+XMLscene.prototype.moveNode = function() {
+	// Make Request - MoveNode
+	this.getPrologRequest("moveNode("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+this.chosen.name+")", this.handleReply);
+}
+
+XMLscene.prototype.finished = function() {
+	var player = this.player == 1 ? "p1" : "p2";
+
+	// Make Request - MoveNode
+	this.getPrologRequest("finish("+player+")", this.handleReply);
 }
 
 //Handle the Reply
 XMLscene.prototype.handleReply = function(data) {
-	document.querySelector("#query_result").innerHTML=data.target.response;
+	document.querySelector("#query_result").innerHTML = data.target.response;
 }

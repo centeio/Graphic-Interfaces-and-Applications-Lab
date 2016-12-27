@@ -107,7 +107,9 @@ print_header_line(_).
 
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
-parse_input(moveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- moveUnit(Row, Column, NewRow, NewColumn, Piece, Success). 
+parse_input(moveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- moveUnit(Row, Column, NewRow, NewColumn, Piece, Success).
+parse_input(moveNode(Row, Column, NewRow, NewColumn, Piece), Success) :- moveNode(Row, Column, NewRow, NewColumn, Piece, Success).
+parse_input(finish(Player), Answer) :- finish(Player, Answer).
 parse_input(init, init) :- init.
 parse_input(quit, goodbye).
 
@@ -594,7 +596,7 @@ nextMove(Player) :-
                 finishMove(Piece, Finish),
                 !.
 
-finish(Player, Board, Answer):-
+/*finish(Player, Board, Answer):-
         nextPlayer(Player, Next),
         nodePlayer(Next, Node),
         findNode(Board, 1, Row, Column, Node),
@@ -606,7 +608,49 @@ finish(Player, Board, Answer):-
         getPiece(Board, NewRow1, Column, Piece),
         getPiece(Board, NewRow2, Column, Piece),
         getPiece(Board, Row, NewColumn1, Piece),
-        getPiece(Board, Row, NewColumn2, Piece).
+        getPiece(Board, Row, NewColumn2, Piece).*/
+
+finish(Player, 0):-
+        retract(state(Board, LineBoard)),
+        assert(state(Board, LineBoard)),
+        nextPlayer(Player, Next),
+        nodePlayer(Next, Node),
+        findNode(Board, 1, Row, Column, Node),
+        unitPlayer(Player, Piece),
+        NewRow1 is Row - 1,
+        \+ getPiece(Board, NewRow1, Column, Piece), !.
+
+finish(Player, 0) :-
+        retract(state(Board, LineBoard)),
+        assert(state(Board, LineBoard)),
+        nextPlayer(Player, Next),
+        nodePlayer(Next, Node),
+        findNode(Board, 1, Row, Column, Node),
+        unitPlayer(Player, Piece),
+        NewColumn1 is Column - 1,
+        \+ getPiece(Board, Row, NewColumn1, Piece), !.
+
+finish(Player, 0) :-
+        retract(state(Board, LineBoard)),
+        assert(state(Board, LineBoard)),
+        nextPlayer(Player, Next),
+        nodePlayer(Next, Node),
+        findNode(Board, 1, Row, Column, Node),
+        unitPlayer(Player, Piece),
+        NewRow2 is Row + 1,
+        \+ getPiece(Board, NewRow2, Column, Piece), !.
+
+finish(Player, 0) :-
+        retract(state(Board, LineBoard)),
+        assert(state(Board, LineBoard)),
+        nextPlayer(Player, Next),
+        nodePlayer(Next, Node),
+        findNode(Board, 1, Row, Column, Node),
+        unitPlayer(Player, Piece),
+        NewColumn2 is Column + 1,
+        \+ getPiece(Board, Row, NewColumn2, Piece), !.
+
+finish(_, 1) :- !.
 
 play(Type) :-
         Type =:= 1 -> playHH;

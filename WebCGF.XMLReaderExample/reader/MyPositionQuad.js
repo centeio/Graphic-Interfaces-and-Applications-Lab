@@ -72,15 +72,16 @@ MyPositionQuad.prototype.display = function () {
 			}
 			else {
 				this.isAnimationActive = 0;
-                this.animationX = 0;
-                this.animationY = 0;
-                this.animationZ = 0;
-                this.board.move(this.row, this.column, this.rowTo, this.columnTo);
 			}
         }
         this.scene.translate(this.column - 5 + this.animationX, 0 + this.animationY, this.row - 5 + this.animationZ);
-        if(this.piece != null)
-            this.piece.display();
+        this.piece.display();
         this.scene.popMatrix();
+        if(point == "done") {
+            this.animationX = 0;
+            this.animationY = 0;
+            this.animationZ = 0;
+            this.board.move(this.row, this.column, this.rowTo, this.columnTo);
+        }
     }
 }

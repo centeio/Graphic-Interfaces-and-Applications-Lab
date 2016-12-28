@@ -17,6 +17,9 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
     this.animationX = 0;
     this.animationY = 0;
     this.animationZ = 0;
+
+    //camera variables
+    this.previousCameraTarget = null;
 }
 
 MyPositionQuad.prototype.setCoordinates = function(row, column) {
@@ -54,6 +57,11 @@ MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo) {
     this.animation.velocityZ = ((rowTo - 5) - (this.row - 5)) / 2;
 
     this.animationInitialTime = this.scene.currentTime;
+
+    /*this.previousCameraTarget = this.scene.camera.target;
+
+    this.scene.camera.setTarget(vec3.fromValues(centerx, centery, centerz));
+    this.scene.camera.zoom(2);*/
 }
 
 MyPositionQuad.prototype.display = function () {

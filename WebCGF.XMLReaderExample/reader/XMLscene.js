@@ -46,6 +46,11 @@ XMLscene.prototype.init = function (application) {
 	this.moveValid = -1;
 	this.player = 1;
 	this.isFinished = 0;
+
+	//Camera animation variables
+	this.activeCameraAnimation = 0;
+	this.initalCameraAnimation = 0;
+	this.cameraPreviousTime = 0;
 };
 
 XMLscene.prototype.initLights = function () {
@@ -138,14 +143,14 @@ XMLscene.prototype.logPicking = function () {
 							this.moveUnit();
 						this.moveValid = document.querySelector("#query_result").innerHTML;
 						if(this.moveValid == 1) {
+							this.activeCameraAnimation = 1;
+							console.log(this.activeCameraAnimation);
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
-							console.debug(this.graph.primitives.get("NodesBoard").moves);
 							this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
 							if(this.chosen instanceof MyNode) {
 								this.finished();
 								this.isFinished = document.querySelector("#query_result").innerHTML;
-								this.player = this.player == 1 ? 2 : 1;
 							}
 						}
 					}
@@ -201,6 +206,22 @@ XMLscene.prototype.display = function () {
 		if (this.graph.loadedOk) {	
 			for(var i = 0; i < this.lights.length; i++)
 				this.lights[i].update();
+
+			if(this.activeCameraAnimation == 1) {
+				if(this.initalCameraAnimation == 0) {
+					this.initalCameraAnimation = this.currentTime;
+					this.cameraPreviousTime = this.currentTime;
+				}
+				
+				if(((this.currentTime - this.initalCameraAnimation) / 1000) < 1) {
+					this.camera.orbit(vec3.fromValues(0,1,0), ((this.currentTime - this.cameraPreviousTime) / 1000) * Math.PI);
+					this.cameraPreviousTime = this.currentTime;
+				} else {
+					this.initalCameraAnimation = 0;
+					this.player = this.player == 1 ? 2 : 1;
+					this.activeCameraAnimation = 0;
+				}
+			}
 			
 			var matrix = mat4.create();
 			mat4.identity(matrix);

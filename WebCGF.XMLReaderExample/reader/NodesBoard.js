@@ -9,6 +9,8 @@ function NodesBoard(scene) {
     this.quads = new Map();
 	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
     this.init();
+	this.moves = [];
+	this.redo = [];
 }
 
 NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){

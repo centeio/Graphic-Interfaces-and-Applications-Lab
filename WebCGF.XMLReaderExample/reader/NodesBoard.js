@@ -98,6 +98,10 @@ NodesBoard.prototype.display = function () {
 	}
 }
 
+NodesBoard.prototype.activateAnimation = function(rowFrom, columnFrom, rowTo, columnTo) {
+	this.getTile(rowFrom, columnFrom).activateAnimation(rowTo, columnTo);
+}
+
 NodesBoard.prototype.move = function(rowFrom, columnFrom, rowTo, columnTo) {
 	var piece = this.getTile(rowFrom, columnFrom).piece;
 	this.getTile(rowFrom, columnFrom).piece = null;

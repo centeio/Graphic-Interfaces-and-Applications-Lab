@@ -139,7 +139,7 @@ XMLscene.prototype.logPicking = function () {
 						this.moveValid = document.querySelector("#query_result").innerHTML;
 						if(this.moveValid == 1) {
 							this.graph.primitives.get("NodesBoard").state = 1;
-							this.graph.primitives.get("NodesBoard").move(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+							this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
 							if(this.chosen instanceof MyNode) {
 								this.finished();
 								this.isFinished = document.querySelector("#query_result").innerHTML;

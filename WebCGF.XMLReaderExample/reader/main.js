@@ -36,6 +36,7 @@ serialInclude([
                 'MyPositionQuad.js',
                 'MyUnit.js',
                 'MyNode.js',
+                'ComplexAnimation.js',
 
 main=function()
 {

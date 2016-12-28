@@ -57,11 +57,6 @@ MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo) {
     this.animation.velocityZ = ((rowTo - 5) - (this.row - 5)) / 2;
 
     this.animationInitialTime = this.scene.currentTime;
-
-    /*this.previousCameraTarget = this.scene.camera.target;
-
-    this.scene.camera.setTarget(vec3.fromValues(centerx, centery, centerz));
-    this.scene.camera.zoom(2);*/
 }
 
 MyPositionQuad.prototype.display = function () {

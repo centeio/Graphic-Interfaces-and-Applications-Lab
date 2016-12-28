@@ -109,11 +109,9 @@ parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(moveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- moveUnit(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(moveNode(Row, Column, NewRow, NewColumn, Piece), Success) :- moveNode(Row, Column, NewRow, NewColumn, Piece, Success).
-parse_input(findRandUnits(Player), Units) :- findRandUnits(Player, Units).
-parse_input(moveRandUnit(Row, Column, Piece), NewPosition) :- moveRandUnit(Row, Column, Piece, NewPosition).
 parse_input(finish(Player), Answer) :- finish(Player, Answer).
 parse_input(updateBoard, updated) :- updateBoard.
-parse_input(init, Response) :- init(Response).
+parse_input(init, init) :- init.
 parse_input(quit, goodbye).
 
 test(_,[],N) :- N =< 0.
@@ -187,19 +185,11 @@ nextPlayer(p1, p2).
 nextPlayer(p2, p1).
 
 /*starting function: calls the menu and gets the type of game. Also initializes both boards.*/
-init(Response) :-
-        retract(state(Board, LineBoard)),
+init :-
         board(Board),
         lineBoard(LineBoard),
         assert(state(Board, LineBoard)),
-        Response is 2,
-        !.
-
-init(Response) :-
-        board(Board),
-        lineBoard(LineBoard),
-        assert(state(Board, LineBoard)),
-        Response is 1,
+        /*assert(player(p1)),*/
         !.
 
 /*findUnits will find all the positions of units (unit1 OR unit2) on the board*/
@@ -519,6 +509,7 @@ updateLineBoardAux(Piece, Row, Column, LineBoard, NewLineBoard) :-
 updateLineBoard(Row, Column, LineBoard, NewLineBoard) :-
         updateLineBoardAux(l, Row, Column, LineBoard, NewLineBoard).
 
+
 /*clears LineBoard: sets cells to empty*/
 cleanLine([], _, _). 
 
@@ -571,6 +562,55 @@ moveUnit(Row, Column, NewRow, NewColumn, Piece, 1) :-
 
 moveUnit(_, _, _, _, _, 0) :- !.
 
+move(Piece, Row, Column, NewRow, NewColumn, Board, LineBoard, Piece, Finish) :-
+        node(Piece),
+        moveNode(Row, Column, NewRow, NewColumn, Board, LineBoard, Piece, Finish).
+
+move(Piece, Row, Column, NewRow, NewColumn, Board, LineBoard, Piece, Finish) :-
+        moveUnit(Row, Column, NewRow, NewColumn, Board, LineBoard, Piece, Finish).
+
+readMove(Player, Board, LineBoard, Piece, Row, Column) :-
+        nl, displayBoard(Board, LineBoard),
+        repeat,
+                nl, write('Row: '),
+                read(Row),
+                write('Column: '),
+                read(TempColumn),
+                Column is TempColumn + 1,
+                checkPosition(Row, Column),
+                getPiece(Board, Row, Column, Piece),
+                validatePiece(Player, Piece),
+                !.
+
+nextMove(Player) :-
+        repeat,
+                retract(state(Board, LineBoard)),
+                readMove(Player, Board, LineBoard, Piece, Row, Column), nl,
+                write('Where to:'), nl,
+                write('Row: '),
+                read(NewRow),
+                write('Column: '),
+                read(TempNewColumn), nl,
+                NewColumn is TempNewColumn + 1,
+                checkPosition(NewRow, NewColumn),
+                move(Piece, Row, Column, NewRow, NewColumn, Board, LineBoard, Piece, Finish),
+                finishMove(Piece, Finish),
+                !.
+
+/*finish(Player, Board, Answer):-
+        nextPlayer(Player, Next),
+        nodePlayer(Next, Node),
+        findNode(Board, 1, Row, Column, Node),
+        unitPlayer(Player, Piece),
+        NewRow1 is Row - 1,
+        NewColumn1 is Column - 1,
+        NewRow2 is Row + 1,
+        NewColumn2 is Column + 1,
+        getPiece(Board, NewRow1, Column, Piece),
+        getPiece(Board, NewRow2, Column, Piece),
+        getPiece(Board, Row, NewColumn1, Piece),
+        getPiece(Board, Row, NewColumn2, Piece).*/
+
 finish(Player, 0):-
         retract(state(Board, LineBoard)),
         assert(state(Board, LineBoard)),
@@ -613,24 +653,47 @@ finish(Player, 0) :-
 
 finish(_, 1) :- !.
 
-moveRandUnitAux(_, _, 0, _, _, [-1, -1]).
+play(Type) :-
+        Type =:= 1 -> playHH;
+        Type =:= 2 -> playHC;
+        Type =:= 3 -> playCC.
 
-moveRandUnitAux(Row, Column, LengthMoves, Moves, Piece, [FinalRow, FinalColumn]) :-
-        Length is LengthMoves + 1,
-        random(1, Length, Move),
-        nth1(Move, Moves, NewPos),
-        nth1(1, NewPos, FinalRow),
-        nth1(2, NewPos, FinalColumn),
-        moveUnit(Row, Column, FinalRow, FinalColumn, Piece, _).
+playHH :-
+        repeat,
+                retract(player(Player)), nl,
+                write('Player: '), write(Player), nl, nl,
+                nextMove(Player),
+                retract(nodePosition(Board, NewLineBoard)),
+                nextPlayer(Player, Next),
+                assert(player(Next)),
+                finish(Player, Board),
+                displayBoard(Board, NewLineBoard),
+                !.
+
+moveRanUnitAux(Row, Column, LengthMoves, Moves, Piece) :-
+        LengthMoves \== 0 ->
+                retract(state(Board, LineBoard)),
+                Length is LengthMoves + 1,
+                random(1, Length, Move),
+                nth1(Move, Moves, NewPos),
+                nth1(1, NewPos, FinalRow),
+                nth1(2, NewPos, FinalColumn),
+                moveUnit(Row, Column, FinalRow, FinalColumn, Board, LineBoard, Piece, _);
+        true.
+
+moveRandUnit([], _).
                                                                     
-moveRandUnit(Row, Column, Piece, NewPosition):-
+moveRandUnit([L1|Ls],Piece):-
+        nth1(1, L1, Row),
+        nth1(2, L1, Column),
         retract(state(Board, LineBoard)),
         assert(validateComputerList([])),
         validateComputerUnitMove(Row, Column, Board, LineBoard),
         assert(state(Board, LineBoard)),
         retract(validateComputerList(Moves)),
         length(Moves, LengthMoves),
-        moveRandUnitAux(Row, Column, LengthMoves, Moves, Piece, NewPosition).
+        moveRanUnitAux(Row, Column, LengthMoves, Moves, Piece),
+        moveRandUnit(Ls,Piece).
 
 randPlayAux(NodeRow, NodeColumn, Board, LineBoard, NodeMoves, Piece) :-
         length(NodeMoves, LengthNodeMoves),
@@ -646,16 +709,8 @@ randPlayAux(NodeRow, NodeColumn, Board, LineBoard, NodeMoves, Piece) :-
                 assert(state(TempBoard, TempLineBoard));
         assert(state(Board, LineBoard)),
         assert(nodePosition(Board, LineBoard)).
-
-findRandUnits(Player, Units) :-
-        retract(state(Board, LineBoard)),
-        assert(state(Board, LineBoard)),
-        unitPlayer(Player, Piece),
-        assert(randlist([])),
-        findUnits(Board, 1, 1, Piece),
-        retract(randlist(Units)).
         
-/*randPlay(Player):- 
+randPlay(Player):- 
         retract(state(Board, LineBoard)),
 
         unitPlayer(Player, Piece),
@@ -685,4 +740,36 @@ findRandUnits(Player, Units) :-
         retract(state(TempBoard, TempLineBoard)),
         displayBoard(TempBoard, TempLineBoard),
         assert(state(TempBoard, TempLineBoard)),
-        !.*/
+        !.
+
+nextHCMove(Player):-
+        Player == p1 ->
+        nextMove(Player);
+        randPlay(Player),!.
+     
+playHC :- 
+        repeat,
+                retract(player(Player)), nl,
+                write('Player: '), write(Player), nl, nl,
+                nextHCMove(Player),
+                retract(nodePosition(Board, _)),
+                nextPlayer(Player, Next),
+                assert(player(Next)),
+                finish(Player, Board),
+                !.
+
+playCC :- 
+        repeat,
+                retract(player(Player)), nl,
+                write('Player: '), write(Player), nl, nl,
+                randPlay(Player),
+                retract(nodePosition(Board, _)),
+                nextPlayer(Player, Next),
+                assert(player(Next)),
+                finish(Player, Board),
+                !.
+
+/*match :-
+        init(),
+        play(Type),
+        retract(state(_,_)).*/

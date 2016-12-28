@@ -102,10 +102,12 @@ NodesBoard.prototype.display = function () {
 
 NodesBoard.prototype.activateAnimation = function(rowFrom, columnFrom, rowTo, columnTo) {
 	this.getTile(rowFrom, columnFrom).activateAnimation(rowTo, columnTo);
+	this.scene.animationRunning = 1;
 }
 
 NodesBoard.prototype.move = function(rowFrom, columnFrom, rowTo, columnTo) {
 	var piece = this.getTile(rowFrom, columnFrom).piece;
 	this.getTile(rowFrom, columnFrom).piece = null;
 	this.getTile(rowTo, columnTo).piece = piece;
+	this.scene.animationRunning = 0;
 }

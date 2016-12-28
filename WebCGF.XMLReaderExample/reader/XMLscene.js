@@ -28,14 +28,17 @@ XMLscene.prototype.init = function (application) {
 	this.sceneTagReady = false;
 	this.sceneBasicsLoaded = false;
 
-	this.Luz1 = true;
-	this.Luz2 = true;
-	this.Luz3 = true;
-	this.Luz4 = true;
-
 	this.setUpdatePeriod(10);
 
 	this.setPickEnabled(true);
+
+	//Game variables
+	this.gameMode = 0; //1- PVP | 2- PVC
+	this.play = 0;
+	this.computerUnitIndex = 0;
+	this.areUnitsFound = 0;
+	this.unitsFound = null;
+	this.animationRunning = 0;
 
 	//Nodes Variable
 	this.rowFrom = -1;
@@ -52,6 +55,20 @@ XMLscene.prototype.init = function (application) {
 	this.initalCameraAnimation = 0;
 	this.cameraPreviousTime = 0;
 };
+
+XMLscene.prototype.PlayerVSPlayer = function() {
+	this.gameMode = 1;
+	console.log("Game mode PVP: " + this.gameMode);
+}
+
+XMLscene.prototype.PlayerVSPC = function() {
+	this.gameMode = 2;
+	console.log("Game mode PVC: " + this.gameMode);
+}
+
+XMLscene.prototype.Play = function() {
+	this.play = 1;
+}
 
 XMLscene.prototype.initLights = function () {
 	this.lights[0].setPosition(2, 3, 3, 1);
@@ -118,7 +135,7 @@ XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
 	return nurbsSurface;	
 }
 
-XMLscene.prototype.logPicking = function () {
+XMLscene.prototype.PlayPVP = function () {
 	if (this.pickMode == false) {
 		if (this.pickResults != null && this.pickResults.length > 0) {
 			for (var i=0; i< this.pickResults.length; i++) {
@@ -129,7 +146,6 @@ XMLscene.prototype.logPicking = function () {
 						this.columnFrom = obj.column;
 						this.graph.primitives.get("NodesBoard").state = 2;
 						//this.pressed = 1;
-						console.log(this.graph.primitives.get("NodesBoard").state);
 						this.chosen = obj.piece;
 					}
 
@@ -144,7 +160,6 @@ XMLscene.prototype.logPicking = function () {
 						this.moveValid = document.querySelector("#query_result").innerHTML;
 						if(this.moveValid == 1) {
 							this.activeCameraAnimation = 1;
-							console.log(this.activeCameraAnimation);
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
 							this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
@@ -157,77 +172,159 @@ XMLscene.prototype.logPicking = function () {
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
-		}		
+		}	
+	}
+}
+
+XMLscene.prototype.PlayPVC = function() {
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				if(this.player == 1) {
+					if (obj) {
+						if(obj.piece != null && obj.piece.player == this.player) {
+							this.rowFrom = obj.row;
+							this.columnFrom = obj.column;
+							this.graph.primitives.get("NodesBoard").state = 2;
+							//this.pressed = 1;
+							this.chosen = obj.piece;
+						}
+						if(this.graph.primitives.get("NodesBoard").state == 2 && obj.piece == null) {
+							this.rowTo = obj.row;
+							this.columnTo = obj.column;
+							
+							if(this.chosen instanceof MyNode)
+								this.moveNode();
+							else
+								this.moveUnit();
+							this.moveValid = document.querySelector("#query_result").innerHTML;
+							document.querySelector("#query_result").innerHTML = "";
+							if(this.moveValid == 1) {
+								this.activeCameraAnimation = 1;
+								this.graph.primitives.get("NodesBoard").state = 1;
+								this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
+								this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+								if(this.chosen instanceof MyNode) {
+									this.finished();
+									this.isFinished = document.querySelector("#query_result").innerHTML;
+									document.querySelector("#query_result").innerHTML = "";
+								}
+							}
+						}
+					}
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		} else {
+			if(this.player == 2) {
+				if(this.areUnitsFound == 0) {
+					this.findComputerUnits();
+					this.unitsFound = JSON.parse(document.querySelector("#query_result").innerHTML);
+					document.querySelector("#query_result").innerHTML = "";
+					this.areUnitsFound = 1;
+				}
+				if(this.computerUnitIndex < this.unitsFound.length) {
+					if(this.animationRunning == 0) {
+						console.log("From: " + this.unitsFound[this.computerUnitIndex]);
+						this.moveRandUnit(this.unitsFound[this.computerUnitIndex]);
+						var destination = JSON.parse(document.querySelector("#query_result").innerHTML);
+						document.querySelector("#query_result").innerHTML = "";
+						console.log("To: "+ destination);
+						if(destination[0] != -1) {
+							console.log("Moving..");
+							this.graph.primitives.get("NodesBoard").moves.push([this.unitsFound[this.computerUnitIndex][0], this.unitsFound[this.computerUnitIndex][1], destination[0], destination[1]]);
+							this.graph.primitives.get("NodesBoard").activateAnimation(this.unitsFound[this.computerUnitIndex][0], this.unitsFound[this.computerUnitIndex][1], destination[0], destination[1]);
+						}
+						this.computerUnitIndex++;
+					}
+				} else {
+					if(this.animationRunning == 0) {
+						this.areUnitsFound = 0;
+						this.computerUnitIndex = 0;
+						this.activeCameraAnimation = 1;
+					}
+				}
+			}
+		}
 	}
 }
 
 XMLscene.prototype.display = function () {
-	this.logPicking();
-	this.clearPickRegistration();	
+	if(this.play == 1) {
+		if(this.gameMode == 1)
+			this.PlayPVP();
+		else
+			this.PlayPVC();
+		this.clearPickRegistration();	
 
-	this.pickedId = 1;
+		this.pickedId = 1;
 
-	
-	if(this.sceneTagReady && !this.sceneBasicsLoaded) {
-		// ---- BEGIN Background, camera and axis setup
-		this.axis = new CGFaxis(this, this.graph.axisLength);
-		this.initCameras();
+		if(this.sceneTagReady && !this.sceneBasicsLoaded) {
+			// ---- BEGIN Background, camera and axis setup
+			this.axis = new CGFaxis(this, this.graph.axisLength);
+			this.initCameras();
 
-		this.sceneBasicsLoaded = true;
-		this.interface.addLights();
-		// ---- END Background, camera and axis setup
+			this.sceneBasicsLoaded = true;
+			this.interface.addLights();
+			// ---- END Background, camera and axis setup
 
-		// it is important that things depending on the proper loading of the graph
-		// only get executed after the graph has loaded correctly.
-		// This is one possible way to do it
-	}
+			// it is important that things depending on the proper loading of the graph
+			// only get executed after the graph has loaded correctly.
+			// This is one possible way to do it
+		}
 
-	if(this.sceneBasicsLoaded) {
-		this.logPicking();
-		this.clearPickRegistration();
-		
+		if(this.sceneBasicsLoaded) {
+			this.PlayPVP();
+			this.clearPickRegistration();
+			
+			// Clear image and depth buffer everytime we update the scene
+			this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+			this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+			// Initialize Model-View matrix as identity (no transformation
+			//console.log(this.camera);
+			this.updateProjectionMatrix();
+			this.loadIdentity();
+
+			// Apply transformations corresponding to the camera position relative to the origin
+			this.applyViewMatrix();
+
+			// Draw axis
+			this.axis.display();
+
+			this.setDefaultAppearance();
+
+			if (this.graph.loadedOk) {	
+				for(var i = 0; i < this.lights.length; i++)
+					this.lights[i].update();
+
+				if(this.activeCameraAnimation == 1) {
+					if(this.initalCameraAnimation == 0) {
+						this.initalCameraAnimation = this.currentTime;
+						this.cameraPreviousTime = this.currentTime;
+					}
+					
+					if(((this.currentTime - this.initalCameraAnimation) / 1000) < 1) {
+						this.camera.orbit(vec3.fromValues(0,1,0), ((this.currentTime - this.cameraPreviousTime) / 1000) * Math.PI);
+						this.cameraPreviousTime = this.currentTime;
+					} else {
+						this.initalCameraAnimation = 0;
+						this.player = this.player == 1 ? 2 : 1;
+						this.activeCameraAnimation = 0;
+					}
+				}
+				
+				var matrix = mat4.create();
+				mat4.identity(matrix);
+			
+				this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
+			}
+		}
+	} else {
 		// Clear image and depth buffer everytime we update the scene
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-		// Initialize Model-View matrix as identity (no transformation
-		//console.log(this.camera);
-		this.updateProjectionMatrix();
-		this.loadIdentity();
-
-		// Apply transformations corresponding to the camera position relative to the origin
-		this.applyViewMatrix();
-
-		// Draw axis
-		this.axis.display();
-
-		this.setDefaultAppearance();
-
-		if (this.graph.loadedOk) {	
-			for(var i = 0; i < this.lights.length; i++)
-				this.lights[i].update();
-
-			if(this.activeCameraAnimation == 1) {
-				if(this.initalCameraAnimation == 0) {
-					this.initalCameraAnimation = this.currentTime;
-					this.cameraPreviousTime = this.currentTime;
-				}
-				
-				if(((this.currentTime - this.initalCameraAnimation) / 1000) < 1) {
-					this.camera.orbit(vec3.fromValues(0,1,0), ((this.currentTime - this.cameraPreviousTime) / 1000) * Math.PI);
-					this.cameraPreviousTime = this.currentTime;
-				} else {
-					this.initalCameraAnimation = 0;
-					this.player = this.player == 1 ? 2 : 1;
-					this.activeCameraAnimation = 0;
-				}
-			}
-			
-			var matrix = mat4.create();
-			mat4.identity(matrix);
-		
-			this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
-		}
 	}
 };
 
@@ -264,19 +361,25 @@ XMLscene.prototype.initServer = function() {
 }
 
 XMLscene.prototype.moveUnit = function() {
-	// Make Request - MoveUnit
+	console.log(this.chosen.name);
 	this.getPrologRequest("moveUnit("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+this.chosen.name+")", this.handleReply);
 }
 
 XMLscene.prototype.moveNode = function() {
-	// Make Request - MoveNode
 	this.getPrologRequest("moveNode("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+this.chosen.name+")", this.handleReply);
+}
+
+XMLscene.prototype.findComputerUnits = function() {
+	this.getPrologRequest("findRandUnits(p2)", this.handleReply);
+}
+
+XMLscene.prototype.moveRandUnit = function(Position) {
+	this.getPrologRequest("moveRandUnit("+Position+",unit2)", this.handleReply);
 }
 
 XMLscene.prototype.finished = function() {
 	var player = this.player == 1 ? "p1" : "p2";
 
-	// Make Request - MoveNode
 	this.getPrologRequest("finish("+player+")", this.handleReply);
 }
 

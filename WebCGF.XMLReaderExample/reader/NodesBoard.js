@@ -116,7 +116,7 @@ NodesBoard.prototype.display = function () {
 	for(var i = 1; i < this.id; i++) {
 		if(this.quads.get(i).piece != null) {
 			this.scene.pushMatrix();
-			if(this.scene.isFinished == 0)
+	//		if(this.scene.isFinished == 0)
 				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
 			if(this.quads.get(i).piece.player == 1)
 				this.player1Appearance.apply();

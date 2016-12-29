@@ -20,6 +20,8 @@ MyInterface.prototype.init = function(application) {
 	
 	// init GUI. For more information on the methods, check:
 	//  http://workshop.chromeexperiments.com/examples/gui
+
+	this.undo = null;
 	
 	this.gui = new dat.GUI();
 
@@ -37,8 +39,6 @@ MyInterface.prototype.init = function(application) {
 	this.omni = this.gui.addFolder("Omni Ligths");
 
 	this.spot = this.gui.addFolder("Spot Ligths");
-
-	this.cameraUnlock = this.gui.add(this.scene, 'UnlockCamera');
 
 	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
 	// e.g. this.option1=true; this.option2=false;
@@ -60,7 +60,7 @@ MyInterface.prototype.addLights = function() {
 		else
 			this.spot.add(this.scene.lights[i], "enabled").name(this.scene.graph.lights[i][1]);
 	}
-	
+
 };
 
 /**

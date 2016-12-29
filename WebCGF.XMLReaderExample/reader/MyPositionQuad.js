@@ -39,8 +39,9 @@ MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo) {
     this.isAnimationActive = 1;
     this.rowTo = rowTo;
     this.columnTo = columnTo;
+    var span = 1;
 
-    this.animation = new ComplexAnimation(2);
+    this.animation = new ComplexAnimation(span);
     var centerx = ((this.column - 5) + (columnTo - 5)) / 2;
     var centery = 0;
     var centerz = ((this.row - 5) + (rowTo - 5)) / 2;
@@ -51,10 +52,10 @@ MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo) {
 
     this.animation.addInitialAngle(0);
 
-    this.animation.addAngle(90);
+    this.animation.addAngle(180 / span);
 
-    this.animation.velocityX = ((columnTo - 5) - (this.column - 5)) / 2;
-    this.animation.velocityZ = ((rowTo - 5) - (this.row - 5)) / 2;
+    this.animation.velocityX = ((columnTo - 5) - (this.column - 5)) / span;
+    this.animation.velocityZ = ((rowTo - 5) - (this.row - 5)) / span;
 
     this.animationInitialTime = this.scene.currentTime;
 }

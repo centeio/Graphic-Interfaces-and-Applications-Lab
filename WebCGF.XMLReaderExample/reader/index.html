@@ -3,6 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>CGFexample</title>
+    <link rel="stylesheet" href="style.css">
 
 <style>
 body, html {
@@ -19,8 +20,15 @@ canvas {
 </style>
 </head>
 <body>
-<div hidden id="query_result"></div>
-<script src="main.js"></script>
+    
+    <div id="hud">
+        <div>
+            <span>Score: <span id="player1Score">0</span> - <span id="player2Score">0</span></span> <br/>
+            <span>Player: <span id="player"> 1 </span></span>
+        </div>
+    </div>
+    <div hidden id="query_result"></div>
+    <script src="main.js"></script>
 
 </body>
 </html>

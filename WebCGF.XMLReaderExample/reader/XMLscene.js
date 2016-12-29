@@ -38,8 +38,8 @@ XMLscene.prototype.init = function (application) {
 	this.unitsFound = null;
 	this.animationRunning = 0;
 	this.computerNodeMoved = 0;
-
-	//Nodes Variable
+	this.player1Wins = 0;
+	this.player2Wins = 0;
 	this.rowFrom = -1;
 	this.columnFrom = -1;
 	this.rowTo = -1;
@@ -48,6 +48,7 @@ XMLscene.prototype.init = function (application) {
 	this.moveValid = -1;
 	this.player = 1;
 	this.isFinished = 0;
+	this.undoComputer = 0;
 
 	//Camera animation variables
 	this.activeCameraAnimation = 0;
@@ -61,17 +62,16 @@ XMLscene.prototype.init = function (application) {
 
 XMLscene.prototype.PlayerVSPlayer = function() {
 	this.gameMode = 1;
-	console.log("Game mode PVP: " + this.gameMode);
 }
 
 XMLscene.prototype.PlayerVSPC = function() {
 	this.gameMode = 2;
-	console.log("Game mode PVC: " + this.gameMode);
 }
 
 XMLscene.prototype.UnlockCamera = function() {
 	this.cameraLocked = false;
 	this.interface.gui.remove(this.interface.cameraUnlock);
+	this.interface.cameraUnlock = null;
 	this.interface.cameraLock = this.interface.gui.add(this, "LockCamera");
 	this.camera = new CGFcamera(this.camera.fov, this.camera.near, this.camera.far, this.camera.position, this.camera.target);
 	this.interface.setActiveCamera(this.camera);
@@ -80,10 +80,10 @@ XMLscene.prototype.UnlockCamera = function() {
 XMLscene.prototype.LockCamera = function() {
 	this.cameraLocked = true;
 	this.interface.gui.remove(this.interface.cameraLock);
+	this.interface.cameraLock = null;
 	this.interface.cameraUnlock = this.interface.gui.add(this, "UnlockCamera");
 	if(this.player == 1) {
 		var graphCamera = this.graph.views.get("player1");
-		console.log(graphCamera.position);
 		this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
 	}
 	else {
@@ -102,6 +102,80 @@ XMLscene.prototype.Play = function() {
 		this.animationRunning = 0;
 	}
 	this.initServer();
+	this.isFinished = 0;
+	if(!this.interface.cameraUnlock && !this.interface.cameraLock)
+		this.interface.cameraUnlock = this.interface.gui.add(this, 'UnlockCamera');
+	document.getElementById("hud").style.display = 'block';
+}
+
+XMLscene.prototype.Undo = function() {
+	if(this.gameMode == 1) {
+		var lastMove = this.graph.primitives.get("NodesBoard").moves.pop();
+		if(this.graph.primitives.get("NodesBoard").moves.length > 0)
+			var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
+		
+		if(this.graph.primitives.get("NodesBoard").moves.length == 0 || 
+			(this.player == 1 && (newLastMove[0] == "unit2" || newLastMove[0] == "node2")) ||
+			(this.player == 2 && (newLastMove[0] == "unit1" || newLastMove[0] == "node1"))) {
+			this.interface.gui.remove(this.interface.undo);
+			this.interface.undo = null;
+		}
+
+		if(this.player == 1 && (lastMove[0] == "unit1" || lastMove[1] == "node1")) {
+			this.rowFrom = lastMove[3];
+			this.columnFrom = lastMove[4];
+			this.rowTo = lastMove[1];
+			this.columnTo = lastMove[2];
+			if(lastMove[0] == "node1")
+				this.undoMoveNode("node1");
+			else
+				this.undoMoveUnit("unit1");
+			this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+		}
+
+		if(this.player == 2 && (lastMove[0] == "unit2" || lastMove[1] == "node2")) {
+			this.rowFrom = lastMove[3];
+			this.columnFrom = lastMove[4];
+			this.rowTo = lastMove[1];
+			this.columnTo = lastMove[2];
+			if(lastMove[0] == "node2")
+				this.undoMoveNode("node2");
+			else
+				this.undoMoveUnit("unit2");
+			this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+		}
+	} else {
+		if(this.undoComputer == 0) {
+			if(this.player == 1) {
+				var lastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
+				if(lastMove[0] == "unit1" || lastMove[1] == "node1") {
+					this.graph.primitives.get("NodesBoard").moves.pop();
+					if(this.graph.primitives.get("NodesBoard").moves.length > 0)
+						var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 2];
+					
+					if(this.graph.primitives.get("NodesBoard").moves.length == 0 || 
+						newLastMove[0] == "unit2" || newLastMove[0] == "node2") {
+						this.interface.gui.remove(this.interface.undo);
+						this.interface.undo = null;
+					}
+
+					this.rowFrom = lastMove[3];
+					this.columnFrom = lastMove[4];
+					this.rowTo = lastMove[1];
+					this.columnTo = lastMove[2];
+					if(lastMove[0] == "node1")
+						this.undoMoveNode("node1");
+					else
+						this.undoMoveUnit("unit1");
+					this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+				} else //Continue in update function
+					this.undoComputer = 1;
+			} else {
+				this.interface.gui.remove(this.interface.undo);
+				this.interface.undo = null;
+			}
+		}
+	}
 }
 
 XMLscene.prototype.initLights = function () {
@@ -111,9 +185,12 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-	var graphCamera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
-	console.log(graphCamera.position);
-	this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
+	if(this.play == 0)
+		this.camera = new CGFcamera();
+	else {
+		var graphCamera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
+		this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
+	}
 };
 
 XMLscene.prototype.changeCamera = function() {
@@ -176,7 +253,7 @@ XMLscene.prototype.PlayPVP = function () {
 			for (var i=0; i< this.pickResults.length; i++) {
 				var obj = this.pickResults[i][0];
 				if (obj) {
-					if(obj.piece != null && obj.piece.player == this.player) {
+					if(obj.piece != null && obj.piece.player == this.player && this.animationRunning == 0) {
 						this.rowFrom = obj.row;
 						this.columnFrom = obj.column;
 						this.graph.primitives.get("NodesBoard").state = 2;
@@ -189,22 +266,34 @@ XMLscene.prototype.PlayPVP = function () {
 						this.columnTo = obj.column;
 						
 						if(this.chosen instanceof MyNode)
-							this.moveNode();
+							this.moveNode(this.chosen.name);
 						else
-							this.moveUnit();
+							this.moveUnit(this.chosen.name);
 						this.moveValid = document.querySelector("#query_result").innerHTML;
 						if(this.moveValid == 1) {
-							if(this.cameraLocked)
-								this.activeCameraAnimation = 1;
-							this.player = this.player == 1 ? 2 : 1;
 							this.graph.primitives.get("NodesBoard").state = 1;
-							this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
+							this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
 							console.log("Before animation");
 							this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
 							if(this.chosen instanceof MyNode) {
 								this.finished();
 								this.isFinished = document.querySelector("#query_result").innerHTML;
+								if(this.isFinished == 1) {
+									if(this.player == 1)
+										this.player1Wins++;
+									else
+										this.player2Wins++;
+									document.getElementById("player1Score").innerHTML = this.player1Wins;
+									document.getElementById("player2Score").innerHTML = this.player2Wins;
+								} else {
+									if(this.cameraLocked)
+										this.activeCameraAnimation = 1;
+									this.player = this.player == 1 ? 2 : 1;
+									document.getElementById("player").innerHTML = this.player;
+								}
 							}
+							//this.player = this.player == 1 ? 2 : 1;
+							//document.getElementById("player").innerHTML = this.player;
 						}
 					}
 				}
@@ -220,9 +309,8 @@ XMLscene.prototype.PlayPVC = function() {
 			for (var i=0; i< this.pickResults.length; i++) {
 				var obj = this.pickResults[i][0];
 				if(this.player == 1) {
-					this.computerUnitIndex = 0;
 					if (obj) {
-						if(obj.piece != null && obj.piece.player == this.player) {
+						if(obj.piece != null && obj.piece.player == this.player && this.animationRunning == 0) {
 							this.rowFrom = obj.row;
 							this.columnFrom = obj.column;
 							this.graph.primitives.get("NodesBoard").state = 2;
@@ -234,23 +322,30 @@ XMLscene.prototype.PlayPVC = function() {
 							this.columnTo = obj.column;
 							
 							if(this.chosen instanceof MyNode)
-								this.moveNode();
+								this.moveNode("node1");
 							else
-								this.moveUnit();
+								this.moveUnit("unit1");
 							this.moveValid = document.querySelector("#query_result").innerHTML;
 							document.querySelector("#query_result").innerHTML = "";
 							if(this.moveValid == 1) {
 								if(this.cameraLocked)
 									this.activeCameraAnimation = 1;
-								this.player = this.player == 1 ? 2 : 1;
 								this.graph.primitives.get("NodesBoard").state = 1;
-								this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
+								this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
 								this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
 								if(this.chosen instanceof MyNode) {
 									this.finished();
 									this.isFinished = document.querySelector("#query_result").innerHTML;
-									document.querySelector("#query_result").innerHTML = "";
+									if(this.isFinished == 1) {
+										this.player1Wins++;
+										document.getElementById("player1Score").innerHTML = this.player1Wins;
+									} else {
+										//this.player = this.player == 1 ? 2 : 1;
+										//document.getElementById("player").innerHTML = this.player;
+									}
 								}
+								this.player = this.player == 1 ? 2 : 1;
+								document.getElementById("player").innerHTML = this.player;
 							}
 						}
 					}
@@ -271,8 +366,7 @@ XMLscene.prototype.PlayPVC = function() {
 						var destination = JSON.parse(document.querySelector("#query_result").innerHTML);
 						document.querySelector("#query_result").innerHTML = "";
 						if(destination[0] != -1) {
-							console.log("Moving..");
-							this.graph.primitives.get("NodesBoard").moves.push([this.unitsFound[this.computerUnitIndex][0], this.unitsFound[this.computerUnitIndex][1], destination[0], destination[1]]);
+							this.graph.primitives.get("NodesBoard").moves.push(["unit2", this.unitsFound[this.computerUnitIndex][0], this.unitsFound[this.computerUnitIndex][1], destination[0], destination[1]]);
 							this.graph.primitives.get("NodesBoard").activateAnimation(this.unitsFound[this.computerUnitIndex][0], this.unitsFound[this.computerUnitIndex][1], destination[0], destination[1]);
 						}
 						this.computerUnitIndex++;
@@ -284,19 +378,27 @@ XMLscene.prototype.PlayPVC = function() {
 							var nodeDestination = JSON.parse(document.querySelector("#query_result").innerHTML);
 							document.querySelector("#query_result").innerHTML = "";
 							if(nodeDestination[2] != -1) {
-								console.log("Moving node from: " + nodeDestination[0] + ", " + nodeDestination[1] + " to: "+ nodeDestination[2] + "," + nodeDestination[3]);
-								this.graph.primitives.get("NodesBoard").moves.push([nodeDestination[0], nodeDestination[1], nodeDestination[2], nodeDestination[3]]);
+								this.graph.primitives.get("NodesBoard").moves.push(["node2", nodeDestination[0], nodeDestination[1], nodeDestination[2], nodeDestination[3]]);
 								this.graph.primitives.get("NodesBoard").activateAnimation(nodeDestination[0], nodeDestination[1], nodeDestination[2], nodeDestination[3]);
 							}
 							this.computerNodeMoved = 1;
 						}
 					} else {
 						if(this.animationRunning == 0) {
-							this.areUnitsFound = 0;
-							this.player = this.player == 1 ? 2 : 1;
-							if(this.cameraLocked)
-								this.activeCameraAnimation = 1;
-							this.computerNodeMoved = 0;
+							this.finished();
+							this.isFinished = document.querySelector("#query_result").innerHTML;
+							if(this.isFinished == 1) {
+								this.player2Wins++;
+								document.getElementById("player2Score").innerHTML = this.player2Wins;
+							} else {
+								this.areUnitsFound = 0;
+								if(this.cameraLocked)
+									this.activeCameraAnimation = 1;
+								this.player = this.player == 1 ? 2 : 1;
+								document.getElementById("player").innerHTML = this.player;
+								this.computerNodeMoved = 0;
+								this.computerUnitIndex = 0;
+							}
 						}
 					}
 				}
@@ -386,6 +488,47 @@ XMLscene.prototype.display = function () {
 
 XMLscene.prototype.update = function(currTime) {
 	this.currentTime = currTime;
+
+	if(this.graph.loadedOk) {
+		if(this.graph.primitives.get("NodesBoard").moves.length > 0 && !this.interface.undo) {
+			if(this.gameMode == 1) {
+				var lastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
+				
+				if(this.player == 1 && (lastMove[0] == "unit1" || lastMove[1] == "node1"))
+					this.interface.undo = this.interface.gui.add(this, "Undo");
+				
+				if(this.player == 2 && (lastMove[0] == "unit2" || lastMove[1] == "node2"))
+					this.interface.undo = this.interface.gui.add(this, "Undo");
+			} else {
+				if(this.graph.primitives.get("NodesBoard").moves.length > 0 && !this.interface.undo && this.player == 1)
+					this.interface.undo = this.interface.gui.add(this, "Undo");
+			}
+		}
+	}
+
+	//Undo Computer
+	if(this.undoComputer == 1 && this.animationRunning == 0) {
+		var lastMove = this.graph.primitives.get("NodesBoard").moves.pop();
+		var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
+
+		if(newLastMove[0] == "unit1" || newLastMove[0] == "node1") {
+			this.undoComputer = 0;
+			this.player = 2;
+			if(this.cameraLocked)
+				this.activeCameraAnimation = 1;
+			document.getElementById("player").innerHTML = this.player;
+		}
+
+		this.rowFrom = lastMove[3];
+		this.columnFrom = lastMove[4];
+		this.rowTo = lastMove[1];
+		this.columnTo = lastMove[2];
+		if(lastMove[0] == "node2")
+			this.undoMoveNode("node2");
+		else
+			this.undoMoveUnit("unit2");
+		this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+	}
 };
 
 XMLscene.prototype.getPrologInitRequest = function(requestString, onSuccess, onError, port) {
@@ -416,13 +559,20 @@ XMLscene.prototype.initServer = function() {
 	this.getPrologInitRequest("init", this.handleReply);
 }
 
-XMLscene.prototype.moveUnit = function() {
-	console.log(this.chosen.name);
-	this.getPrologRequest("moveUnit("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+this.chosen.name+")", this.handleReply);
+XMLscene.prototype.undoMoveUnit = function(unitName) {
+	this.getPrologRequest("undoMoveUnit("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+unitName+")", this.handleReply);
 }
 
-XMLscene.prototype.moveNode = function() {
-	this.getPrologRequest("moveNode("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+this.chosen.name+")", this.handleReply);
+XMLscene.prototype.undoMoveNode = function(nodeName) {
+	this.getPrologRequest("undoMoveNode("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+nodeName+")", this.handleReply);
+}
+
+XMLscene.prototype.moveUnit = function(unitName) {
+	this.getPrologRequest("moveUnit("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+unitName+")", this.handleReply);
+}
+
+XMLscene.prototype.moveNode = function(nodeName) {
+	this.getPrologRequest("moveNode("+this.rowFrom+","+this.columnFrom+","+this.rowTo+","+this.columnTo+","+nodeName+")", this.handleReply);
 }
 
 XMLscene.prototype.findComputerUnits = function() {

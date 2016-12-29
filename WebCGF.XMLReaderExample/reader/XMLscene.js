@@ -31,11 +31,13 @@ XMLscene.prototype.init = function (application) {
 	this.setPickEnabled(true);
 
 	//Game variables
-	this.gameMode = 0; //1- PVP | 2- PVC
+	this.gameMode = 0; //1- PVP | 2- PVC | 3- PVC Easy
+	this.gameModePressed = 0;
 	this.play = 0;
 	this.computerUnitIndex = 0;
 	this.areUnitsFound = 0;
 	this.unitsFound = null;
+	this.possibleMoves = null;
 	this.animationRunning = 0;
 	this.computerNodeMoved = 0;
 	this.player1Wins = 0;
@@ -49,6 +51,8 @@ XMLscene.prototype.init = function (application) {
 	this.player = 1;
 	this.isFinished = 0;
 	this.undoComputer = 0;
+	this.isEasy = 0;
+	this.difficultyPressed = 0;
 
 	//Camera animation variables
 	this.activeCameraAnimation = 0;
@@ -61,11 +65,19 @@ XMLscene.prototype.init = function (application) {
 };
 
 XMLscene.prototype.PlayerVSPlayer = function() {
-	this.gameMode = 1;
+	this.gameModePressed = 1;
 }
 
 XMLscene.prototype.PlayerVSPC = function() {
-	this.gameMode = 2;
+	this.gameModePressed = 2;
+}
+
+XMLscene.prototype.Easy = function() {
+	this.difficultyPressed = 1;
+}
+
+XMLscene.prototype.Hard = function() {
+	this.difficultyPressed = 0;
 }
 
 XMLscene.prototype.UnlockCamera = function() {
@@ -103,6 +115,8 @@ XMLscene.prototype.Play = function() {
 	}
 	this.initServer();
 	this.isFinished = 0;
+	this.isEasy = this.difficultyPressed;
+	this.gameMode = this.gameModePressed;
 	if(!this.interface.cameraUnlock && !this.interface.cameraLock)
 		this.interface.cameraUnlock = this.interface.gui.add(this, 'UnlockCamera');
 	document.getElementById("hud").style.display = 'block';
@@ -257,8 +271,12 @@ XMLscene.prototype.PlayPVP = function () {
 						this.rowFrom = obj.row;
 						this.columnFrom = obj.column;
 						this.graph.primitives.get("NodesBoard").state = 2;
+						console.log(this.graph.primitives.get("NodesBoard").state);
 						//this.pressed = 1;
 						this.chosen = obj.piece;
+						this.possibleMovesFunction();
+						this.possibleMoves = JSON.parse(document.querySelector("#query_result").innerHTML);
+						document.querySelector("#query_result").innerHTML = "";
 					}
 
 					if(this.graph.primitives.get("NodesBoard").state == 2 && obj.piece == null) {
@@ -273,7 +291,6 @@ XMLscene.prototype.PlayPVP = function () {
 						if(this.moveValid == 1) {
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
-							console.log("Before animation");
 							this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
 							if(this.chosen instanceof MyNode) {
 								this.finished();
@@ -288,12 +305,13 @@ XMLscene.prototype.PlayPVP = function () {
 								} else {
 									if(this.cameraLocked)
 										this.activeCameraAnimation = 1;
-									this.player = this.player == 1 ? 2 : 1;
-									document.getElementById("player").innerHTML = this.player;
+									//this.player = this.player == 1 ? 2 : 1;
+									//document.getElementById("player").innerHTML = this.player;
 								}
 							}
-							//this.player = this.player == 1 ? 2 : 1;
-							//document.getElementById("player").innerHTML = this.player;
+							this.possibleMoves = null;
+							this.player = this.player == 1 ? 2 : 1;
+							document.getElementById("player").innerHTML = this.player;
 						}
 					}
 				}
@@ -557,6 +575,10 @@ XMLscene.prototype.getPrologRequest = function(requestString, onSuccess, onError
 
 XMLscene.prototype.initServer = function() {
 	this.getPrologInitRequest("init", this.handleReply);
+}
+
+XMLscene.prototype.possibleMovesFunction = function() {
+	this.getPrologRequest("possibleMoves("+this.rowFrom+","+this.columnFrom+")", this.handleReply);
 }
 
 XMLscene.prototype.undoMoveUnit = function(unitName) {

@@ -111,6 +111,8 @@ parse_input(moveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- moveUni
 parse_input(moveNode(Row, Column, NewRow, NewColumn, Piece), Success) :- moveNode(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(findRandUnits(Player), Units) :- findRandUnits(Player, Units).
 parse_input(moveRandUnit(Row, Column, Piece), NewPosition) :- moveRandUnit(Row, Column, Piece, NewPosition).
+parse_input(undoMoveNode(Row, Column, NewRow, NewColumn, Piece), Success) :- undoMoveNode(Row, Column, NewRow, NewColumn, Piece, Success).
+parse_input(undoMoveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- undoMoveUnit(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(moveRandNode(Node), NewPosition) :- moveRandNode(Node, NewPosition).
 parse_input(finish(Player), Answer) :- finish(Player, Answer).
 parse_input(updateBoard, updated) :- updateBoard.
@@ -545,7 +547,16 @@ updateBoard :-
             setCell(NewRow2, NewColumn2, l, NewTempLineBoard3, NewTempLineBoard),
             updateLineBoard(NewRow2, NewColumn2, NewTempLineBoard, NewLineBoard),
             assert(state(NewBoard, NewLineBoard)).
-            /*assert(nodePosition(NewBoard, NewLineBoard)).*/
+
+undoMoveNode(Row, Column, NewRow, NewColumn, Piece, 1) :-
+        retract(state(Board, LineBoard)),
+        assert(state(Board, LineBoard)),
+        setCell(Row, Column, empty, Board, NewBoardTemp),
+        setCell(NewRow, NewColumn, Piece, NewBoardTemp, NewBoard),
+        retract(state(Board, LineBoard)),
+        assert(state(NewBoard, LineBoard)), 
+        !,
+        updateBoard.
 
 moveNode(Row, Column, NewRow, NewColumn, Piece, 1) :-
         retract(state(Board, LineBoard)),
@@ -559,6 +570,15 @@ moveNode(Row, Column, NewRow, NewColumn, Piece, 1) :-
         updateBoard.
 
 moveNode(_, _, _, _, _, 0) :- !.
+
+undoMoveUnit(Row, Column, NewRow, NewColumn, Piece, 1) :-
+        retract(state(Board, LineBoard)),
+        assert(state(Board, LineBoard)),
+        setCell(Row, Column, empty, Board, NewBoardTemp),
+        setCell(NewRow, NewColumn, Piece, NewBoardTemp, NewBoard),
+        retract(state(Board, LineBoard)),
+        assert(state(NewBoard, LineBoard)),
+        !.
 
 moveUnit(Row, Column, NewRow, NewColumn, Piece, 1) :-
         retract(state(Board, LineBoard)),

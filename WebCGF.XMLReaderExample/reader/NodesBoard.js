@@ -86,6 +86,17 @@ NodesBoard.prototype.display = function () {
 			}
 		}
     }
+
+	if(this.scene.isEasy == 1 && this.scene.possibleMoves && !this.scene.pickMode) {
+		for(var i = 0; i < this.scene.possibleMoves.length; i++) {
+			this.scene.pushMatrix();
+			this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+			this.scene.translate(0,0,0.05);
+			this.getTile(this.scene.possibleMoves[i][0], this.scene.possibleMoves[i][1]).display();
+			this.scene.popMatrix();
+			this.scene.pickedId++;
+		}
+	}
 	
 	for(var i = 1; i < this.id; i++) {
 		if(this.quads.get(i).piece != null) {

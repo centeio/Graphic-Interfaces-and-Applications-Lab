@@ -9,8 +9,6 @@ XMLscene.prototype.constructor = XMLscene;
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
-	this.initServer();
-
 	this.camCounter = 0;
 	this.currentTime = 0;
 
@@ -68,7 +66,15 @@ XMLscene.prototype.PlayerVSPC = function() {
 }
 
 XMLscene.prototype.Play = function() {
-	this.play = 1;
+	if(this.play == 0)
+		this.play = 1;
+	else {
+		this.graph.primitives.get("NodesBoard").restartBoard();
+		this.play = 1;
+		this.player = 1;
+		this.animationRunning = 0;
+	}
+	this.initServer();
 }
 
 XMLscene.prototype.initLights = function () {
@@ -161,8 +167,10 @@ XMLscene.prototype.PlayPVP = function () {
 						this.moveValid = document.querySelector("#query_result").innerHTML;
 						if(this.moveValid == 1) {
 							this.activeCameraAnimation = 1;
+							this.player = this.player == 1 ? 2 : 1;
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
+							console.log("Before animation");
 							this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
 							if(this.chosen instanceof MyNode) {
 								this.finished();

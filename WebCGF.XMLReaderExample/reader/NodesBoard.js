@@ -8,9 +8,9 @@ function NodesBoard(scene) {
     this.texture = new CGFtexture(this.scene, "scenes/resources/Board2.png");
     this.quads = new Map();
 	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
-    this.init();
-	this.moves = [];
+    this.moves = [];
 	this.redo = [];
+	this.init();
 }
 
 NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){
@@ -110,4 +110,12 @@ NodesBoard.prototype.move = function(rowFrom, columnFrom, rowTo, columnTo) {
 	this.getTile(rowFrom, columnFrom).piece = null;
 	this.getTile(rowTo, columnTo).piece = piece;
 	this.scene.animationRunning = 0;
+}
+
+NodesBoard.prototype.restartBoard = function() {
+	this.quads = new Map();
+	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
+    this.moves = [];
+	this.redo = [];
+	this.init();
 }

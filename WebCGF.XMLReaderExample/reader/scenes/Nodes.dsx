@@ -2,16 +2,16 @@
 
 	<scene root="root" axis_length="10" />
 	
-	<views default="v1" >
+	<views default="player1" >
 
-		<perspective id="v1" near="0.5" far="800" angle="45">
-            <from x="0" y="10" z="10" />	
+		<perspective id="player1" near="0.5" far="800" angle="45">
+            <from x="0" y="10" z="-10" />	
             <to x="0" y="0" z="0" />
 
 		</perspective>
 
-        <perspective id="v2" near="0.5" far="800" angle="45">
-            <from x="0" y="10" z="-10" />
+        <perspective id="player2" near="0.5" far="800" angle="45">
+            <from x="0" y="10" z="10" />
             <to x="0" y="0" z="0" />
 		</perspective>
 

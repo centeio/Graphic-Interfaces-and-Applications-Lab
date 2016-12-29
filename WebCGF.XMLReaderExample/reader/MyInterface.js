@@ -38,6 +38,8 @@ MyInterface.prototype.init = function(application) {
 
 	this.spot = this.gui.addFolder("Spot Ligths");
 
+	this.cameraUnlock = this.gui.add(this.scene, 'UnlockCamera');
+
 	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
 	// e.g. this.option1=true; this.option2=false;
 	

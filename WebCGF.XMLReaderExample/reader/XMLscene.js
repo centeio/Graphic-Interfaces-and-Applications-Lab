@@ -53,6 +53,10 @@ XMLscene.prototype.init = function (application) {
 	this.activeCameraAnimation = 0;
 	this.initalCameraAnimation = 0;
 	this.cameraPreviousTime = 0;
+	this.cameraVelocityX = 0;
+	this.cameraVelocityY = 0;
+	this.cameraVelocityZ = 0;
+	this.cameraLocked = true;
 };
 
 XMLscene.prototype.PlayerVSPlayer = function() {
@@ -63,6 +67,29 @@ XMLscene.prototype.PlayerVSPlayer = function() {
 XMLscene.prototype.PlayerVSPC = function() {
 	this.gameMode = 2;
 	console.log("Game mode PVC: " + this.gameMode);
+}
+
+XMLscene.prototype.UnlockCamera = function() {
+	this.cameraLocked = false;
+	this.interface.gui.remove(this.interface.cameraUnlock);
+	this.interface.cameraLock = this.interface.gui.add(this, "LockCamera");
+	this.camera = new CGFcamera(this.camera.fov, this.camera.near, this.camera.far, this.camera.position, this.camera.target);
+	this.interface.setActiveCamera(this.camera);
+}
+
+XMLscene.prototype.LockCamera = function() {
+	this.cameraLocked = true;
+	this.interface.gui.remove(this.interface.cameraLock);
+	this.interface.cameraUnlock = this.interface.gui.add(this, "UnlockCamera");
+	if(this.player == 1) {
+		var graphCamera = this.graph.views.get("player1");
+		console.log(graphCamera.position);
+		this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
+	}
+	else {
+		var graphCamera = this.graph.views.get("player2");
+		this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
+	}
 }
 
 XMLscene.prototype.Play = function() {
@@ -84,14 +111,15 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-	this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
-	this.interface.setActiveCamera(this.camera);
+	var graphCamera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
+	console.log(graphCamera.position);
+	this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
 };
 
 XMLscene.prototype.changeCamera = function() {
 	this.camCounter = (this.camCounter + 1) % this.graph.viewsID.length;
-	this.camera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
-	this.interface.setActiveCamera(this.camera);
+	var graphCamera = this.graph.views.get(this.graph.viewsID[this.camCounter]);
+	this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
 }
 
 XMLscene.prototype.changeMaterial = function() {
@@ -135,7 +163,7 @@ XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
 	console.log(knots2);
 	console.log(degree1);
 	console.log(degree2);
-	console.log(controlvertexes);				
+	console.log(controlvertexes);
 		
 	var nurbsSurface = new CGFnurbsSurface(degree1, degree2, knots1, knots2, controlvertexes); 
 
@@ -166,7 +194,8 @@ XMLscene.prototype.PlayPVP = function () {
 							this.moveUnit();
 						this.moveValid = document.querySelector("#query_result").innerHTML;
 						if(this.moveValid == 1) {
-							this.activeCameraAnimation = 1;
+							if(this.cameraLocked)
+								this.activeCameraAnimation = 1;
 							this.player = this.player == 1 ? 2 : 1;
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
@@ -211,7 +240,8 @@ XMLscene.prototype.PlayPVC = function() {
 							this.moveValid = document.querySelector("#query_result").innerHTML;
 							document.querySelector("#query_result").innerHTML = "";
 							if(this.moveValid == 1) {
-								this.activeCameraAnimation = 1;
+								if(this.cameraLocked)
+									this.activeCameraAnimation = 1;
 								this.player = this.player == 1 ? 2 : 1;
 								this.graph.primitives.get("NodesBoard").state = 1;
 								this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
@@ -263,9 +293,10 @@ XMLscene.prototype.PlayPVC = function() {
 					} else {
 						if(this.animationRunning == 0) {
 							this.areUnitsFound = 0;
-							this.activeCameraAnimation = 1;
-							this.computerNodeMoved = 0;
 							this.player = this.player == 1 ? 2 : 1;
+							if(this.cameraLocked)
+								this.activeCameraAnimation = 1;
+							this.computerNodeMoved = 0;
 						}
 					}
 				}
@@ -333,8 +364,9 @@ XMLscene.prototype.display = function () {
 						this.camera.orbit(vec3.fromValues(0,1,0), ((this.currentTime - this.cameraPreviousTime) / 1000) * Math.PI);
 						this.cameraPreviousTime = this.currentTime;
 					} else {
+						var timeExceeded = ((this.currentTime - this.initalCameraAnimation) / 1000) - 1;
+						this.camera.orbit(vec3.fromValues(0,1,0), (((this.currentTime - this.cameraPreviousTime) / 1000) - timeExceeded) * Math.PI);
 						this.initalCameraAnimation = 0;
-						//this.player = this.player == 1 ? 2 : 1;
 						this.activeCameraAnimation = 0;
 					}
 				}

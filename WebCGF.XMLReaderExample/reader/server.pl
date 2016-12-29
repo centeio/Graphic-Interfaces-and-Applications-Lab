@@ -111,6 +111,7 @@ parse_input(moveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- moveUni
 parse_input(moveNode(Row, Column, NewRow, NewColumn, Piece), Success) :- moveNode(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(findRandUnits(Player), Units) :- findRandUnits(Player, Units).
 parse_input(moveRandUnit(Row, Column, Piece), NewPosition) :- moveRandUnit(Row, Column, Piece, NewPosition).
+parse_input(moveRandNode(Node), NewPosition) :- moveRandNode(Node, NewPosition).
 parse_input(finish(Player), Answer) :- finish(Player, Answer).
 parse_input(updateBoard, updated) :- updateBoard.
 parse_input(init, Response) :- init(Response).
@@ -632,21 +633,6 @@ moveRandUnit(Row, Column, Piece, NewPosition):-
         length(Moves, LengthMoves),
         moveRandUnitAux(Row, Column, LengthMoves, Moves, Piece, NewPosition).
 
-randPlayAux(NodeRow, NodeColumn, Board, LineBoard, NodeMoves, Piece) :-
-        length(NodeMoves, LengthNodeMoves),
-        LengthNodeMoves \== 0 ->
-                Length is LengthNodeMoves + 1,
-                random(1, Length, NodeMove),
-                nth1(NodeMove, NodeMoves,NewNodePos),
-                nth1(1, NewNodePos, FinalNodeRow),
-                nth1(2, NewNodePos, FinalNodeColumn),
-                moveNode(NodeRow, NodeColumn, FinalNodeRow, FinalNodeColumn, Board, LineBoard, Piece, _),
-                retract(state(TempBoard, TempLineBoard)),
-                assert(nodePosition(TempBoard, TempLineBoard)),
-                assert(state(TempBoard, TempLineBoard));
-        assert(state(Board, LineBoard)),
-        assert(nodePosition(Board, LineBoard)).
-
 findRandUnits(Player, Units) :-
         retract(state(Board, LineBoard)),
         assert(state(Board, LineBoard)),
@@ -654,19 +640,20 @@ findRandUnits(Player, Units) :-
         assert(randlist([])),
         findUnits(Board, 1, 1, Piece),
         retract(randlist(Units)).
-        
-/*randPlay(Player):- 
-        retract(state(Board, LineBoard)),
 
-        unitPlayer(Player, Piece),
-        nodePlayer(Player, Node),
-        assert(randlist([])),
-        findUnits(Board, 1, 1, Piece),
-        retract(randlist(Units)),
-        assert(state(Board, LineBoard)),
-        moveRandUnit(Units, Piece),
-        
+moveRandNodeAux(_, _, _, 0, _, -1,-1) :- !.
+
+moveRandNodeAux(NodeRow, NodeColumn, NodeMoves, LengthNodeMoves, Piece, FinalNodeRow, FinalNodeColumn) :-
+        Length is LengthNodeMoves + 1,
+        random(1, Length, NodeMove),
+        nth1(NodeMove, NodeMoves,NewNodePos),
+        nth1(1, NewNodePos, FinalNodeRow),
+        nth1(2, NewNodePos, FinalNodeColumn),
+        moveNode(NodeRow, NodeColumn, FinalNodeRow, FinalNodeColumn, Piece, _), !.
+
+moveRandNode(Node, [NodeRow, NodeColumn, RowTo, ColumnTo]) :-
         retract(state(NewBoard, NewLineBoard)),
+        assert(state(NewBoard, NewLineBoard)),
         findNode(NewBoard, 1, NodeRow, NodeColumn, Node),
         findall([NewNodeRow, NewNodeColumn], (((NewNodeRow is NodeRow + 1,
                                               NewNodeColumn is NodeColumn,
@@ -680,9 +667,5 @@ findRandUnits(Player, Units) :-
                                               (NewNodeRow is NodeRow,
                                               NewNodeColumn is NodeColumn - 1,
                                               validateNodeMove(NodeRow, NodeColumn, NewNodeRow, NewNodeColumn, NewBoard)))), NodeMoves),
-        randPlayAux(NodeRow, NodeColumn, NewBoard, NewLineBoard, NodeMoves, Node),
-        finishMove(Node, 1),
-        retract(state(TempBoard, TempLineBoard)),
-        displayBoard(TempBoard, TempLineBoard),
-        assert(state(TempBoard, TempLineBoard)),
-        !.*/
+        length(NodeMoves, LengthNodeMoves), !,
+        moveRandNodeAux(NodeRow, NodeColumn, NodeMoves, LengthNodeMoves, Node , RowTo, ColumnTo).

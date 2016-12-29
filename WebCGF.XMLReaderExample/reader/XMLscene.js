@@ -39,6 +39,7 @@ XMLscene.prototype.init = function (application) {
 	this.areUnitsFound = 0;
 	this.unitsFound = null;
 	this.animationRunning = 0;
+	this.computerNodeMoved = 0;
 
 	//Nodes Variable
 	this.rowFrom = -1;
@@ -182,6 +183,7 @@ XMLscene.prototype.PlayPVC = function() {
 			for (var i=0; i< this.pickResults.length; i++) {
 				var obj = this.pickResults[i][0];
 				if(this.player == 1) {
+					this.computerUnitIndex = 0;
 					if (obj) {
 						if(obj.piece != null && obj.piece.player == this.player) {
 							this.rowFrom = obj.row;
@@ -202,6 +204,7 @@ XMLscene.prototype.PlayPVC = function() {
 							document.querySelector("#query_result").innerHTML = "";
 							if(this.moveValid == 1) {
 								this.activeCameraAnimation = 1;
+								this.player = this.player == 1 ? 2 : 1;
 								this.graph.primitives.get("NodesBoard").state = 1;
 								this.graph.primitives.get("NodesBoard").moves.push([this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
 								this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
@@ -226,11 +229,9 @@ XMLscene.prototype.PlayPVC = function() {
 				}
 				if(this.computerUnitIndex < this.unitsFound.length) {
 					if(this.animationRunning == 0) {
-						console.log("From: " + this.unitsFound[this.computerUnitIndex]);
 						this.moveRandUnit(this.unitsFound[this.computerUnitIndex]);
 						var destination = JSON.parse(document.querySelector("#query_result").innerHTML);
 						document.querySelector("#query_result").innerHTML = "";
-						console.log("To: "+ destination);
 						if(destination[0] != -1) {
 							console.log("Moving..");
 							this.graph.primitives.get("NodesBoard").moves.push([this.unitsFound[this.computerUnitIndex][0], this.unitsFound[this.computerUnitIndex][1], destination[0], destination[1]]);
@@ -239,10 +240,25 @@ XMLscene.prototype.PlayPVC = function() {
 						this.computerUnitIndex++;
 					}
 				} else {
-					if(this.animationRunning == 0) {
-						this.areUnitsFound = 0;
-						this.computerUnitIndex = 0;
-						this.activeCameraAnimation = 1;
+					if(this.computerNodeMoved == 0) {
+						if(this.animationRunning == 0) {
+							this.moveRandNode();
+							var nodeDestination = JSON.parse(document.querySelector("#query_result").innerHTML);
+							document.querySelector("#query_result").innerHTML = "";
+							if(nodeDestination[2] != -1) {
+								console.log("Moving node from: " + nodeDestination[0] + ", " + nodeDestination[1] + " to: "+ nodeDestination[2] + "," + nodeDestination[3]);
+								this.graph.primitives.get("NodesBoard").moves.push([nodeDestination[0], nodeDestination[1], nodeDestination[2], nodeDestination[3]]);
+								this.graph.primitives.get("NodesBoard").activateAnimation(nodeDestination[0], nodeDestination[1], nodeDestination[2], nodeDestination[3]);
+							}
+							this.computerNodeMoved = 1;
+						}
+					} else {
+						if(this.animationRunning == 0) {
+							this.areUnitsFound = 0;
+							this.activeCameraAnimation = 1;
+							this.computerNodeMoved = 0;
+							this.player = this.player == 1 ? 2 : 1;
+						}
 					}
 				}
 			}
@@ -310,7 +326,7 @@ XMLscene.prototype.display = function () {
 						this.cameraPreviousTime = this.currentTime;
 					} else {
 						this.initalCameraAnimation = 0;
-						this.player = this.player == 1 ? 2 : 1;
+						//this.player = this.player == 1 ? 2 : 1;
 						this.activeCameraAnimation = 0;
 					}
 				}
@@ -375,6 +391,10 @@ XMLscene.prototype.findComputerUnits = function() {
 
 XMLscene.prototype.moveRandUnit = function(Position) {
 	this.getPrologRequest("moveRandUnit("+Position+",unit2)", this.handleReply);
+}
+
+XMLscene.prototype.moveRandNode = function() {
+	this.getPrologRequest("moveRandNode(node2)", this.handleReply);
 }
 
 XMLscene.prototype.finished = function() {

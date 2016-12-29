@@ -49,13 +49,15 @@ NodesBoard.prototype.init = function(){
 	var rows2 = [9,9,9,9,8,8,8,7];
 
 	for(var i = 0; i < 8; i++) {
-		console.debug(this.getTile(rows1[i], columns[i]));
+//		console.debug(this.getTile(rows1[i], columns[i]));
 		this.getTile(rows1[i], columns[i]).piece = new MyUnit(this.scene, 1, "unit1");
 		this.getTile(rows2[i], columns[i]).piece = new MyUnit(this.scene, 2, "unit2");
 	}
 
 	this.getTile(1, 5).piece = new MyNode(this.scene, 1, "node1");
 	this.getTile(9, 5).piece = new MyNode(this.scene, 2, "node2");
+
+	console.debug(this.getTile(1, 5));
 }
 
 NodesBoard.prototype.display = function () {
@@ -90,8 +92,10 @@ NodesBoard.prototype.display = function () {
 	for(var i = 1; i < this.id; i++) {
 		if(this.quads.get(i).piece != null) {
 			this.scene.pushMatrix();
-			if(this.scene.isFinished == 0)
+	//		if(this.scene.isFinished == 0)
 				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
+	//		console.log("for picking "+i+" "+this.quads.get(i).piece);
+
 			this.quads.get(i).display();
 			this.scene.popMatrix();
 

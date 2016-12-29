@@ -124,12 +124,15 @@ XMLscene.prototype.logPicking = function () {
 			for (var i=0; i< this.pickResults.length; i++) {
 				var obj = this.pickResults[i][0];
 				if (obj) {
+					console.log(obj.piece);
+
 					if(obj.piece != null && obj.piece.player == this.player) {
 						this.rowFrom = obj.row;
 						this.columnFrom = obj.column;
 						this.graph.primitives.get("NodesBoard").state = 2;
 						//this.pressed = 1;
-						console.log(this.graph.primitives.get("NodesBoard").state);
+						//console.log(this.graph.primitives.get("NodesBoard").state);
+						console.log(obj.piece);
 						this.chosen = obj.piece;
 					}
 

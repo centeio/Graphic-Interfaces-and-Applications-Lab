@@ -5,8 +5,7 @@
 function MyUnit(scene) {
     this.scene = scene;
     this.sphere = new MySphere(scene, 1, 20, 20);
-    this.player = 0;
-    this.name = "";
+
 }
 
 MyUnit.prototype.display = function() {

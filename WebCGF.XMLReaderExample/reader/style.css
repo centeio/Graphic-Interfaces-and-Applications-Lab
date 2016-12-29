@@ -1,0 +1,9 @@
+#hud {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 200px;
+    width: 200px;
+    background: grey;
+    display: none;
+}

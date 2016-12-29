@@ -8,9 +8,9 @@ function NodesBoard(scene) {
     this.texture = new CGFtexture(this.scene, "scenes/resources/Board2.png");
     this.quads = new Map();
 	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
-    this.init();
-	this.moves = [];
+    this.moves = [];
 	this.redo = [];
+	this.init();
 }
 
 NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){
@@ -88,6 +88,17 @@ NodesBoard.prototype.display = function () {
 			}
 		}
     }
+
+	if(this.scene.isEasy == 1 && this.scene.possibleMoves && !this.scene.pickMode) {
+		for(var i = 0; i < this.scene.possibleMoves.length; i++) {
+			this.scene.pushMatrix();
+			this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+			this.scene.translate(0,0,0.05);
+			this.getTile(this.scene.possibleMoves[i][0], this.scene.possibleMoves[i][1]).display();
+			this.scene.popMatrix();
+			this.scene.pickedId++;
+		}
+	}
 	
 	for(var i = 1; i < this.id; i++) {
 		if(this.quads.get(i).piece != null) {
@@ -106,10 +117,20 @@ NodesBoard.prototype.display = function () {
 
 NodesBoard.prototype.activateAnimation = function(rowFrom, columnFrom, rowTo, columnTo) {
 	this.getTile(rowFrom, columnFrom).activateAnimation(rowTo, columnTo);
+	this.scene.animationRunning = 1;
 }
 
 NodesBoard.prototype.move = function(rowFrom, columnFrom, rowTo, columnTo) {
 	var piece = this.getTile(rowFrom, columnFrom).piece;
 	this.getTile(rowFrom, columnFrom).piece = null;
 	this.getTile(rowTo, columnTo).piece = piece;
+	this.scene.animationRunning = 0;
+}
+
+NodesBoard.prototype.restartBoard = function() {
+	this.quads = new Map();
+	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
+    this.moves = [];
+	this.redo = [];
+	this.init();
 }

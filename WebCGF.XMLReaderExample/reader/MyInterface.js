@@ -20,6 +20,8 @@ MyInterface.prototype.init = function(application) {
 	
 	// init GUI. For more information on the methods, check:
 	//  http://workshop.chromeexperiments.com/examples/gui
+
+	this.undo = null;
 	
 	this.gui = new dat.GUI();
 
@@ -28,7 +30,12 @@ MyInterface.prototype.init = function(application) {
 	// the identifier 'doSomething' must be a function declared as part of that object (i.e. a member of the scene class)
 	// e.g. LightingScene.prototype.doSomething = function () { console.log("Doing something..."); }; 
 
-	//this.gui.add(this.scene, 'pause');	
+	
+	this.gui.add(this.scene, 'PlayerVSPlayer');
+	this.gui.add(this.scene, 'PlayerVSPC');
+	this.gui.add(this.scene, "Easy");
+	this.gui.add(this.scene, "Hard");
+	this.gui.add(this.scene, 'Play');
 
 	// add a group of controls (and open/expand by defult)
 	
@@ -56,7 +63,7 @@ MyInterface.prototype.addLights = function() {
 		else
 			this.spot.add(this.scene.lights[i], "enabled").name(this.scene.graph.lights[i][1]);
 	}
-	
+
 };
 
 /**

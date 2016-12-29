@@ -471,7 +471,7 @@ XMLscene.prototype.display = function () {
 
 			this.setDefaultAppearance();
 
-			if (this.graph.loadedOk) {	
+			if (this.graph.loadedOk) {
 				for(var i = 0; i < this.lights.length; i++)
 					this.lights[i].update();
 

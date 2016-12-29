@@ -2,11 +2,11 @@
  * MyUnit
  * @constructor
  */
-function MyUnit(scene, player, name) {
+function MyUnit(scene) {
     this.scene = scene;
     this.sphere = new MySphere(scene, 1, 20, 20);
-    this.player = player;
-    this.name = name;
+    this.player = 0;
+    this.name = "";
 }
 
 MyUnit.prototype.display = function() {

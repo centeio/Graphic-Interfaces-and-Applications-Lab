@@ -277,6 +277,7 @@ XMLscene.prototype.PlayPVP = function () {
 						this.possibleMovesFunction();
 						this.possibleMoves = JSON.parse(document.querySelector("#query_result").innerHTML);
 						document.querySelector("#query_result").innerHTML = "";
+						console.log(this.possibleMoves);
 					}
 
 					if(this.graph.primitives.get("NodesBoard").state == 2 && obj.piece == null) {
@@ -305,13 +306,11 @@ XMLscene.prototype.PlayPVP = function () {
 								} else {
 									if(this.cameraLocked)
 										this.activeCameraAnimation = 1;
-									//this.player = this.player == 1 ? 2 : 1;
-									//document.getElementById("player").innerHTML = this.player;
+									this.player = this.player == 1 ? 2 : 1;
+									document.getElementById("player").innerHTML = this.player;
 								}
 							}
 							this.possibleMoves = null;
-							this.player = this.player == 1 ? 2 : 1;
-							document.getElementById("player").innerHTML = this.player;
 						}
 					}
 				}
@@ -358,12 +357,10 @@ XMLscene.prototype.PlayPVC = function() {
 										this.player1Wins++;
 										document.getElementById("player1Score").innerHTML = this.player1Wins;
 									} else {
-										//this.player = this.player == 1 ? 2 : 1;
-										//document.getElementById("player").innerHTML = this.player;
+										this.player = this.player == 1 ? 2 : 1;
+										document.getElementById("player").innerHTML = this.player;
 									}
 								}
-								this.player = this.player == 1 ? 2 : 1;
-								document.getElementById("player").innerHTML = this.player;
 							}
 						}
 					}

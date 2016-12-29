@@ -11,6 +11,15 @@ function NodesBoard(scene) {
     this.moves = [];
 	this.redo = [];
 	this.init();
+
+	//Player appearances
+	this.player1Appearance = new CGFappearance(this.scene);
+	this.player1Appearance.setAmbient(0.8,0.8,0.8,1);
+	this.player1Appearance.setDiffuse(0.8,0.8,0.8,1);
+
+	this.player2Appearance = new CGFappearance(this.scene);
+	this.player2Appearance.setAmbient(0.3,0.3,0.3,1);
+	this.player2Appearance.setDiffuse(0.3,0.3,0.3,1);
 }
 
 NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){
@@ -50,12 +59,20 @@ NodesBoard.prototype.init = function(){
 
 	for(var i = 0; i < 8; i++) {
 		console.debug(this.getTile(rows1[i], columns[i]));
-		this.getTile(rows1[i], columns[i]).piece = new MyUnit(this.scene, 1, "unit1");
-		this.getTile(rows2[i], columns[i]).piece = new MyUnit(this.scene, 2, "unit2");
+		this.getTile(rows1[i], columns[i]).piece = new MyUnit(this.scene);
+		this.getTile(rows1[i], columns[i]).piece.player = 1;
+		this.getTile(rows1[i], columns[i]).piece.name = "unit1";
+		this.getTile(rows2[i], columns[i]).piece = new MyUnit(this.scene);
+		this.getTile(rows2[i], columns[i]).piece.player = 2;
+		this.getTile(rows2[i], columns[i]).piece.name = "unit2";
 	}
 
-	this.getTile(1, 5).piece = new MyNode(this.scene, 1, "node1");
-	this.getTile(9, 5).piece = new MyNode(this.scene, 2, "node2");
+	this.getTile(1, 5).piece = new MyNode(this.scene);
+	this.getTile(1, 5).piece.player = 1;
+	this.getTile(1, 5).piece.name = "node1";
+	this.getTile(9, 5).piece = new MyNode(this.scene);
+	this.getTile(9, 5).piece.player = 2;
+	this.getTile(9, 5).piece.name = "node2";
 }
 
 NodesBoard.prototype.display = function () {
@@ -90,9 +107,7 @@ NodesBoard.prototype.display = function () {
 	if(this.scene.isEasy == 1 && this.scene.possibleMoves && !this.scene.pickMode) {
 		for(var i = 0; i < this.scene.possibleMoves.length; i++) {
 			this.scene.pushMatrix();
-			this.scene.rotate(-Math.PI / 2, 1, 0, 0);
-			this.scene.translate(0,0,0.05);
-			this.getTile(this.scene.possibleMoves[i][0], this.scene.possibleMoves[i][1]).display();
+			this.getTile(this.scene.possibleMoves[i][0], this.scene.possibleMoves[i][1]).displayHighlighted();
 			this.scene.popMatrix();
 			this.scene.pickedId++;
 		}
@@ -103,6 +118,10 @@ NodesBoard.prototype.display = function () {
 			this.scene.pushMatrix();
 			if(this.scene.isFinished == 0)
 				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
+			if(this.quads.get(i).piece.player == 1)
+				this.player1Appearance.apply();
+			else
+				this.player2Appearance.apply();
 			this.quads.get(i).display();
 			this.scene.popMatrix();
 

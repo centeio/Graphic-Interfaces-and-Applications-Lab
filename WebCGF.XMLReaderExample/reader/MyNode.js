@@ -4,6 +4,8 @@ function MyNode(scene){
     this.bottom = new MySphere(scene, 0.2, 20, 20);
     this.base = new MySphere(scene, 0.3, 20, 20);
     this.top = new MySphere(scene, 0.1, 20, 20);
+    this.player = 0;
+    this.name = "name";
 }
 
 MyNode.prototype.display = function(){

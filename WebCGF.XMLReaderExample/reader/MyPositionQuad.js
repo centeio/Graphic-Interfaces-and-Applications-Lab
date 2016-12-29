@@ -5,6 +5,7 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
     this.row = -y + 5;
     this.piece = null;
     this.quad = new MyRectangle(scene, minPosX, maxPosX, minPosY, maxPosY, 0, 1, 0, 1);
+    this.circumference = new MyPolygon(scene, 0.3, 20);
     this.pressed = 0;
 
     //Animation variables
@@ -20,6 +21,10 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
 
     //camera variables
     this.previousCameraTarget = null;
+
+    //Highlight appearance
+    this.highlightAppearance = new CGFappearance(this.scene);
+    this.highlightAppearance.setAmbient(0.6,0,0,1);
 }
 
 MyPositionQuad.prototype.setCoordinates = function(row, column) {
@@ -58,6 +63,13 @@ MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo) {
     this.animation.velocityZ = ((rowTo - 5) - (this.row - 5)) / span;
 
     this.animationInitialTime = this.scene.currentTime;
+}
+
+MyPositionQuad.prototype.displayHighlighted = function() {
+    this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+	this.scene.translate((this.column - 5) , -(this.row - 5), 0.05);
+    this.highlightAppearance.apply();
+    this.circumference.display();
 }
 
 MyPositionQuad.prototype.display = function () {

@@ -89,7 +89,26 @@
             <nodesboard>
             </nodesboard>
         </primitive>	
+		
+        <primitive id="unit1">
+            <unit>
+            </unit>
+        </primitive>	
+
+        <primitive id="unit2">
+            <unit>
+            </unit>
+        </primitive>			
+		
+        <primitive id="node1">
+            <node>
+            </node>
+        </primitive>			
   
+        <primitive id="node2">
+            <node>
+            </node>
+        </primitive>
         
     </primitives>
 	

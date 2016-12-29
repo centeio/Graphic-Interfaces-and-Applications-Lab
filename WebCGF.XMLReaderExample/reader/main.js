@@ -37,6 +37,7 @@ serialInclude([
                 'MyUnit.js',
                 'MyNode.js',
                 'ComplexAnimation.js',
+                'MyPiece.js',
 
 main=function()
 {

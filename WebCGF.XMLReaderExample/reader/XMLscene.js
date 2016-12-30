@@ -291,6 +291,7 @@ XMLscene.prototype.PlayPVP = function () {
 						else
 							this.moveUnit(this.chosen.name);
 						this.moveValid = document.querySelector("#query_result").innerHTML;
+						
 						if(this.moveValid == 1) {
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
@@ -308,6 +309,10 @@ XMLscene.prototype.PlayPVP = function () {
 								} else {
 									if(this.cameraLocked)
 										this.activeCameraAnimation = 1;
+									if(this.interface.undo) {
+										this.interface.gui.remove(this.interface.undo);
+										this.interface.undo = null;
+									}
 									this.player = this.player == 1 ? 2 : 1;
 									document.getElementById("player").innerHTML = this.player;
 								}
@@ -329,16 +334,20 @@ XMLscene.prototype.PlayPVC = function() {
 				var obj = this.pickResults[i][0];
 				if(this.player == 1) {
 					if (obj) {
-						if(obj.piece != null && obj.piece.player == this.player && this.animationRunning == 0) {
+
+						if(obj.piece != null && obj.piece.player == this.player) {
 							this.rowFrom = obj.row;
 							this.columnFrom = obj.column;
 							this.graph.primitives.get("NodesBoard").state = 2;
 							//this.pressed = 1;
+							console.log(obj.piece);
+
 							this.chosen = obj.piece;
 							this.possibleMovesFunction();
 							this.possibleMoves = JSON.parse(document.querySelector("#query_result").innerHTML);
 							document.querySelector("#query_result").innerHTML = "";
 						}
+
 						if(this.graph.primitives.get("NodesBoard").state == 2 && obj.piece == null) {
 							this.rowTo = obj.row;
 							this.columnTo = obj.column;
@@ -363,6 +372,10 @@ XMLscene.prototype.PlayPVC = function() {
 									} else {
 										if(this.cameraLocked)
 											this.activeCameraAnimation = 1;
+										if(this.interface.undo) {
+											this.interface.gui.remove(this.interface.undo);
+											this.interface.undo = null;
+										}
 										this.player = this.player == 1 ? 2 : 1;
 										document.getElementById("player").innerHTML = this.player;
 									}

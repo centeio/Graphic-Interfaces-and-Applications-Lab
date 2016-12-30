@@ -249,21 +249,21 @@ checkPosition(Row, Column) :-
         Row > 0,
         Row < 3,
         Column > 3 - Row,
-        Column < 11 - (3 - Row), 
+        Column < 11 - (4 - Row), 
         !.
 
 checkPosition(Row, Column) :-
         Row > 2,
         Row < 8,
-        Column > 1,
-        Column < 11,
+        Column > 0,
+        Column < 10,
         !.
 
 checkPosition(Row, Column) :-
         Row > 7,
         Row < 10,
-        Column > Row - 6,
-        Column < 10 + (8 - Row),
+        Column > Row - 7,
+        Column < 10 + (7 - Row),
         !.
 /*gets piece in LineBoard*/
 getCommunication([H|_], 1, Column, Piece) :-
@@ -573,9 +573,8 @@ moveNode(Row, Column, NewRow, NewColumn, Piece, 1) :-
         setCell(Row, Column, empty, Board, NewBoardTemp),
         setCell(NewRow, NewColumn, Piece, NewBoardTemp, NewBoard),
         retract(state(Board, LineBoard)),
-        assert(state(NewBoard, LineBoard)), 
-        !,
-        updateBoard.
+        assert(state(NewBoard, LineBoard)),
+        updateBoard, !.
 
 moveNode(_, _, _, _, _, 0) :- !.
 

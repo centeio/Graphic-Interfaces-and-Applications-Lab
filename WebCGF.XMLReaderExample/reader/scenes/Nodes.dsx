@@ -103,13 +103,14 @@
         <primitive id="node2">
             <node>
             </node>
-        </primitive>
-		
+
+        </primitive>	
+
         <primitive id="NodesBoard">
             <nodesboard>
             </nodesboard>
-        </primitive>			
-        
+        </primitive>	
+	
     </primitives>
 	
 	<components>

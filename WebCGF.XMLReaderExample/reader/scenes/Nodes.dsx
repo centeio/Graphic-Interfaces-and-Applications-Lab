@@ -43,20 +43,28 @@
 	<materials>
     
         <material id="default" >
-            <emission r="0" g="0" b="0" a="1" />
+            <emission r="0.1" g="0.1" b="0.1" a="1" />
             <ambient r="0.3" g="0.3" b="0.3" a="1" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1" />
             <specular r="0.2" g="0.2" b="0.5" a="1" />
             <shininess value="70" />
         </material>
 		
-        <material id="cone" >
-            <emission r="0" g="0" b="0" a="1" />
-            <ambient r="1" g="0.3" b="0" a="1" />
-            <diffuse r="1" g="0.3" b="0" a="1" />
-            <specular r="1" g="0.2" b="0" a="1" />
-            <shininess value="0" />
-        </material>				
+        <material id="m1" >
+            <emission r="0" g="0" b="0.5" a="1" />
+            <ambient r="0.3" g="0.3" b="1" a="1" />
+            <diffuse r="0.7" g="0.7" b="1" a="1" />
+            <specular r="0.2" g="0.2" b="1" a="1" />
+            <shininess value="30" />
+        </material>	
+
+        <material id="m2" >
+            <emission r="0" g="0.1" b="0.1" a="1" />
+            <ambient r="0.3" g="1" b="1" a="1" />
+            <diffuse r="0.7" g="1" b="1" a="1" />
+            <specular r="0.2" g="1" b="1" a="1" />
+            <shininess value="30" />
+        </material>			
 
         
     </materials>
@@ -150,10 +158,10 @@
             </transformation>
 
             <materials>
-                <material id="default" />
+                <material id="m2" />
             </materials>
 
-            <texture id="grass" />
+            <texture id="none" />
 			
             <children>
                 <primitiveref id="unit1" />
@@ -171,7 +179,7 @@
 		
 		
             <materials>
-                <material id="cone" />
+                <material id="m1" />
             </materials>
 
             <texture id="none" />

@@ -36,7 +36,10 @@
 	
     <textures>
     
-        <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" />  
+        <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" /> 
+        <texture id="wood1" file="scenes/resources/texture_wood.jpg" length_s="1" length_t="1" />  
+        <texture id="wood2" file="scenes/resources/wood.jpg" length_s="1" length_t="1" />  
+		
 
     </textures>
 	
@@ -94,23 +97,20 @@
         </primitive>	
 		
         <primitive id="unit1">
-            <unit>
-            </unit>
+            <torus inner="0.1" outer="0.15" slices="8" loops="4" />
         </primitive>	
 
         <primitive id="unit2">
-            <unit>
-            </unit>
+            <torus inner="0.1" outer="0.15" slices="8" loops="4" />
         </primitive>			
 		
         <primitive id="node1">
-            <node>
-            </node>
+            <torus inner="0.1" outer="0.3" slices="8" loops="4" />
         </primitive>			
   
         <primitive id="node2">
-            <node>
-            </node>
+            <torus inner="0.1" outer="0.3" slices="8" loops="4" />
+
 
         </primitive>	
 
@@ -146,35 +146,33 @@
 		<component id="player1">
         
             <transformation>
-                <translate x="0" y="0" z="0" />
+                <translate x="0" y="0.2" z="0" />
             </transformation>
 
             <materials>
                 <material id="default" />
             </materials>
 
-            <texture id="grass" />
+            <texture id="wood2" />
 			
             <children>
                 <primitiveref id="unit1" />
 				<primitiveref id="node1" />
             </children>
             
-        </component>
+        </component>		
 		
 		<component id="player2">
         
             <transformation>
-                <translate x="0" y="0" z="0" />
+                <translate x="0" y="0.2" z="0" />
             </transformation>
-
-		
 		
             <materials>
-                <material id="cone" />
+                <material id="default" />
             </materials>
 
-            <texture id="none" />
+            <texture id="wood1" />
 			
             <children>
                 <primitiveref id="unit2" />

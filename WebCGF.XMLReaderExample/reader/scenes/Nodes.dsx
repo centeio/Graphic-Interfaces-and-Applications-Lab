@@ -83,13 +83,8 @@
                    <c2 r="0.0" g="1.0" b="1.0" a="1.0" />
                    <cs r="1.0" g="0.0" b="0.0" a="1.0" />				   
 			</chessboard>               
-        </primitive>	
+        </primitive>
 
-        <primitive id="NodesBoard">
-            <nodesboard>
-            </nodesboard>
-        </primitive>	
-		
         <primitive id="unit1">
             <unit>
             </unit>
@@ -108,8 +103,13 @@
         <primitive id="node2">
             <node>
             </node>
-        </primitive>
-        
+        </primitive>	
+
+        <primitive id="NodesBoard">
+            <nodesboard>
+            </nodesboard>
+        </primitive>	
+	
     </primitives>
 	
 	<components>

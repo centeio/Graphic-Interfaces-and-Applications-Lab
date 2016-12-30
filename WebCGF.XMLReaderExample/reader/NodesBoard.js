@@ -57,6 +57,9 @@ NodesBoard.prototype.init = function(){
 	var columns = [3,4,6,7,4,5,6,5];
 	var rows2 = [9,9,9,9,8,8,8,7];
 
+	console.log("Node from primitives");
+	console.log(this.scene.graph.primitives);
+
 	for(var i = 0; i < 8; i++) {
 		console.debug(this.getTile(rows1[i], columns[i]));
 		
@@ -70,9 +73,6 @@ NodesBoard.prototype.init = function(){
 		this.getTile(rows2[i], columns[i]).piece.player = 2;
 		this.getTile(rows2[i], columns[i]).piece.name = "unit2";*/
 	}
-
-	console.log("Node from primitives");
-	console.log(this.scene.graph.primitives.get('unit1'));
 	
 	this.getTile(1, 5).piece = new MyPiece(this.scene, 1, "node1", this.scene.graph.primitives.get("node1"));
 	this.getTile(9, 5).piece = new MyPiece(this.scene, 2, "node2", this.scene.graph.primitives.get("node2"));

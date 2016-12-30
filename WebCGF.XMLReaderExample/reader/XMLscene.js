@@ -274,21 +274,19 @@ XMLscene.prototype.PlayPVP = function () {
 						this.columnFrom = obj.column;
 						this.graph.primitives.get("NodesBoard").state = 2;
 						//this.pressed = 1;
-						//console.log(this.graph.primitives.get("NodesBoard").state);
 						console.log(obj.piece);
 
 						this.chosen = obj.piece;
 						this.possibleMovesFunction();
 						this.possibleMoves = JSON.parse(document.querySelector("#query_result").innerHTML);
 						document.querySelector("#query_result").innerHTML = "";
-						console.log(this.possibleMoves);
 					}
 
 					if(this.graph.primitives.get("NodesBoard").state == 2 && obj.piece == null) {
 						this.rowTo = obj.row;
 						this.columnTo = obj.column;
 						
-						if(this.chosen instanceof MyNode)
+						if(this.chosen.piece instanceof MyNode)
 							this.moveNode(this.chosen.name);
 						else
 							this.moveUnit(this.chosen.name);
@@ -297,7 +295,7 @@ XMLscene.prototype.PlayPVP = function () {
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
 							this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
-							if(this.chosen instanceof MyNode) {
+							if(this.chosen.piece instanceof MyNode) {
 								this.finished();
 								this.isFinished = document.querySelector("#query_result").innerHTML;
 								if(this.isFinished == 1) {
@@ -337,34 +335,39 @@ XMLscene.prototype.PlayPVC = function() {
 							this.graph.primitives.get("NodesBoard").state = 2;
 							//this.pressed = 1;
 							this.chosen = obj.piece;
+							this.possibleMovesFunction();
+							this.possibleMoves = JSON.parse(document.querySelector("#query_result").innerHTML);
+							document.querySelector("#query_result").innerHTML = "";
 						}
 						if(this.graph.primitives.get("NodesBoard").state == 2 && obj.piece == null) {
 							this.rowTo = obj.row;
 							this.columnTo = obj.column;
 							
-							if(this.chosen instanceof MyNode)
+							if(this.chosen.piece instanceof MyNode)
 								this.moveNode("node1");
 							else
 								this.moveUnit("unit1");
 							this.moveValid = document.querySelector("#query_result").innerHTML;
 							document.querySelector("#query_result").innerHTML = "";
+
 							if(this.moveValid == 1) {
-								if(this.cameraLocked)
-									this.activeCameraAnimation = 1;
 								this.graph.primitives.get("NodesBoard").state = 1;
 								this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
 								this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
-								if(this.chosen instanceof MyNode) {
+								if(this.chosen.piece instanceof MyNode) {
 									this.finished();
 									this.isFinished = document.querySelector("#query_result").innerHTML;
 									if(this.isFinished == 1) {
 										this.player1Wins++;
 										document.getElementById("player1Score").innerHTML = this.player1Wins;
 									} else {
+										if(this.cameraLocked)
+											this.activeCameraAnimation = 1;
 										this.player = this.player == 1 ? 2 : 1;
 										document.getElementById("player").innerHTML = this.player;
 									}
 								}
+								this.possibleMoves = null;
 							}
 						}
 					}

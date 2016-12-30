@@ -110,7 +110,8 @@ parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(moveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- moveUnit(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(moveNode(Row, Column, NewRow, NewColumn, Piece), Success) :- moveNode(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(findRandUnits(Player), Units) :- findRandUnits(Player, Units).
-parse_input(possibleMoves(Row, Column), Moves) :- possibleMoves(Row, Column, Moves).
+parse_input(possibleMovesUnit(Row, Column), Moves) :- possibleMovesUnit(Row, Column, Moves).
+parse_input(possibleMovesNode(Row, Column), Moves) :- possibleMovesNode(Row, Column, Moves).
 parse_input(moveRandUnit(Row, Column, Piece), NewPosition) :- moveRandUnit(Row, Column, Piece, NewPosition).
 parse_input(undoMoveNode(Row, Column, NewRow, NewColumn, Piece), Success) :- undoMoveNode(Row, Column, NewRow, NewColumn, Piece, Success).
 parse_input(undoMoveUnit(Row, Column, NewRow, NewColumn, Piece), Success) :- undoMoveUnit(Row, Column, NewRow, NewColumn, Piece, Success).
@@ -538,12 +539,28 @@ cleanBoard([E1|Es], [H|T]) :-
         cleanLine(E1, l, H),
         cleanBoard(Es, T).
 
-possibleMoves(Row, Column, Moves) :-
+possibleMovesUnit(Row, Column, Moves) :-
         retract(state(Board, LineBoard)),
         assert(state(Board, LineBoard)),
         assert(validateComputerList([])),
         validateComputerUnitMove(Row, Column, Board, LineBoard),
         retract(validateComputerList(Moves)), !.
+
+possibleMovesNode(Row, Column, Moves) :-
+        retract(state(Board, LineBoard)),
+        assert(state(Board, LineBoard)),
+        findall([NewNodeRow, NewNodeColumn], (((NewNodeRow is Row + 1,
+                                              NewNodeColumn is Column,
+                                              validateNodeMove(Row, Column, NewNodeRow, NewNodeColumn, Board));
+                                              (NewNodeRow is Row - 1,
+                                              NewNodeColumn is Column,
+                                              validateNodeMove(Row, Column, NewNodeRow, NewNodeColumn, Board));
+                                              (NewNodeRow is Row,
+                                              NewNodeColumn is Column + 1,
+                                              validateNodeMove(Row, Column, NewNodeRow, NewNodeColumn, Board));
+                                              (NewNodeRow is Row,
+                                              NewNodeColumn is Column - 1,
+                                              validateNodeMove(Row, Column, NewNodeRow, NewNodeColumn, Board)))), Moves).
 
 updateBoard :-
             retract(state(NewBoard, LineBoard)),

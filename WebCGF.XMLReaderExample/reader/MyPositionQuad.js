@@ -40,11 +40,10 @@ MyPositionQuad.prototype.setPiece = function (piece) {
     this.piece = piece;
 }
 
-MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo) {
+MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo, span) {
     this.isAnimationActive = 1;
     this.rowTo = rowTo;
     this.columnTo = columnTo;
-    var span = 1;
 
     this.animation = new ComplexAnimation(span);
     var centerx = ((this.column - 5) + (columnTo - 5)) / 2;

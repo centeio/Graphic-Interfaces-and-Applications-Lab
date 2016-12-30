@@ -9,7 +9,6 @@ function NodesBoard(scene) {
     this.quads = new Map();
 	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
     this.moves = [];
-	this.redo = [];
 	this.init();
 
 	//Player appearances
@@ -126,8 +125,8 @@ NodesBoard.prototype.display = function () {
 	}
 }
 
-NodesBoard.prototype.activateAnimation = function(rowFrom, columnFrom, rowTo, columnTo) {
-	this.getTile(rowFrom, columnFrom).activateAnimation(rowTo, columnTo);
+NodesBoard.prototype.activateAnimation = function(rowFrom, columnFrom, rowTo, columnTo, span) {
+	this.getTile(rowFrom, columnFrom).activateAnimation(rowTo, columnTo, span);
 	this.scene.animationRunning = 1;
 }
 
@@ -143,5 +142,10 @@ NodesBoard.prototype.restartBoard = function() {
 	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
     this.moves = [];
 	this.redo = [];
+	this.init();
+}
+
+NodesBoard.prototype.restartForFilm = function() {
+	this.quads = new Map();
 	this.init();
 }

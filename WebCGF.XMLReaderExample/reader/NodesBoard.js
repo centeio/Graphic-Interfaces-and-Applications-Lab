@@ -9,16 +9,9 @@ function NodesBoard(scene) {
     this.quads = new Map();
 	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
     this.moves = [];
-	this.init();
 
-	//Player appearances
-	this.player1Appearance = new CGFappearance(this.scene);
-	this.player1Appearance.setAmbient(0.8,0.8,0.8,1);
-	this.player1Appearance.setDiffuse(0.8,0.8,0.8,1);
-
-	this.player2Appearance = new CGFappearance(this.scene);
-	this.player2Appearance.setAmbient(0.3,0.3,0.3,1);
-	this.player2Appearance.setDiffuse(0.3,0.3,0.3,1);
+    if(this.scene.firstTheme)
+		this.init();
 }
 
 NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){
@@ -32,7 +25,7 @@ NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){
 }
 
 NodesBoard.prototype.getTile = function(row, column) {
-	for(var j=1; j<this.id; j++){
+	for(var j=1; j<this.quads.size; j++){
 		if(this.quads.get(j).row == row && this.quads.get(j).column == column)
 			return this.quads.get(j);
 	}
@@ -41,6 +34,7 @@ NodesBoard.prototype.getTile = function(row, column) {
 }
 
 NodesBoard.prototype.init = function(){
+	this.scene.firstTheme = false;
 	this.id = 1;
 	this.ret(1*4, -1*2, 1*2, 1);
 	this.ret(1*3, -1*3, 1*3, 1);
@@ -57,17 +51,17 @@ NodesBoard.prototype.init = function(){
 	var rows2 = [9,9,9,9,8,8,8,7];
 
 	for(var i = 0; i < 8; i++) {		
-		this.getTile(rows1[i], columns[i]).piece = new MyPiece(this.scene, 1, "unit1");
-		this.getTile(rows2[i], columns[i]).piece = new MyPiece(this.scene, 2, "unit2");
+		this.getTile(rows1[i], columns[i]).piece = new MyPiece(this.scene, 1, "unit1",this.scene.graph.primitives.get("unit1"));
+		this.getTile(rows2[i], columns[i]).piece = new MyPiece(this.scene, 2, "unit2",this.scene.graph.primitives.get("unit2"));
 	}
 	
-	this.getTile(1, 5).piece = new MyPiece(this.scene, 1, "node1");
-	this.getTile(9, 5).piece = new MyPiece(this.scene, 2, "node2");
+	this.getTile(1, 5).piece = new MyPiece(this.scene, 1, "node1",this.scene.graph.primitives.get("node1"));
+	this.getTile(9, 5).piece = new MyPiece(this.scene, 2, "node2",this.scene.graph.primitives.get("node2"));
 }
 
 NodesBoard.prototype.displayPiece = function(pieceID) {
 	var ret = false;
-		for(var i = 1; i < this.id; i++) {
+		for(var i = 1; i < this.quads.size; i++) {
 		if(this.quads.get(i).piece != null && this.quads.get(i).piece.name == pieceID) {
 			if(this.scene.isFinished == 0 && this.scene.gameFilm == 0)
 				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
@@ -96,7 +90,7 @@ NodesBoard.prototype.display = function () {
     this.scene.popMatrix();    
 
 	if(this.scene.pickMode == true) {
-		for(var j=1; j < this.id; j++) {
+		for(var j=1; j < this.quads.size; j++) {
 			if(this.quads.get(j).piece == null) {
 				this.scene.pushMatrix();
 				this.scene.rotate(-Math.PI / 2, 1, 0, 0);

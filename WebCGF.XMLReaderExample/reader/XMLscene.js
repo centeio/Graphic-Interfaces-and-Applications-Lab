@@ -65,7 +65,34 @@ XMLscene.prototype.init = function (application) {
 	this.cameraVelocityY = 0;
 	this.cameraVelocityZ = 0;
 	this.cameraLocked = true;
+
+	this.graphs = [];
+	this.counterGraphs = 0;
+	this.firstTheme = true;
 };
+
+XMLscene.prototype.newGraph = function(filename) {
+	this.graphs.push(new MySceneGraph(filename, this));
+	this.graph = this.graphs[0];
+}
+
+XMLscene.prototype.Theme = function() {
+	console.log('theme');
+	if(this.graph.primitives.size > 0){
+		var quadstmp = this.graph.primitives.get('NodesBoard').quads;
+		this.graph = this.graphs[this.counterGraphs];
+		this.counterGraphs = (this.counterGraphs + 1) % this.graphs.length;
+
+		for(var i=1; i < quadstmp.size; i++) {
+			if(quadstmp.get(i).piece != null) {
+				quadstmp.get(i).piece.piece = this.graph.primitives.get(quadstmp.get(i).piece.name);
+
+			}
+		}
+
+		this.graph.primitives.get('NodesBoard').quads = quadstmp;
+	}
+}
 
 XMLscene.prototype.PlayerVSPlayer = function() {
 	this.gameModePressed = 1;

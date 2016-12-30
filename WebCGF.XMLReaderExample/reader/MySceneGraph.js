@@ -4,7 +4,7 @@ function MySceneGraph(filename, scene) {
 
 	// Establish bidirectional references between scene and graph
 	this.scene = scene;
-	scene.graph = this;
+	
 
 	// File reading 
 	this.reader = new CGFXMLreader();

@@ -41,6 +41,8 @@ MyInterface.prototype.init = function(application) {
 	this.difficulty.add(this.scene, "Easy");
 	this.difficulty.add(this.scene, "Hard");
 
+	this.gui.add(this.scene, "Theme");
+
 	this.gui.add(this.scene, 'Play');
 
 	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean

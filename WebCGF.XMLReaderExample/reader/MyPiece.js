@@ -1,10 +1,11 @@
-function MyPiece(scene, player, name){
+function MyPiece(scene, player, name, piece){
     this.scene = scene;
     this.player = player;
     this.name = name;
+    this.piece = piece;
 }
 
 MyPiece.prototype.display = function(){
 
-    this.scene.graph.primitives.get(this.name).display();
+    this.piece.display();
 }

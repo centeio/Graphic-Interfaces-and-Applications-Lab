@@ -1,0 +1,187 @@
+<dsx>
+
+	<scene root="root" axis_length="10" />
+	
+	<views default="player1" >
+
+		<perspective id="player1" near="0.5" far="800" angle="45">
+            <from x="0" y="10" z="-10" />	
+            <to x="0" y="0" z="0" />
+
+		</perspective>
+
+        <perspective id="player2" near="0.5" far="800" angle="45">
+            <from x="0" y="10" z="10" />
+            <to x="0" y="0" z="0" />
+		</perspective>
+
+    </views>
+
+	<illumination doublesided="1" local="1" >
+
+        <ambient r="0.5" g="0.5" b="0.5" a="0.8" />
+        <background r="0.1" g="0.1" b="0.2" a="1" />
+
+    </illumination>
+
+    <lights>
+
+       <omni id="twet" enabled="1" >
+           <location x="0" y="8" z="0" w="1" />
+           <ambient r="0" g="0" b="0" a="1" />
+           <diffuse r="1" g="1" b="1" a="1" />
+           <specular r="0" g="0" b="0" a="1" />
+       </omni>
+    </lights>
+	
+    <textures>
+    
+        <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" />  
+
+    </textures>
+	
+	<materials>
+    
+        <material id="default" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+            <specular r="0.2" g="0.2" b="0.5" a="1" />
+            <shininess value="70" />
+        </material>
+		
+        <material id="cone" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0.3" b="1" a="1" />
+            <diffuse r="0" g="0.3" b="1" a="1" />
+            <specular r="0" g="0.2" b="1" a="1" />
+            <shininess value="0" />
+        </material>				
+
+        
+    </materials>
+	
+    <transformations>
+    
+        <transformation id="leftx">
+           <rotate axis="y" angle="90" />
+        </transformation>
+        
+    </transformations>
+
+    <animations>
+        <animation id="linearAnim" span="5" type="linear">
+            <controlpoint xx="2" yy="1" zz="3" />
+            <controlpoint xx="2" yy="1" zz="4" />
+            <controlpoint xx="3" yy="1" zz="5" />
+            <controlpoint xx="4" yy="2" zz="6" />
+            <controlpoint xx="7" yy="2" zz="7" />
+        </animation>
+
+        <animation id="circularAnim" span="8" type="circular"
+            centerx="2" centery="2" centerz="7"
+            radius="5" startang="0" rotang="10" />
+    </animations>
+	
+	<primitives>
+		
+        <primitive id="board">
+			<chessboard du="8.0" dv="8.0" textureref="grass">
+                   <c1 r="0.0" g="0.0" b="1.0" a="1.0" />
+                   <c2 r="0.0" g="1.0" b="1.0" a="1.0" />
+                   <cs r="1.0" g="0.0" b="0.0" a="1.0" />				   
+			</chessboard>               
+        </primitive>	
+		
+        <primitive id="unit1">
+            <unit>
+            </unit>
+        </primitive>	
+
+        <primitive id="unit2">
+            <unit>
+            </unit>
+        </primitive>			
+		
+        <primitive id="node1">
+            <node>
+            </node>
+        </primitive>			
+  
+        <primitive id="node2">
+            <node>
+            </node>
+
+        </primitive>	
+
+        <primitive id="NodesBoard">
+            <nodesboard>
+            </nodesboard>
+        </primitive>	
+	
+    </primitives>
+	
+	<components>
+        
+        <component id="root">
+        
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="none" />
+			
+            <children>
+				<componentref id="player1" />
+				<componentref id="player2" />
+                <primitiveref id="NodesBoard" />
+            </children>
+            
+        </component>
+		
+		<component id="player1">
+        
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="grass" />
+			
+            <children>
+                <primitiveref id="unit1" />
+				<primitiveref id="node1" />
+            </children>
+            
+        </component>
+		
+		<component id="player2">
+        
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+		
+		
+            <materials>
+                <material id="cone" />
+            </materials>
+
+            <texture id="none" />
+			
+            <children>
+                <primitiveref id="unit2" />
+				<primitiveref id="node2" />
+            </children>
+            
+        </component>		
+		
+    </components>
+</dsx>

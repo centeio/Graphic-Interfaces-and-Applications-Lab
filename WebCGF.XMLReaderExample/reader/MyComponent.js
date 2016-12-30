@@ -124,6 +124,8 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 
 	this.scene.pushMatrix();
 	this.scene.multMatrix(matrix);
+
+
 	for(var i = 0; i < this.primitives.length; i++) {
 		if(this.scene.graph.primitives.get(this.primitives[i]) instanceof ChessBoard)
 			this.scene.graph.primitives.get(this.primitives[i]).display();
@@ -142,9 +144,11 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 						material.setTextureWrap('REPEAT', 'REPEAT');
 			}
 			material.apply();
-			this.scene.graph.primitives.get(this.primitives[i]).display();
+			if(!this.scene.graph.primitives.get('NodesBoard').displayPiece(this.primitives[i]))
+				this.scene.graph.primitives.get(this.primitives[i]).display();
 		}
 	}
+	
 	this.scene.popMatrix();
 }
 

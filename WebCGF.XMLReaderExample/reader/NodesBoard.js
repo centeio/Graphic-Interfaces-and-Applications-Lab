@@ -65,6 +65,22 @@ NodesBoard.prototype.init = function(){
 	this.getTile(9, 5).piece = new MyPiece(this.scene, 2, "node2", this.scene.graph.primitives.get("node2"));
 }
 
+NodesBoard.prototype.displayPiece = function(pieceID) {
+	var ret = false;
+		for(var i = 1; i < this.id; i++) {
+		if(this.quads.get(i).piece != null && this.quads.get(i).piece.name == pieceID) {
+			if(this.scene.isFinished == 0 && this.scene.gameFilm == 0)
+				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
+
+			this.quads.get(i).display();
+
+			this.scene.pickedId++;
+			ret = true;
+		}
+	}
+	return ret;
+}
+
 NodesBoard.prototype.display = function () {
     this.scene.pushMatrix();
     this.scene.scale(5,5,5);
@@ -103,13 +119,13 @@ NodesBoard.prototype.display = function () {
 		}
 	}
 	
-	for(var i = 1; i < this.id; i++) {
+/*		for(var i = 1; i < this.id; i++) {
 		if(this.quads.get(i).piece != null) {
 			this.scene.pushMatrix();
 			if(this.scene.isFinished == 0 && this.scene.gameFilm == 0)
 				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
-			if(this.quads.get(i).piece.player == 1)
-				this.player1Appearance.apply();
+		if(this.quads.get(i).piece.player == 1)
+				this.scene.graph.components.get('player1').apply();
 			else
 				this.player2Appearance.apply();
 			this.quads.get(i).display();
@@ -117,7 +133,7 @@ NodesBoard.prototype.display = function () {
 
 			this.scene.pickedId++;
 		}
-	}
+	}*/
 }
 
 NodesBoard.prototype.activateAnimation = function(rowFrom, columnFrom, rowTo, columnTo, span) {

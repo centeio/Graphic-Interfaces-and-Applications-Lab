@@ -49,6 +49,14 @@
             <specular r="0.2" g="0.2" b="0.5" a="1" />
             <shininess value="70" />
         </material>
+		
+        <material id="cone" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="1" g="0.3" b="0" a="1" />
+            <diffuse r="1" g="0.3" b="0" a="1" />
+            <specular r="1" g="0.2" b="0" a="1" />
+            <shininess value="0" />
+        </material>				
 
         
     </materials>
@@ -128,9 +136,52 @@
             <texture id="none" />
 			
             <children>
+				<componentref id="player1" />
+				<componentref id="player2" />
                 <primitiveref id="NodesBoard" />
             </children>
             
         </component>
+		
+		<component id="player1">
+        
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="none" />
+			
+            <children>
+                <primitiveref id="unit1" />
+				<primitiveref id="node1" />
+            </children>
+            
+        </component>
+		
+		<component id="player2">
+        
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+
+		
+		
+            <materials>
+                <material id="cone" />
+            </materials>
+
+            <texture id="none" />
+			
+            <children>
+                <primitiveref id="unit2" />
+				<primitiveref id="node2" />
+            </children>
+            
+        </component>		
+		
     </components>
 </dsx>

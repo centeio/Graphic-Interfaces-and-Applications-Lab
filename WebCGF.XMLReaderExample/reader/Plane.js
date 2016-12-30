@@ -17,11 +17,8 @@ function Plane(scene, dX, dY, xDiv, yDiv) {
     controlvertexes.push(y);     
 
 	this.surface = this.scene.makeSurface(1, 1, controlvertexes);
-	console.log(this.surface);
 
     this.init();
-
-
 };
 
 Plane.prototype = Object.create(CGFnurbsObject.prototype);
@@ -41,7 +38,6 @@ Plane.prototype.init = function () {
 
     this.plane = new CGFnurbsObject(this.scene, getSurfacePoint, this.xDivs, this.yDivs);
 
-//  CGFnurbsObject.prototype.initBuffers.call(this.scene);
     this.plane.initBuffers(this.scene);
     this.primitiveType=this.scene.gl.TRIANGLES;
 	this.initGLBuffers();

@@ -5,16 +5,12 @@ function ChessBoard(scene, dU, dV, texture, su, sv, colors) {
 	this.sU = su;
 	this.sV = sv;
 
-	console.log(texture);
-
     this.texture = texture.texture;
 
     this.setColors(colors);
 	    
-    console.log(this.texture);
     this.shader = new CGFshader(this.scene.gl, "shaders/test1.vert", "shaders/test1.frag");
  
-
 	this.shader.setUniformsValues({uSampler: 1.0});
 	this.shader.setUniformsValues({du: this.dU});
 	this.shader.setUniformsValues({dv: this.dV});	

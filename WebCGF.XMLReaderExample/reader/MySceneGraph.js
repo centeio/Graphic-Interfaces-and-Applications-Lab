@@ -816,11 +816,6 @@ MySceneGraph.prototype.parseAnimations = function(rootElement) {
 		else
 			console.error('Invalid animation type');	
 	}
-
-
-	for(var [key, value] of this.animations) {
-		console.debug(value);
-	}
 }
 
 MySceneGraph.prototype.parseGlobalsExample = function(rootElement) {	

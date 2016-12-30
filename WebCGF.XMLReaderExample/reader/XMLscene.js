@@ -255,12 +255,6 @@ XMLscene.prototype.makeSurface = function (degree1, degree2, controlvertexes) {
 		
 	var knots1 = this.getKnotsVector(degree1); 
 	var knots2 = this.getKnotsVector(degree2); 
-
-	console.log(knots1);
-	console.log(knots2);
-	console.log(degree1);
-	console.log(degree2);
-	console.log(controlvertexes);
 		
 	var nurbsSurface = new CGFnurbsSurface(degree1, degree2, knots1, knots2, controlvertexes); 
 
@@ -273,8 +267,7 @@ XMLscene.prototype.PlayPVP = function () {
 			for (var i=0; i< this.pickResults.length; i++) {
 				var obj = this.pickResults[i][0];
 				if (obj) {
-					console.log(obj.piece);
-
+					
 					if(obj.piece != null && obj.piece.player == this.player) {
 						this.rowFrom = obj.row;
 						this.columnFrom = obj.column;

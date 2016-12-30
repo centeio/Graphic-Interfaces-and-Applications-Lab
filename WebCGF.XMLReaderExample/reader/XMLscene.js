@@ -273,9 +273,10 @@ XMLscene.prototype.PlayPVP = function () {
 						this.graph.primitives.get("NodesBoard").state = 2;
 						//this.pressed = 1;
 						console.log(obj.piece);
+						console.log(obj.piece.name);
 
 						this.chosen = obj.piece;
-						if(this.chosen.piece instanceof MyNode)
+						if(this.chosen.name == "node1" || this.chosen.name == "node2")
 							this.possibleMovesNodeFunction();
 						else
 							this.possibleMovesUnitFunction();
@@ -287,7 +288,7 @@ XMLscene.prototype.PlayPVP = function () {
 						this.rowTo = obj.row;
 						this.columnTo = obj.column;
 						
-						if(this.chosen.piece instanceof MyNode)
+						if(this.chosen.name == "node1" || this.chosen.name == "node2")
 							this.moveNode(this.chosen.name);
 						else
 							this.moveUnit(this.chosen.name);
@@ -297,7 +298,7 @@ XMLscene.prototype.PlayPVP = function () {
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
 							this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo, 1);
-							if(this.chosen.piece instanceof MyNode) {
+							if(this.chosen.name == "node1" || this.chosen.name == "node2") {
 								this.finished();
 								this.isFinished = document.querySelector("#query_result").innerHTML;
 								if(this.isFinished == 1) {
@@ -340,7 +341,7 @@ XMLscene.prototype.PlayPVC = function() {
 							console.log(obj.piece);
 
 							this.chosen = obj.piece;
-							if(this.chosen.piece instanceof MyNode)
+							if(this.chosen.name == "node1")
 								this.possibleMovesNodeFunction();
 							else
 								this.possibleMovesUnitFunction();
@@ -352,7 +353,7 @@ XMLscene.prototype.PlayPVC = function() {
 							this.rowTo = obj.row;
 							this.columnTo = obj.column;
 							
-							if(this.chosen.piece instanceof MyNode)
+							if(this.chosen.name == "node1")
 								this.moveNode("node1");
 							else
 								this.moveUnit("unit1");
@@ -363,7 +364,7 @@ XMLscene.prototype.PlayPVC = function() {
 								this.graph.primitives.get("NodesBoard").state = 1;
 								this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
 								this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo, 1);
-								if(this.chosen.piece instanceof MyNode) {
+								if(this.chosen.name == "node1") {
 									this.finished();
 									this.isFinished = document.querySelector("#query_result").innerHTML;
 									if(this.isFinished == 1) {

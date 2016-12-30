@@ -92,15 +92,7 @@
     </animations>
 	
 	<primitives>
-		
-        <primitive id="board">
-			<chessboard du="8.0" dv="8.0" textureref="grass">
-                   <c1 r="0.0" g="0.0" b="1.0" a="1.0" />
-                   <c2 r="0.0" g="1.0" b="1.0" a="1.0" />
-                   <cs r="1.0" g="0.0" b="0.0" a="1.0" />				   
-			</chessboard>               
-        </primitive>	
-		
+				
         <primitive id="unit1">
             <unit>
             </unit>
@@ -119,7 +111,6 @@
         <primitive id="node2">
             <node>
             </node>
-
         </primitive>	
 
         <primitive id="NodesBoard">

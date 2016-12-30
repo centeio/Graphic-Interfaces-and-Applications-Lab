@@ -41,7 +41,9 @@ MyInterface.prototype.init = function(application) {
 	this.difficulty.add(this.scene, "Easy");
 	this.difficulty.add(this.scene, "Hard");
 
-	this.gui.add(this.scene, "Theme");
+	this.theme = this.gui.addFolder("Theme");
+	this.theme.add(this.scene, "Wood");
+	this.theme.add(this.scene, "Pastel");
 
 	this.gui.add(this.scene, 'Play');
 

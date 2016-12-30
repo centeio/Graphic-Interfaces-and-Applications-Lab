@@ -36,7 +36,6 @@
 	
     <textures>
     
-        <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" /> 
         <texture id="wood1" file="scenes/resources/texture_wood.jpg" length_s="1" length_t="1" />  
         <texture id="wood2" file="scenes/resources/wood.jpg" length_s="1" length_t="1" />  
 		
@@ -53,13 +52,21 @@
             <shininess value="70" />
         </material>
 		
-        <material id="cone" >
-            <emission r="0" g="0" b="0" a="1" />
-            <ambient r="0" g="0.3" b="1" a="1" />
-            <diffuse r="0" g="0.3" b="1" a="1" />
-            <specular r="0" g="0.2" b="1" a="1" />
-            <shininess value="0" />
-        </material>				
+        <material id="m1" >
+            <emission r="0.5" g="0.5" b="0.5" a="1" />
+            <ambient r="1" g="1" b="1" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+            <shininess value="30" />
+        </material>	
+
+        <material id="m2" >
+            <emission r="0.1" g="0.1" b="0.1" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+            <specular r="0.3" g="0.3" b="0.3" a="1" />
+            <shininess value="30" />
+        </material>					
 
         
     </materials>
@@ -87,15 +94,7 @@
     </animations>
 	
 	<primitives>
-		
-        <primitive id="board">
-			<chessboard du="8.0" dv="8.0" textureref="grass">
-                   <c1 r="0.0" g="0.0" b="1.0" a="1.0" />
-                   <c2 r="0.0" g="1.0" b="1.0" a="1.0" />
-                   <cs r="1.0" g="0.0" b="0.0" a="1.0" />				   
-			</chessboard>               
-        </primitive>	
-		
+				
         <primitive id="unit1">
             <torus inner="0.1" outer="0.15" slices="8" loops="4" />
         </primitive>	
@@ -110,8 +109,6 @@
   
         <primitive id="node2">
             <torus inner="0.1" outer="0.3" slices="8" loops="4" />
-
-
         </primitive>	
 
         <primitive id="NodesBoard">
@@ -150,7 +147,7 @@
             </transformation>
 
             <materials>
-                <material id="default" />
+                <material id="m1" />
             </materials>
 
             <texture id="wood2" />
@@ -169,7 +166,7 @@
             </transformation>
 		
             <materials>
-                <material id="default" />
+                <material id="m2" />
             </materials>
 
             <texture id="wood1" />

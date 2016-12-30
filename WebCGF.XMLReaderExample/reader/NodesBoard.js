@@ -34,6 +34,10 @@ NodesBoard.prototype.getTile = function(row, column) {
 }
 
 NodesBoard.prototype.init = function(){
+	if(this.scene.graph.primitives.get("unit1") == undefined || this.scene.graph.primitives.get("unit2") == undefined ||
+	this.scene.graph.primitives.get("node1") == undefined || this.scene.graph.primitives.get("node2") == undefined)
+		console.error("Pieces declaration missing for board construction.");
+
 	this.scene.firstTheme = false;
 	this.id = 1;
 	this.ret(1*4, -1*2, 1*2, 1);

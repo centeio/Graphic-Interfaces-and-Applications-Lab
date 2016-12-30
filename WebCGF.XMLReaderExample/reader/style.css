@@ -1,9 +1,35 @@
 #hud {
+    display: block;
     position: fixed;
-    left: 0;
-    top: 0;
-    height: 200px;
-    width: 200px;
-    background: grey;
-    display: none;
+    left: 10px;
+    top: 10px;
+    height: 80px;
+    width: 150px;
+    background: rgb(64,64,64);
+    opacity: 0;
+    box-shadow: 0px 0px 10px 2px #888;
+    -webkit-box-shadow: 0px 0px 10px 2px #888;
+    -moz-box-shadow: 0px 0px 10px 2px #888;
+    -o-box-shadow: 0px 0px 10px 2px #888;
+	border-radius: 5%;
+    -webkit-border-radius: 5%;
+    -moz-border-radius: 5%;
+    -o-border-radius: 5%;
+
+    transition: opacity 1s ease;
+    -webkit-transition: opacity 1s ease;
+    -moz-transition: opacity 1s ease;
+    -o-transition: opacity 1s ease;
+}
+
+#hud > div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -50px;
+    margin-top: -30px;
+    height: 60px;
+    width: 100px;
+    text-align: center;
+    color: rgb(224,224,224);
 }

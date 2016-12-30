@@ -53,6 +53,7 @@ XMLscene.prototype.init = function (application) {
 	this.undoComputer = 0;
 	this.isEasy = 0;
 	this.difficultyPressed = 0;
+	this.gameStartTime = 0;
 
 	//Camera animation variables
 	this.activeCameraAnimation = 0;
@@ -119,7 +120,8 @@ XMLscene.prototype.Play = function() {
 	this.gameMode = this.gameModePressed;
 	if(!this.interface.cameraUnlock && !this.interface.cameraLock)
 		this.interface.cameraUnlock = this.interface.gui.add(this, 'UnlockCamera');
-	document.getElementById("hud").style.display = 'block';
+	document.getElementById("hud").style.opacity = 1;
+	this.gameStartTime = this.currentTime;
 }
 
 XMLscene.prototype.Undo = function() {
@@ -291,7 +293,7 @@ XMLscene.prototype.PlayPVP = function () {
 						else
 							this.moveUnit(this.chosen.name);
 						this.moveValid = document.querySelector("#query_result").innerHTML;
-						
+
 						if(this.moveValid == 1) {
 							this.graph.primitives.get("NodesBoard").state = 1;
 							this.graph.primitives.get("NodesBoard").moves.push([this.chosen.name, this.rowFrom, this.columnFrom, this.rowTo, this.columnTo]);
@@ -564,6 +566,16 @@ XMLscene.prototype.update = function(currTime) {
 			this.undoMoveUnit("unit2");
 		this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
 	}
+
+	//Updates time in index.html
+	var minutes = Math.floor(((this.currentTime - this.gameStartTime) / 1000) / 60);
+	var seconds = Math.floor((this.currentTime - this.gameStartTime) / 1000) % 60;
+
+	document.getElementById("minutes").innerHTML = minutes;
+	if(seconds < 10)
+		document.getElementById("seconds").innerHTML = "0" + seconds;
+	else
+		document.getElementById("seconds").innerHTML = seconds;
 };
 
 XMLscene.prototype.getPrologInitRequest = function(requestString, onSuccess, onError, port) {

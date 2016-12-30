@@ -84,11 +84,10 @@ XMLscene.prototype.Hard = function() {
 }
 
 XMLscene.prototype.GameFilm = function() {
-	if(this.isFinished == 1) {
-		this.gameFilm = 1;
-		this.filmCounter = 0;
-		this.graph.primitives.get("NodesBoard").restartForFilm();
-	}
+	this.gameFilm = 1;
+	this.filmCounter = 0;
+	this.camera = new CGFcamera(this.graph.getRadiansAngle(45), 0.5, 800, vec3.fromValues(10,7,0), vec3.fromValues(0,0,0));
+	this.graph.primitives.get("NodesBoard").restartForFilm();
 }
 
 XMLscene.prototype.UnlockCamera = function() {
@@ -558,11 +557,19 @@ XMLscene.prototype.update = function(currTime) {
 	}
 
 	//Play Game film
-	if(this.isFinished == 1 && this.gameFilm == 1 && this.animationRunning == 0) {
+	if(this.gameFilm == 1 && this.animationRunning == 0) {
 
 		if(this.filmCounter >=  this.graph.primitives.get("NodesBoard").moves.length) {
 			this.filmCounter = 0;
 			this.gameFilm = 0;
+			if(this.player == 1) {
+				var graphCamera = this.graph.views.get("player1");
+				this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
+			}
+			else {
+				var graphCamera = this.graph.views.get("player2");
+				this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
+			}
 		} else {
 			var move = this.graph.primitives.get("NodesBoard").moves[this.filmCounter];
 			this.rowFrom = move[1];

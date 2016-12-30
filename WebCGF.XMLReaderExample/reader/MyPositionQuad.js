@@ -89,7 +89,7 @@ MyPositionQuad.prototype.display = function () {
 				this.isAnimationActive = 0;
 			}
         }
-        this.scene.translate(this.column - 5 + this.animationX, 0 + this.animationY, this.row - 5 + this.animationZ);
+        this.scene.translate(this.column - 5 + this.animationX, 0.1 + this.animationY, this.row - 5 + this.animationZ);
         this.piece.display();
         this.scene.popMatrix();
         if(point == "done") {

@@ -65,24 +65,10 @@ NodesBoard.prototype.init = function(){
 		
 		this.getTile(rows1[i], columns[i]).piece = new MyPiece(this.scene, 1, "unit1", this.scene.graph.primitives.get("unit1"));
 		this.getTile(rows2[i], columns[i]).piece = new MyPiece(this.scene, 2, "unit2", this.scene.graph.primitives.get("unit2"));
-		/*
-		this.getTile(rows1[i], columns[i]).piece = new MyUnit(this.scene);
-		this.getTile(rows1[i], columns[i]).piece.player = 1;
-		this.getTile(rows1[i], columns[i]).piece.name = "unit1";
-		this.getTile(rows2[i], columns[i]).piece = new MyUnit(this.scene);
-		this.getTile(rows2[i], columns[i]).piece.player = 2;
-		this.getTile(rows2[i], columns[i]).piece.name = "unit2";*/
 	}
 	
 	this.getTile(1, 5).piece = new MyPiece(this.scene, 1, "node1", this.scene.graph.primitives.get("node1"));
 	this.getTile(9, 5).piece = new MyPiece(this.scene, 2, "node2", this.scene.graph.primitives.get("node2"));
-	/*
-	this.getTile(1, 5).piece = new MyNode(this.scene);
-	this.getTile(1, 5).piece.player = 1;
-	this.getTile(1, 5).piece.name = "node1";
-	this.getTile(9, 5).piece = new MyNode(this.scene);
-	this.getTile(9, 5).piece.player = 2;
-	this.getTile(9, 5).piece.name = "node2";*/
 }
 
 NodesBoard.prototype.display = function () {

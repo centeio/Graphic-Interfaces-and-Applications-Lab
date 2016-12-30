@@ -118,6 +118,8 @@ XMLscene.prototype.Play = function() {
 	this.isFinished = 0;
 	this.isEasy = this.difficultyPressed;
 	this.gameMode = this.gameModePressed;
+	if(!this.interface.undo)
+		this.interface.undo = this.interface.gui.add(this, "Undo");
 	if(!this.interface.cameraUnlock && !this.interface.cameraLock)
 		this.interface.cameraUnlock = this.interface.gui.add(this, 'UnlockCamera');
 	document.getElementById("hud").style.opacity = 1;
@@ -125,70 +127,56 @@ XMLscene.prototype.Play = function() {
 }
 
 XMLscene.prototype.Undo = function() {
-	if(this.gameMode == 1) {
-		var lastMove = this.graph.primitives.get("NodesBoard").moves.pop();
-		if(this.graph.primitives.get("NodesBoard").moves.length > 0)
-			var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
-		
-		if(this.graph.primitives.get("NodesBoard").moves.length == 0 || 
-			(this.player == 1 && (newLastMove[0] == "unit2" || newLastMove[0] == "node2")) ||
-			(this.player == 2 && (newLastMove[0] == "unit1" || newLastMove[0] == "node1"))) {
-			this.interface.gui.remove(this.interface.undo);
-			this.interface.undo = null;
-		}
+	if(this.graph.primitives.get("NodesBoard").moves.length > 0) {
+		if(this.gameMode == 1) {
+			var lastMove = this.graph.primitives.get("NodesBoard").moves.pop();
+			if(this.graph.primitives.get("NodesBoard").moves.length > 0)
+				var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
 
-		if(this.player == 1 && (lastMove[0] == "unit1" || lastMove[1] == "node1")) {
-			this.rowFrom = lastMove[3];
-			this.columnFrom = lastMove[4];
-			this.rowTo = lastMove[1];
-			this.columnTo = lastMove[2];
-			if(lastMove[0] == "node1")
-				this.undoMoveNode("node1");
-			else
-				this.undoMoveUnit("unit1");
-			this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
-		}
+			if(this.player == 1 && (lastMove[0] == "unit1" || lastMove[1] == "node1")) {
+				this.rowFrom = lastMove[3];
+				this.columnFrom = lastMove[4];
+				this.rowTo = lastMove[1];
+				this.columnTo = lastMove[2];
+				if(lastMove[0] == "node1")
+					this.undoMoveNode("node1");
+				else
+					this.undoMoveUnit("unit1");
+				this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+			}
 
-		if(this.player == 2 && (lastMove[0] == "unit2" || lastMove[1] == "node2")) {
-			this.rowFrom = lastMove[3];
-			this.columnFrom = lastMove[4];
-			this.rowTo = lastMove[1];
-			this.columnTo = lastMove[2];
-			if(lastMove[0] == "node2")
-				this.undoMoveNode("node2");
-			else
-				this.undoMoveUnit("unit2");
-			this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
-		}
-	} else {
-		if(this.undoComputer == 0) {
-			if(this.player == 1) {
-				var lastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
-				if(lastMove[0] == "unit1" || lastMove[1] == "node1") {
-					this.graph.primitives.get("NodesBoard").moves.pop();
-					if(this.graph.primitives.get("NodesBoard").moves.length > 0)
-						var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 2];
-					
-					if(this.graph.primitives.get("NodesBoard").moves.length == 0 || 
-						newLastMove[0] == "unit2" || newLastMove[0] == "node2") {
-						this.interface.gui.remove(this.interface.undo);
-						this.interface.undo = null;
-					}
+			if(this.player == 2 && (lastMove[0] == "unit2" || lastMove[1] == "node2")) {
+				this.rowFrom = lastMove[3];
+				this.columnFrom = lastMove[4];
+				this.rowTo = lastMove[1];
+				this.columnTo = lastMove[2];
+				if(lastMove[0] == "node2")
+					this.undoMoveNode("node2");
+				else
+					this.undoMoveUnit("unit2");
+				this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+			}
+		} else {
+			if(this.undoComputer == 0) {
+				if(this.player == 1) {
+					var lastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
+					if(lastMove[0] == "unit1" || lastMove[1] == "node1") {
+						this.graph.primitives.get("NodesBoard").moves.pop();
+						if(this.graph.primitives.get("NodesBoard").moves.length > 0)
+							var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 2];
 
-					this.rowFrom = lastMove[3];
-					this.columnFrom = lastMove[4];
-					this.rowTo = lastMove[1];
-					this.columnTo = lastMove[2];
-					if(lastMove[0] == "node1")
-						this.undoMoveNode("node1");
-					else
-						this.undoMoveUnit("unit1");
-					this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
-				} else //Continue in update function
-					this.undoComputer = 1;
-			} else {
-				this.interface.gui.remove(this.interface.undo);
-				this.interface.undo = null;
+						this.rowFrom = lastMove[3];
+						this.columnFrom = lastMove[4];
+						this.rowTo = lastMove[1];
+						this.columnTo = lastMove[2];
+						if(lastMove[0] == "node1")
+							this.undoMoveNode("node1");
+						else
+							this.undoMoveUnit("unit1");
+						this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo);
+					} else //Continue in update function
+						this.undoComputer = 1;
+				}
 			}
 		}
 	}
@@ -311,10 +299,6 @@ XMLscene.prototype.PlayPVP = function () {
 								} else {
 									if(this.cameraLocked)
 										this.activeCameraAnimation = 1;
-									if(this.interface.undo) {
-										this.interface.gui.remove(this.interface.undo);
-										this.interface.undo = null;
-									}
 									this.player = this.player == 1 ? 2 : 1;
 									document.getElementById("player").innerHTML = this.player;
 								}
@@ -374,10 +358,6 @@ XMLscene.prototype.PlayPVC = function() {
 									} else {
 										if(this.cameraLocked)
 											this.activeCameraAnimation = 1;
-										if(this.interface.undo) {
-											this.interface.gui.remove(this.interface.undo);
-											this.interface.undo = null;
-										}
 										this.player = this.player == 1 ? 2 : 1;
 										document.getElementById("player").innerHTML = this.player;
 									}
@@ -525,23 +505,6 @@ XMLscene.prototype.display = function () {
 
 XMLscene.prototype.update = function(currTime) {
 	this.currentTime = currTime;
-
-	if(this.graph.loadedOk) {
-		if(this.graph.primitives.get("NodesBoard").moves.length > 0 && !this.interface.undo) {
-			if(this.gameMode == 1) {
-				var lastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
-				
-				if(this.player == 1 && (lastMove[0] == "unit1" || lastMove[1] == "node1"))
-					this.interface.undo = this.interface.gui.add(this, "Undo");
-				
-				if(this.player == 2 && (lastMove[0] == "unit2" || lastMove[1] == "node2"))
-					this.interface.undo = this.interface.gui.add(this, "Undo");
-			} else {
-				if(this.graph.primitives.get("NodesBoard").moves.length > 0 && !this.interface.undo && this.player == 1)
-					this.interface.undo = this.interface.gui.add(this, "Undo");
-			}
-		}
-	}
 
 	//Undo Computer
 	if(this.undoComputer == 1 && this.animationRunning == 0) {

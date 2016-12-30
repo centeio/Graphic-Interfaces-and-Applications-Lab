@@ -30,18 +30,18 @@ MyInterface.prototype.init = function(application) {
 	// the identifier 'doSomething' must be a function declared as part of that object (i.e. a member of the scene class)
 	// e.g. LightingScene.prototype.doSomething = function () { console.log("Doing something..."); }; 
 
-	
-	this.gui.add(this.scene, 'PlayerVSPlayer');
-	this.gui.add(this.scene, 'PlayerVSPC');
-	this.gui.add(this.scene, "Easy");
-	this.gui.add(this.scene, "Hard");
-	this.gui.add(this.scene, 'Play');
-
-	// add a group of controls (and open/expand by defult)
-	
 	this.omni = this.gui.addFolder("Omni Ligths");
-
 	this.spot = this.gui.addFolder("Spot Ligths");
+
+	this.mode = this.gui.addFolder("Game Mode");
+	this.mode.add(this.scene, 'PlayerVSPlayer');
+	this.mode.add(this.scene, 'PlayerVSPC');
+	
+	this.difficulty = this.gui.addFolder("Difficulty");
+	this.difficulty.add(this.scene, "Easy");
+	this.difficulty.add(this.scene, "Hard");
+
+	this.gui.add(this.scene, 'Play');
 
 	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
 	// e.g. this.option1=true; this.option2=false;

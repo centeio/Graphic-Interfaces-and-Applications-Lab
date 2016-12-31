@@ -96,15 +96,15 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 		}
 	}
 
-	var material = new CGFappearance(this.scene);
+	this.scene.tmpmaterial = new CGFappearance(this.scene);
 	var materialRef, textureRef;
 
 	if(this.materialsRef[this.materialCounter] == "inherit") {
-		material = this.scene.graph.materials.get(oldMaterial);
+		this.scene.tmpmaterial = this.scene.graph.materials.get(oldMaterial);
 		materialRef = oldMaterial;
 	}
 	else {
-		material = this.scene.graph.materials.get(this.materialsRef[this.materialCounter]);
+		this.scene.tmpmaterial = this.scene.graph.materials.get(this.materialsRef[this.materialCounter]);
 		materialRef = this.materialsRef[this.materialCounter];
 	}
 
@@ -114,9 +114,9 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 		textureRef = this.textureRef;
 	
 	if(textureRef != "none")
-		material.setTexture(this.scene.graph.textures.get(String(textureRef)).texture);
+		this.scene.tmpmaterial.setTexture(this.scene.graph.textures.get(String(textureRef)).texture);
 	else
-		material.setTexture(null);
+		this.scene.tmpmaterial.setTexture(null);
 
 	for(var i = 0; i < this.components.length; i++) {
 		this.scene.graph.components.get(this.components[i]).display(matrix, materialRef, textureRef);
@@ -133,7 +133,7 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 
 			if((this.scene.graph.primitives.get(this.primitives[i]) instanceof MyRectangle || 
 				this.scene.graph.primitives.get(this.primitives[i]) instanceof MyTriangle) &&
-					textureRef != "none" && material.texture != null) {
+					textureRef != "none" && this.scene.tmpmaterial.texture != null) {
 
 						this.scene.graph.primitives.get(this.primitives[i]).updateTexCoords(
 							0,
@@ -141,9 +141,9 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 							0,
 							this.scene.graph.primitives.get(this.primitives[i]).lengthV / this.scene.graph.textures.get(String(textureRef)).lengthT
 						);
-						material.setTextureWrap('REPEAT', 'REPEAT');
+						this.scene.tmpmaterial.setTextureWrap('REPEAT', 'REPEAT');
 			}
-			material.apply();
+			this.scene.tmpmaterial.apply();
 			if(!this.scene.graph.primitives.get('NodesBoard').displayPiece(this.primitives[i]))
 				this.scene.graph.primitives.get(this.primitives[i]).display();
 		}

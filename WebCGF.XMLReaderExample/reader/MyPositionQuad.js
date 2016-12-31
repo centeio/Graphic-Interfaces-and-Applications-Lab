@@ -5,7 +5,7 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
     this.row = -y + 5;
     this.piece = null;
     this.quad = new MyRectangle(scene, minPosX, maxPosX, minPosY, maxPosY, 0, 1, 0, 1);
-    this.circumference = new MyPolygon(scene, 0.3, 20);
+    this.circumference = new MyPolygon(scene, 0.22, 20);
     this.pressed = 0;
 
     //Animation variables
@@ -24,7 +24,11 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
 
     //Highlight appearance
     this.highlightAppearance = new CGFappearance(this.scene);
-    this.highlightAppearance.setAmbient(0.6,0,0,1);
+    this.highlightAppearance.setAmbient(0,0,0, 0);
+    this.highlightAppearance.setDiffuse(0,0,0, 0);
+    this.highlightAppearance.setSpecular(0,0,0, 0);
+    this.highlightAppearance.setShininess(0.0);
+
 }
 
 /*MyPositionQuad.prototype.setCoordinates = function(row, column) {
@@ -90,7 +94,10 @@ MyPositionQuad.prototype.display = function () {
 			}
         }
         this.scene.translate(this.column - 5 + this.animationX, 0.1 + this.animationY, this.row - 5 + this.animationZ);
+        if(this.scene.rowFrom == this.row && this.scene.columnFrom == this.column)
+        	this.highlightAppearance.apply();
         this.piece.display();
+        this.scene.tmpmaterial.apply();
         this.scene.popMatrix();
         if(point == "done") {
             this.animationX = 0;

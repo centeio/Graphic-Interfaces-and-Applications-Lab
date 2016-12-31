@@ -77,27 +77,25 @@ XMLscene.prototype.newGraph = function(filename) {
 }
 
 XMLscene.prototype.Wood = function() {
-	console.log('theme');
 	this.counterGraphs = 1;
 	
-	if(this.graph.primitives.size > 0){
+	if(this.graph.primitives.size > 0) {
 		var quadstmp = this.graph.primitives.get('NodesBoard').quads;
+		var movestmp = this.graph.primitives.get('NodesBoard').moves;
 		
 		this.graph = this.graphs[this.counterGraphs];
 
 		for(var i=1; i < quadstmp.size; i++) {
 			if(quadstmp.get(i).piece != null) {
 				quadstmp.get(i).piece.piece = this.graph.primitives.get(quadstmp.get(i).piece.name);
-
 			}
 		}
-
 		this.graph.primitives.get('NodesBoard').quads = quadstmp;
+		this.graph.primitives.get('NodesBoard').moves = movestmp;
 	}
 }
 
 XMLscene.prototype.Pastel = function() {
-	console.log('theme');
 	this.counterGraphs = 0;	
 
 	if(this.graph.primitives.size > 0){
@@ -107,7 +105,6 @@ XMLscene.prototype.Pastel = function() {
 		for(var i=1; i < quadstmp.size; i++) {
 			if(quadstmp.get(i).piece != null) {
 				quadstmp.get(i).piece.piece = this.graph.primitives.get(quadstmp.get(i).piece.name);
-
 			}
 		}
 
@@ -190,7 +187,7 @@ XMLscene.prototype.Play = function() {
 }
 
 XMLscene.prototype.Undo = function() {
-	if(this.graph.primitives.get("NodesBoard").moves.length > 0) {
+	if(this.graph.primitives.get("NodesBoard").moves.length > 0 && this.isFinished == 0) {
 		if(this.gameMode == 1) {
 			var lastMove = this.graph.primitives.get("NodesBoard").moves.pop();
 			if(this.graph.primitives.get("NodesBoard").moves.length > 0)
@@ -319,9 +316,6 @@ XMLscene.prototype.PlayPVP = function () {
 						this.rowFrom = obj.row;
 						this.columnFrom = obj.column;
 						this.graph.primitives.get("NodesBoard").state = 2;
-						//this.pressed = 1;
-						console.log(obj.piece);
-						console.log(obj.piece.name);
 
 						this.chosen = obj.piece;
 						if(this.chosen.name == "node1" || this.chosen.name == "node2")
@@ -385,8 +379,6 @@ XMLscene.prototype.PlayPVC = function() {
 							this.rowFrom = obj.row;
 							this.columnFrom = obj.column;
 							this.graph.primitives.get("NodesBoard").state = 2;
-							//this.pressed = 1;
-							console.log(obj.piece);
 
 							this.chosen = obj.piece;
 							if(this.chosen.name == "node1")
@@ -603,6 +595,10 @@ XMLscene.prototype.update = function(currTime) {
 			document.getElementById("seconds").innerHTML = "0" + seconds;
 		else
 			document.getElementById("seconds").innerHTML = seconds;
+	}
+
+	if(this.isFinished == 1) {
+		document.getElementById("playerInfo").innerHTML = "GameOver";
 	}
 
 	//Play Game film

@@ -25,9 +25,9 @@ NodesBoard.prototype.ret = function(posX, minPosY, maxPosY, delta){
 }
 
 NodesBoard.prototype.getTile = function(row, column) {
-	for(var j=1; j<this.quads.size; j++){
-		if(this.quads.get(j).row == row && this.quads.get(j).column == column)
-			return this.quads.get(j);
+	for(var i = 1; i <= this.quads.size; i++) {
+		if(this.quads.get(i).row == row && this.quads.get(i).column == column)
+			return this.quads.get(i);
 	}
 
 	return null;
@@ -55,17 +55,18 @@ NodesBoard.prototype.init = function(){
 	var rows2 = [9,9,9,9,8,8,8,7];
 
 	for(var i = 0; i < 8; i++) {		
-		this.getTile(rows1[i], columns[i]).piece = new MyPiece(this.scene, 1, "unit1",this.scene.graph.primitives.get("unit1"));
-		this.getTile(rows2[i], columns[i]).piece = new MyPiece(this.scene, 2, "unit2",this.scene.graph.primitives.get("unit2"));
+		this.getTile(rows1[i], columns[i]).piece = new MyPiece(this.scene, 1, "unit1", this.scene.graph.primitives.get("unit1"));
+		this.getTile(rows2[i], columns[i]).piece = new MyPiece(this.scene, 2, "unit2", this.scene.graph.primitives.get("unit2"));
 	}
 	
-	this.getTile(1, 5).piece = new MyPiece(this.scene, 1, "node1",this.scene.graph.primitives.get("node1"));
-	this.getTile(9, 5).piece = new MyPiece(this.scene, 2, "node2",this.scene.graph.primitives.get("node2"));
+	this.getTile(1, 5).piece = new MyPiece(this.scene, 1, "node1", this.scene.graph.primitives.get("node1"));
+	this.getTile(9, 5).piece = new MyPiece(this.scene, 2, "node2", this.scene.graph.primitives.get("node2"));
+
 }
 
 NodesBoard.prototype.displayPiece = function(pieceID) {
 	var ret = false;
-		for(var i = 1; i < this.quads.size; i++) {
+	for(var i = 1; i <= this.quads.size; i++) {
 		if(this.quads.get(i).piece != null && this.quads.get(i).piece.name == pieceID) {
 			if(this.scene.isFinished == 0 && this.scene.gameFilm == 0)
 				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
@@ -94,13 +95,13 @@ NodesBoard.prototype.display = function () {
     this.scene.popMatrix();    
 
 	if(this.scene.pickMode == true) {
-		for(var j=1; j < this.quads.size; j++) {
-			if(this.quads.get(j).piece == null) {
+		for(var i = 1; i <= this.quads.size; i++) {
+			if(this.quads.get(i).piece == null) {
 				this.scene.pushMatrix();
 				this.scene.rotate(-Math.PI / 2, 1, 0, 0);
 				this.scene.translate(0,0,0.05);
-				this.scene.registerForPick(this.scene.pickedId, this.quads.get(j));
-				this.quads.get(j).display();		
+				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
+				this.quads.get(i).display();		
 				this.scene.popMatrix();
 
 				this.scene.pickedId++;

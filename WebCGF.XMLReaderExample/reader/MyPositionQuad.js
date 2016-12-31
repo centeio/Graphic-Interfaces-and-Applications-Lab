@@ -27,10 +27,10 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
     this.highlightAppearance.setAmbient(0.6,0,0,1);
 }
 
-MyPositionQuad.prototype.setCoordinates = function(row, column) {
+/*MyPositionQuad.prototype.setCoordinates = function(row, column) {
     this.row = row;
     this.column = column;
-}
+}*/
 
 MyPositionQuad.prototype.getPiece = function () {
     return this.piece;

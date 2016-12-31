@@ -6,6 +6,5 @@ function MyPiece(scene, player, name, piece){
 }
 
 MyPiece.prototype.display = function(){
-
     this.piece.display();
 }

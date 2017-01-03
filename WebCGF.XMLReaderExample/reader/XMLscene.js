@@ -56,6 +56,7 @@ XMLscene.prototype.init = function (application) {
 	this.gameStartTime = 0;
 	this.gameFilm = 0;
 	this.filmCounter = 0;
+	this.waitingForUndo = 0;
 
 	//Camera animation variables
 	this.activeCameraAnimation = 0;
@@ -194,6 +195,7 @@ XMLscene.prototype.Undo = function() {
 				var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 2];
 
 			if(this.player == 1 && (lastMove[0] == "unit1" || lastMove[1] == "node1")) {
+				this.possibleMoves = null;
 				this.graph.primitives.get("NodesBoard").moves.pop();
 				this.rowFrom = lastMove[3];
 				this.columnFrom = lastMove[4];
@@ -207,6 +209,7 @@ XMLscene.prototype.Undo = function() {
 			}
 
 			if(this.player == 2 && (lastMove[0] == "unit2" || lastMove[1] == "node2")) {
+				this.possibleMoves = null;
 				this.graph.primitives.get("NodesBoard").moves.pop();
 				this.rowFrom = lastMove[3];
 				this.columnFrom = lastMove[4];
@@ -220,13 +223,15 @@ XMLscene.prototype.Undo = function() {
 			}
 		} else {
 			if(this.undoComputer == 0) {
+				this.waitingForUndo = 0;
 				if(this.player == 1) {
 					var lastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
-					if(lastMove[0] == "unit1" || lastMove[1] == "node1") {
+					if(lastMove[0] == "unit1" || lastMove[0] == "node1") {
 						this.graph.primitives.get("NodesBoard").moves.pop();
 						if(this.graph.primitives.get("NodesBoard").moves.length > 0)
 							var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 2];
 
+						this.possibleMoves = null;
 						this.rowFrom = lastMove[3];
 						this.columnFrom = lastMove[4];
 						this.rowTo = lastMove[1];
@@ -236,8 +241,10 @@ XMLscene.prototype.Undo = function() {
 						else
 							this.undoMoveUnit("unit1");
 						this.graph.primitives.get("NodesBoard").activateAnimation(this.rowFrom, this.columnFrom, this.rowTo, this.columnTo, 1);
-					} else //Continue in update function
+					} else { //Continue in update function
 						this.undoComputer = 1;
+						this.possibleMoves = null;
+					}
 				}
 			}
 		}
@@ -563,17 +570,25 @@ XMLscene.prototype.display = function () {
 XMLscene.prototype.update = function(currTime) {
 	this.currentTime = currTime;
 
+	if(this.waitingForUndo != 0 && ((currTime - this.waitingForUndo) / 1000) >= 5) {
+		var lastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
+		
+		if(lastMove[0] == "node1") {
+			this.player = 2;
+			if(this.cameraLocked)
+				this.activeCameraAnimation = 1;
+			document.getElementById("player").innerHTML = this.player;
+		}
+	}
+
 	//Undo Computer
 	if(this.undoComputer == 1 && this.animationRunning == 0) {
 		var lastMove = this.graph.primitives.get("NodesBoard").moves.pop();
 		var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
 
 		if(newLastMove[0] == "unit1" || newLastMove[0] == "node1") {
+			this.waitingForUndo = currTime;
 			this.undoComputer = 0;
-			this.player = 2;
-			if(this.cameraLocked)
-				this.activeCameraAnimation = 1;
-			document.getElementById("player").innerHTML = this.player;
 		}
 
 		this.rowFrom = lastMove[3];

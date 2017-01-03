@@ -189,11 +189,12 @@ XMLscene.prototype.Play = function() {
 XMLscene.prototype.Undo = function() {
 	if(this.graph.primitives.get("NodesBoard").moves.length > 0 && this.isFinished == 0) {
 		if(this.gameMode == 1) {
-			var lastMove = this.graph.primitives.get("NodesBoard").moves.pop();
+			var lastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
 			if(this.graph.primitives.get("NodesBoard").moves.length > 0)
-				var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 1];
+				var newLastMove = this.graph.primitives.get("NodesBoard").moves[this.graph.primitives.get("NodesBoard").moves.length - 2];
 
 			if(this.player == 1 && (lastMove[0] == "unit1" || lastMove[1] == "node1")) {
+				this.graph.primitives.get("NodesBoard").moves.pop();
 				this.rowFrom = lastMove[3];
 				this.columnFrom = lastMove[4];
 				this.rowTo = lastMove[1];
@@ -206,6 +207,7 @@ XMLscene.prototype.Undo = function() {
 			}
 
 			if(this.player == 2 && (lastMove[0] == "unit2" || lastMove[1] == "node2")) {
+				this.graph.primitives.get("NodesBoard").moves.pop();
 				this.rowFrom = lastMove[3];
 				this.columnFrom = lastMove[4];
 				this.rowTo = lastMove[1];

@@ -66,6 +66,7 @@ XMLscene.prototype.init = function (application) {
 	this.cameraVelocityY = 0;
 	this.cameraVelocityZ = 0;
 	this.cameraLocked = true;
+	this.cameraSpan = 2;
 
 	this.graphs = [];
 	this.counterGraphs = 0;
@@ -545,12 +546,12 @@ XMLscene.prototype.display = function () {
 						this.cameraPreviousTime = this.currentTime;
 					}
 					
-					if(((this.currentTime - this.initalCameraAnimation) / 1000) < 1) {
-						this.camera.orbit(vec3.fromValues(0,1,0), ((this.currentTime - this.cameraPreviousTime) / 1000) * Math.PI);
+					if(((this.currentTime - this.initalCameraAnimation) / 1000) < this.cameraSpan) {
+						this.camera.orbit(vec3.fromValues(0,1,0), ((this.currentTime - this.cameraPreviousTime) / 1000) * (Math.PI / this.cameraSpan));
 						this.cameraPreviousTime = this.currentTime;
 					} else {
-						var timeExceeded = ((this.currentTime - this.initalCameraAnimation) / 1000) - 1;
-						this.camera.orbit(vec3.fromValues(0,1,0), (((this.currentTime - this.cameraPreviousTime) / 1000) - timeExceeded) * Math.PI);
+						var timeExceeded = ((this.currentTime - this.initalCameraAnimation) / 1000) - this.cameraSpan;
+						this.camera.orbit(vec3.fromValues(0,1,0), (((this.currentTime - this.cameraPreviousTime) / 1000) - timeExceeded) * (Math.PI / this.cameraSpan));
 						this.initalCameraAnimation = 0;
 						this.activeCameraAnimation = 0;
 					}

@@ -70,15 +70,6 @@ XMLscene.prototype.init = function (application) {
 	this.counterGraphs = 0;
 	this.firstTheme = true;
 
-/*	this.amb = new MyInvSphere(this, 15, 50, 50);
-	
-					    this.exp = new CGFappearance(this);
-				    this.exp.setAmbient(0.5,0.5,0.5,1);
-					this.exp.setDiffuse(0.5,0.5,0.5,1);
-					this.exp.setSpecular(0.5,0.5,0.5,1);
-					this.exp.setShininess(10);
-
-					this.exp.loadTexture("scenes/resources/bamboo2.jpg");*/
 };
 
 XMLscene.prototype.newGraph = function(filename) {

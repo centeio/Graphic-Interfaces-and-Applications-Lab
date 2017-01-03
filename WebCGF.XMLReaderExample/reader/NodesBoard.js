@@ -9,6 +9,8 @@ function NodesBoard(scene) {
     this.quads = new Map();
 	this.state = 1; // 1- Espera da peça de origem | 2- Espera da peça de destino
     this.moves = [];
+    this.player1material = null;
+    this.player2material = null;
 
     if(this.scene.firstTheme)
 		this.init();
@@ -64,14 +66,14 @@ NodesBoard.prototype.init = function(){
 
 }
 
-NodesBoard.prototype.displayPiece = function(pieceID) {
+NodesBoard.prototype.displayPiece = function(pieceID, material) {
 	var ret = false;
 	for(var i = 1; i <= this.quads.size; i++) {
 		if(this.quads.get(i).piece != null && this.quads.get(i).piece.name == pieceID) {
 			if(this.scene.isFinished == 0 && this.scene.gameFilm == 0)
 				this.scene.registerForPick(this.scene.pickedId, this.quads.get(i));
 
-			this.quads.get(i).display();
+			this.quads.get(i).display(material);
 
 			this.scene.pickedId++;
 			ret = true;

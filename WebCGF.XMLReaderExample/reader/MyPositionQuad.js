@@ -24,10 +24,10 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
 
     //Highlight appearance
     this.highlightAppearance = new CGFappearance(this.scene);
-    this.highlightAppearance.setAmbient(0,0,0, 0);
-    this.highlightAppearance.setDiffuse(0,0,0, 0);
-    this.highlightAppearance.setSpecular(0,0,0, 0);
-    this.highlightAppearance.setShininess(0.0);
+    this.highlightAppearance.setAmbient(1,1,1,1);
+    this.highlightAppearance.setDiffuse(1,1,1,1);
+    this.highlightAppearance.setSpecular(1,1,1,1);
+    this.highlightAppearance.setShininess(10);
 
 }
 
@@ -75,7 +75,7 @@ MyPositionQuad.prototype.displayHighlighted = function() {
     this.circumference.display();
 }
 
-MyPositionQuad.prototype.display = function () {
+MyPositionQuad.prototype.display = function (material) {
     if(this.piece == null)
         this.quad.display();
     else {
@@ -97,7 +97,7 @@ MyPositionQuad.prototype.display = function () {
         if(this.scene.rowFrom == this.row && this.scene.columnFrom == this.column)
         	this.highlightAppearance.apply();
         this.piece.display();
-        this.scene.tmpmaterial.apply();
+        material.apply();
         this.scene.popMatrix();
         if(point == "done") {
             this.animationX = 0;

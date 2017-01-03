@@ -38,6 +38,7 @@
     
         <texture id="wood1" file="scenes/resources/texture_wood.jpg" length_s="1" length_t="1" />  
         <texture id="wood2" file="scenes/resources/wood.jpg" length_s="1" length_t="1" />  
+        <texture id="bamboo" file="scenes/resources/bamboo2.jpg" length_s="1" length_t="1" />  		
 		
 
     </textures>
@@ -114,7 +115,11 @@
         <primitive id="NodesBoard">
             <nodesboard>
             </nodesboard>
-        </primitive>	
+        </primitive>
+
+        <primitive id="invsphere">
+            <invsphere radius="15" slices="50" stacks="50" />            
+        </primitive>		
 	
     </primitives>
 	
@@ -135,6 +140,7 @@
             <children>
 				<componentref id="player1" />
 				<componentref id="player2" />
+				<componentref id="theme" />				
                 <primitiveref id="NodesBoard" />
             </children>
             
@@ -174,6 +180,25 @@
             <children>
                 <primitiveref id="unit2" />
 				<primitiveref id="node2" />
+            </children>
+            
+        </component>		
+		
+		<component id="theme">
+        
+            <transformation>
+                <translate x="0" y="0" z="0" />
+				
+            </transformation>
+
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="bamboo" />
+			
+            <children>
+                <primitiveref id="invsphere" />
             </children>
             
         </component>		

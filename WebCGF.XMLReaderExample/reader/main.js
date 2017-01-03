@@ -38,6 +38,7 @@ serialInclude([
                 'MyNode.js',
                 'ComplexAnimation.js',
                 'MyPiece.js',
+                'MyInvSphere.js',
 
 main=function()
 {

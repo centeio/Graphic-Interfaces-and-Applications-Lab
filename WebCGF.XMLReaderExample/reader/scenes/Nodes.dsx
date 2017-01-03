@@ -36,7 +36,7 @@
 	
     <textures>
     
-        <texture id="grass" file="scenes/resources/grass.png" length_s="1" length_t="1" />  
+        <texture id="space" file="scenes/resources/space.png" length_s="1" length_t="1" />  
 
     </textures>
 	
@@ -117,6 +117,10 @@
             <nodesboard>
             </nodesboard>
         </primitive>	
+		
+        <primitive id="invsphere">
+            <invsphere radius="15" slices="50" stacks="50" />            
+        </primitive>		
 	
     </primitives>
 	
@@ -137,10 +141,30 @@
             <children>
 				<componentref id="player1" />
 				<componentref id="player2" />
+				<componentref id="theme" />
                 <primitiveref id="NodesBoard" />
             </children>
             
         </component>
+		
+		<component id="theme">
+        
+            <transformation>
+                <translate x="0" y="0" z="0" />
+				
+            </transformation>
+
+            <materials>
+                <material id="default" />
+            </materials>
+
+            <texture id="space" />
+			
+            <children>
+                <primitiveref id="invsphere" />
+            </children>
+            
+        </component>		
 		
 		<component id="player1">
         

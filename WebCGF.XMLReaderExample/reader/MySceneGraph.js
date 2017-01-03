@@ -410,7 +410,13 @@ MySceneGraph.prototype.parsePrimitives = function(rootElement) {
 					this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
 					new NodesBoard(this.scene));
 					break;				
-
+			case 'invsphere':
+					this.primitives.set(this.reader.getString(rootPrimitives[0].children[i], "id", bool), 
+					new MyInvSphere(this.scene,
+						this.reader.getFloat(element, "radius", bool),
+						this.reader.getFloat(element, "slices", bool),
+						this.reader.getFloat(element, "stacks", bool)));
+					break;	
 			default:
 				console.error("Primitive tag unknown.");
 				break;

@@ -69,6 +69,16 @@ XMLscene.prototype.init = function (application) {
 	this.graphs = [];
 	this.counterGraphs = 0;
 	this.firstTheme = true;
+
+/*	this.amb = new MyInvSphere(this, 15, 50, 50);
+	
+					    this.exp = new CGFappearance(this);
+				    this.exp.setAmbient(0.5,0.5,0.5,1);
+					this.exp.setDiffuse(0.5,0.5,0.5,1);
+					this.exp.setSpecular(0.5,0.5,0.5,1);
+					this.exp.setShininess(10);
+
+					this.exp.loadTexture("scenes/resources/bamboo2.jpg");*/
 };
 
 XMLscene.prototype.newGraph = function(filename) {
@@ -522,13 +532,14 @@ XMLscene.prototype.display = function () {
 			this.applyViewMatrix();
 
 			// Draw axis
-			this.axis.display();
+		//	this.axis.display();
 
 			this.setDefaultAppearance();
 
 			if (this.graph.loadedOk) {
-				for(var i = 0; i < this.lights.length; i++)
+				for(var i = 0; i < this.lights.length; i++){
 					this.lights[i].update();
+				}
 
 				if(this.activeCameraAnimation == 1) {
 					if(this.initalCameraAnimation == 0) {
@@ -549,8 +560,8 @@ XMLscene.prototype.display = function () {
 				
 				var matrix = mat4.create();
 				mat4.identity(matrix);
-			
 				this.graph.components.get(this.graph.rootName).display(matrix, "null", "null");
+					
 			}
 		}
 	} else {

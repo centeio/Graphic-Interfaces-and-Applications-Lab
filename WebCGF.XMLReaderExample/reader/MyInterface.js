@@ -43,7 +43,8 @@ MyInterface.prototype.init = function(application) {
 
 	this.theme = this.gui.addFolder("Theme");
 	this.theme.add(this.scene, "Wood");
-	this.theme.add(this.scene, "Pastel");
+	this.theme.add(this.scene, "Space");
+	this.theme.add(this.scene, "Spring");
 
 	this.gui.add(this.scene, 'Play');
 

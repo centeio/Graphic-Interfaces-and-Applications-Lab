@@ -118,7 +118,7 @@
         </primitive>
 
         <primitive id="invsphere">
-            <invsphere radius="15" slices="50" stacks="50" />            
+            <invsphere radius="35" slices="50" stacks="50" />            
         </primitive>		
 	
     </primitives>

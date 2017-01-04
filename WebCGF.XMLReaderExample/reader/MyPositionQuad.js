@@ -24,9 +24,9 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
 
     //Highlight appearance
     this.highlightAppearance = new CGFappearance(this.scene);
-    this.highlightAppearance.setAmbient(1,1,1,1);
-    this.highlightAppearance.setDiffuse(1,1,1,1);
-    this.highlightAppearance.setSpecular(1,1,1,1);
+    this.highlightAppearance.setAmbient(1,1,1,0.1);
+    this.highlightAppearance.setDiffuse(1,1,1,0.1);
+    this.highlightAppearance.setSpecular(1,1,1,0.1);
     this.highlightAppearance.setShininess(10);
 
 }

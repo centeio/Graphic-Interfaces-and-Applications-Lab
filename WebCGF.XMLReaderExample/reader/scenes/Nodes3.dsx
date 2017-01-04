@@ -160,7 +160,7 @@
 			
             <children>
                 <primitiveref id="unit1" />
-				<primitiveref id="node1" />
+				<componentref id="node1" />
             </children>
             
         </component>		
@@ -168,7 +168,7 @@
 		<component id="player2">
         
             <transformation>
-                <translate x="0" y="0.2" z="0" />
+                <translate x="0" y="0.2" z="-0.2" />
             </transformation>
 		
             <materials>
@@ -179,6 +179,42 @@
 			
             <children>
                 <primitiveref id="unit2" />
+				<componentref id="node2" />
+            </children>
+            
+        </component>
+
+		<component id="node1">
+        
+            <transformation>
+                <translate x="0" y="0.15" z="-0.1" />
+            </transformation>
+		
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+			
+            <children>
+				<primitiveref id="node1" />
+            </children>
+            
+        </component>
+
+		<component id="node2">
+        
+            <transformation>
+                <translate x="0" y="0.15" z="-0.1" />
+            </transformation>
+		
+            <materials>
+                <material id="inherit" />
+            </materials>
+
+            <texture id="inherit" />
+			
+            <children>
 				<primitiveref id="node2" />
             </children>
             

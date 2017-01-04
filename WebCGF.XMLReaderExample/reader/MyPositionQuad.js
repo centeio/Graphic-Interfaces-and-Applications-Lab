@@ -24,10 +24,10 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
 
     //Highlight appearance
     this.highlightAppearance = new CGFappearance(this.scene);
-    this.highlightAppearance.setAmbient(1,1,1,0.1);
-    this.highlightAppearance.setDiffuse(1,1,1,0.1);
-    this.highlightAppearance.setSpecular(1,1,1,0.1);
-    this.highlightAppearance.setShininess(10);
+    this.highlightAppearance.setAmbient(1,1,1,0.8);
+    this.highlightAppearance.setDiffuse(0.5,0.5,0.5,0.8);
+    this.highlightAppearance.setSpecular(0.5,0.5,0.5,0);
+    this.highlightAppearance.setShininess(1);
  
 }
 
@@ -69,11 +69,16 @@ MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo, span) {
 }
 
 MyPositionQuad.prototype.displayHighlighted = function() {
+    this.scene.gl.enable(this.scene.gl.BLEND);
+    this.scene.gl.blendFunc(this.scene.gl.ONE, this.scene.gl.ONE);	
+	
 	this.scene.pushMatrix();
-	this.scene.translate((this.column - 5), 0, this.row - 5);
+	this.scene.translate((this.column - 5), 0.2, this.row - 5);
     this.highlightAppearance.apply();
-    this.scene.graph.primitives.get(this.scene.chosen.name).display();
+	this.scene.chosen.display();
 	this.scene.popMatrix();
+	
+	this.scene.gl.disable(this.scene.gl.BLEND);
 	
 }
 

@@ -91,10 +91,7 @@ NodesBoard.prototype.display = function () {
 	this.board.display();
     this.texture.unbind();
     this.scene.popMatrix();
-    this.scene.pushMatrix();
-    this.scene.translate(1,0.01,0);
-    this.scene.scale(0.4, 0.4, 0.4);
-    this.scene.popMatrix();    
+  
 
 	if(this.scene.pickMode == true) {
 		for(var i = 1; i <= this.quads.size; i++) {

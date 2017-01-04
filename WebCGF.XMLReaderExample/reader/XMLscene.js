@@ -100,8 +100,25 @@ XMLscene.prototype.Wood = function() {
 	}
 }
 
-XMLscene.prototype.Pastel = function() {
+XMLscene.prototype.Space = function() {
 	this.counterGraphs = 0;	
+
+	if(this.graph.primitives.size > 0){
+		var quadstmp = this.graph.primitives.get('NodesBoard').quads;
+		this.graph = this.graphs[this.counterGraphs];
+
+		for(var i=1; i < quadstmp.size; i++) {
+			if(quadstmp.get(i).piece != null) {
+				quadstmp.get(i).piece.piece = this.graph.primitives.get(quadstmp.get(i).piece.name);
+			}
+		}
+
+		this.graph.primitives.get('NodesBoard').quads = quadstmp;
+	}
+}
+
+XMLscene.prototype.Spring = function() {
+	this.counterGraphs = 2;	
 
 	if(this.graph.primitives.size > 0){
 		var quadstmp = this.graph.primitives.get('NodesBoard').quads;

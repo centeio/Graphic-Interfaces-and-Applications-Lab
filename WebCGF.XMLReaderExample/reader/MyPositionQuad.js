@@ -28,7 +28,7 @@ function MyPositionQuad(scene, board, x, y, minPosX, maxPosX, minPosY, maxPosY){
     this.highlightAppearance.setDiffuse(1,1,1,0.1);
     this.highlightAppearance.setSpecular(1,1,1,0.1);
     this.highlightAppearance.setShininess(10);
-
+ 
 }
 
 /*MyPositionQuad.prototype.setCoordinates = function(row, column) {
@@ -69,10 +69,12 @@ MyPositionQuad.prototype.activateAnimation = function(rowTo, columnTo, span) {
 }
 
 MyPositionQuad.prototype.displayHighlighted = function() {
-    this.scene.rotate(-Math.PI / 2, 1, 0, 0);
-	this.scene.translate((this.column - 5) , -(this.row - 5), 0.05);
+	this.scene.pushMatrix();
+	this.scene.translate((this.column - 5), 0, this.row - 5);
     this.highlightAppearance.apply();
-    this.circumference.display();
+    this.scene.graph.primitives.get(this.scene.chosen.name).display();
+	this.scene.popMatrix();
+	
 }
 
 MyPositionQuad.prototype.display = function (material) {

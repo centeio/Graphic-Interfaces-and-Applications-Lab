@@ -39,6 +39,7 @@ serialInclude([
                 'ComplexAnimation.js',
                 'MyPiece.js',
                 'MyInvSphere.js',
+                'MyUnitCubeQuad',
 
 main=function()
 {
@@ -59,8 +60,10 @@ main=function()
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
+	
 	myScene.newGraph('Nodes.dsx');
 	myScene.newGraph('Nodes2.dsx');
+	myScene.newGraph('Nodes3.dsx');	
 	
 	// start
     app.run();

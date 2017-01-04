@@ -176,6 +176,9 @@ XMLscene.prototype.Play = function() {
 	this.isEasy = this.difficultyPressed;
 	this.gameMode = this.gameModePressed;
 
+	this.rowFrom = -1;
+	this.columnFrom = -1;
+
 	if(!this.interface.undo)
 		this.interface.undo = this.interface.gui.add(this, "Undo");
 
@@ -187,6 +190,8 @@ XMLscene.prototype.Play = function() {
 
 	document.getElementById("hud").style.opacity = 1;
 	this.gameStartTime = this.currentTime;
+
+	this.possibleMoves = null;
 }
 
 XMLscene.prototype.Undo = function() {
@@ -650,7 +655,7 @@ XMLscene.prototype.update = function(currTime) {
 XMLscene.prototype.getPrologInitRequest = function(requestString, onSuccess, onError, port) {
 	var requestPort = port || 8081;
 	var request = new XMLHttpRequest();
-	request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
+	request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, false);
 
 	request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
 	request.onerror = onError || function(){console.log("Error waiting for response");};

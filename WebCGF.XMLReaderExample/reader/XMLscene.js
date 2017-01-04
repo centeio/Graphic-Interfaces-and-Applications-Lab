@@ -105,6 +105,8 @@ XMLscene.prototype.Space = function() {
 
 	if(this.graph.primitives.size > 0){
 		var quadstmp = this.graph.primitives.get('NodesBoard').quads;
+		var movestmp = this.graph.primitives.get('NodesBoard').moves;
+
 		this.graph = this.graphs[this.counterGraphs];
 
 		for(var i=1; i < quadstmp.size; i++) {
@@ -114,6 +116,7 @@ XMLscene.prototype.Space = function() {
 		}
 
 		this.graph.primitives.get('NodesBoard').quads = quadstmp;
+		this.graph.primitives.get('NodesBoard').moves = movestmp;
 	}
 }
 
@@ -122,6 +125,8 @@ XMLscene.prototype.Spring = function() {
 
 	if(this.graph.primitives.size > 0){
 		var quadstmp = this.graph.primitives.get('NodesBoard').quads;
+		var movestmp = this.graph.primitives.get('NodesBoard').moves;
+		
 		this.graph = this.graphs[this.counterGraphs];
 
 		for(var i=1; i < quadstmp.size; i++) {
@@ -131,6 +136,7 @@ XMLscene.prototype.Spring = function() {
 		}
 
 		this.graph.primitives.get('NodesBoard').quads = quadstmp;
+		this.graph.primitives.get('NodesBoard').moves = movestmp;
 	}
 }
 
@@ -211,6 +217,11 @@ XMLscene.prototype.Play = function() {
 	this.gameStartTime = this.currentTime;
 
 	this.possibleMoves = null;
+
+	var graphCamera = this.graph.views.get("player1");
+		this.camera = new CGFcamera(graphCamera.fov, graphCamera.near, graphCamera.far, graphCamera.position, graphCamera.target);
+
+	document.getElementById("playerInfo").innerHTML = "Player <span id='player'> 1</span>'s turn";
 }
 
 XMLscene.prototype.Undo = function() {

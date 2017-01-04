@@ -39,7 +39,6 @@ serialInclude([
                 'ComplexAnimation.js',
                 'MyPiece.js',
                 'MyInvSphere.js',
-                'MyUnitCubeQuad',
 
 main=function()
 {

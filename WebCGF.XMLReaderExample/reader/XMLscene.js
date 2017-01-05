@@ -462,6 +462,15 @@ XMLscene.prototype.PlayPVC = function() {
 									if(this.isFinished == 1) {
 										this.player1Wins++;
 										document.getElementById("player1Score").innerHTML = this.player1Wins;
+
+										document.getElementById("player1Score").innerHTML = this.player1Wins;
+										document.getElementById("player2Score").innerHTML = this.player2Wins;
+										document.getElementById("Winner").innerHTML = "Player "+this.player+" WON!";
+										
+										document.getElementById("black-screen").style.display = "block";
+										document.getElementById("WinnerPopUp").style.display = "block";
+										document.getElementById("black-screen").style.opacity = 1;
+										document.getElementById("WinnerPopUp").style.opacity = 1;
 									} else {
 										if(this.cameraLocked)
 											this.activeCameraAnimation = 1;

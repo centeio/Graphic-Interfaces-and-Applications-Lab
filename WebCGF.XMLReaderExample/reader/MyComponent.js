@@ -144,7 +144,7 @@ MyComponent.prototype.display = function(oldMatrix, oldMaterial, oldTexture) {
 						material.setTextureWrap('REPEAT', 'REPEAT');
 			}
 			material.apply();
-			if(this.primitives[i] == "unit1" || this.primitives[i] == "unit2" || this.primitives[i] == "node1" || this.primitives[i] == "node2"){
+			if(this.primitives[i] == "unit1" || this.primitives[i] == "unit2" || this.primitives[i] == "node1" || this.primitives[i] == "node2") {
 				this.scene.graph.primitives.get('NodesBoard').displayPiece(this.primitives[i], material);
 			}
 			else

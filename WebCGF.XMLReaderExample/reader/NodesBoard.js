@@ -79,6 +79,12 @@ NodesBoard.prototype.displayPiece = function(pieceID, material) {
 			ret = true;
 		}
 	}
+
+	if(pieceID == "node2") {
+		this.scene.registerForPick(this.scene.pickedId, null);
+		this.pickedId++;
+	}
+
 	return ret;
 }
 

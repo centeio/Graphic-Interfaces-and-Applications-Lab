@@ -126,7 +126,7 @@ XMLscene.prototype.Spring = function() {
 	if(this.graph.primitives.size > 0){
 		var quadstmp = this.graph.primitives.get('NodesBoard').quads;
 		var movestmp = this.graph.primitives.get('NodesBoard').moves;
-		
+
 		this.graph = this.graphs[this.counterGraphs];
 
 		for(var i=1; i < quadstmp.size; i++) {
@@ -396,6 +396,12 @@ XMLscene.prototype.PlayPVP = function () {
 										this.player2Wins++;
 									document.getElementById("player1Score").innerHTML = this.player1Wins;
 									document.getElementById("player2Score").innerHTML = this.player2Wins;
+									document.getElementById("Winner").innerHTML = "Player "+this.player+" WON!";
+									
+									document.getElementById("black-screen").style.display = "block";
+           							document.getElementById("WinnerPopUp").style.display = "block";
+									document.getElementById("black-screen").style.opacity = 1;
+           							document.getElementById("WinnerPopUp").style.opacity = 1;
 								} else {
 									if(this.cameraLocked)
 										this.activeCameraAnimation = 1;

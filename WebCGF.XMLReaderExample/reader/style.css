@@ -33,3 +33,50 @@
     text-align: center;
     color: rgb(224,224,224);
 }
+
+#black-screen {
+    display: none;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0,0.9);
+    opacity: 0;
+
+    transition: opacity 1s ease;
+    -webkit-transition: opacity 1s ease;
+    -moz-transition: opacity 1s ease;
+    -o-transition: opacity 1s ease;
+}
+
+#WinnerPopUp {
+    display: none;
+
+    position: fixed;
+    opacity: 0;
+    left: 50%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: -75px;
+    width: 300px;
+    height: 150px;
+    text-align: center;
+
+    background-color: #666;
+    color: rgb(224,224,224);
+
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -o-border-radius: 10px;
+	box-shadow: 0px 3px 10px #888;
+    -webkit-box-shadow: 0px 3px 10px #888;
+    -moz-box-shadow: 0px 3px 10px #888;
+    -o-box-shadow: 0px 3px 10px #888;
+
+    transition: opacity 1s ease;
+    -webkit-transition: opacity 1s ease;
+    -moz-transition: opacity 1s ease;
+    -o-transition: opacity 1s ease;
+}

@@ -20,7 +20,12 @@ canvas {
 </style>
 </head>
 <body>
-    
+    <div id="black-screen">
+    </div>
+    <div id="WinnerPopUp">
+        <h1> Congratulations! </h1>
+        <h3 id="Winner">Player 1 WON!</h3>
+    </div>
     <div id="hud">
         <div>
             <span>Score: <span id="player1Score">0</span> - <span id="player2Score">0</span></span> <br/>
@@ -30,6 +35,13 @@ canvas {
     </div>
     <div hidden id="query_result"></div>
     <script src="main.js"></script>
+    <script> 
+        document.getElementById("black-screen").onclick = function() {
+            document.getElementById("black-screen").style.opacity = 0;
+            document.getElementById("WinnerPopUp").style.opacity = 0;
+            document.getElementById("Winner").innerHTML = "";
+        }
+    </script>
 
 </body>
 </html>
